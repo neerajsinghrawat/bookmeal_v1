@@ -9,8 +9,8 @@ use App\Models\Client;
 use App\Models\Page;
 use App\Models\OrderComplaint;
 use App\Models\Order;
-use App\Models\OrderItems
-;
+use App\Models\OrderItems;
+use App\Models\Setting;
 use View;
 use Auth;
 class AppServiceProvider extends ServiceProvider
@@ -98,7 +98,12 @@ class AppServiceProvider extends ServiceProvider
         }
         View::share('activeComplaints', $activeComplaints);
         View::share('activeComplaintDataArr', $activeComplaintDataArr);		
+        $setting = Setting::with('openingTime')->first();
+        $people_count = range(1, $setting->total_men);
+        View::share('people_count', $people_count);        
 
+        $timearray = getTimeArr();
+        View::share('timearray', $timearray);
 
 /***************************pre order admin header**********************************************/
         $orders_pre = Order::select('order_number','id','created_at')->with(['order_items' => function($test) {
