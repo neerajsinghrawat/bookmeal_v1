@@ -224,7 +224,7 @@ class PagesController extends Controller
        $result = 0;
        $msg = '';
        $setting = Setting::first();
-
+//die('kmjkjjghj');
        
        if (!empty($request->reservation_date) && !empty($request->people_count) && !empty($request->reservation_time) && !empty($request->name) &&  !empty($request->email) &&  !empty($request->phone)) {
 
@@ -234,7 +234,7 @@ class PagesController extends Controller
             $currentDate = date('Y-m-d');
             $day = strtolower(date('l',strtotime($request->reservation_date)));
             if (($date == $currentDate && $time > $currenttime) || ($date > $currentDate)) {
-                $openingTimes = OpeningTime::where('setting_id','=',$settings->id)->where('day_name','=',$day)->first();
+                $openingTimes = OpeningTime::where('setting_id','=',$setting->id)->where('day_name','=',$day)->first();
                 if (!empty($openingTimes) && $openingTimes->is_close == 0) {
 
                     if ($openingTimes->start_time <= $time && $openingTimes->end_time > $time) { 
@@ -296,6 +296,10 @@ class PagesController extends Controller
                                     $result = 1;
                                 }
                         }
+                    }else{
+                        $msg = 'This time not set in Detail';
+                        $result = 0;
+
                     }
 
 
@@ -306,6 +310,10 @@ class PagesController extends Controller
 
                 }
 
+            }else{
+
+                        $msg = 'Please select greater than current time ';
+                        $result = 0;
             }
           
        }else{
