@@ -1,0 +1,179 @@
+<?php
+
+
+if (! function_exists('get_data')) {
+    function get_data($model)
+    {
+    	$category_list = $model::first();
+        return $category_list;
+    }
+
+
+    function get_count($user_id)
+    {
+    	$cart_count = DB::table('carts')->where('user_id', $user_id)->count();
+
+        return $cart_count;
+    }
+    
+    
+    
+    
+   function getProductAverageRating($reviews){
+		
+		$avg_rating = 0;
+		$totalRating = 0;
+		if(!empty($reviews)){
+			
+			foreach($reviews as $review){
+				$totalRating += $review['rating'];
+			}
+		
+			if(($totalRating > 0) && (count($reviews) > 0)){
+				$avg_rating = $totalRating / count($reviews);
+			}
+			
+		}
+		
+		return $avg_rating;
+	}
+
+
+	function getProductAverageRatingfor_many_items($id)
+	{
+		
+		$avg_rating = 0;
+		$totalRating = 0;
+		$reviews = DB::table('product_reviews')->where('product_id', $id)->get();
+		//echo '<pre>';print_r($reviews);die;
+		if(!empty($reviews)){
+			
+			foreach($reviews as $review){
+				$totalRating += $review->rating;
+			}
+		
+			if(($totalRating > 0) && (count($reviews) > 0)){
+				$avg_rating = $totalRating / count($reviews);
+			}
+			
+		}
+		
+		return $avg_rating;
+	}
+
+
+	function getProducttag($id){
+		
+		$tag = DB::table('product_tags')->where('product_id', $id)->get();
+		
+		return $tag;
+	}	
+
+	function getProductitems($id){
+		
+		$items = DB::table('product_items')->select('title')->where('product_id', $id)->get();
+		
+		return $items;
+	}
+	
+	
+	function getOpenHours(){
+		
+		$openHours = DB::table('open_hours')->orderBy('sort_number')->get();
+		
+		return $openHours;
+	}
+    
+    
+     function getAllCurrencies(){
+	     $result = array(
+	                'GBP' => array('currency' => 'GBP','currency_symbol' => '£','currency_code' => 'GBP'),
+					'USD' => array('currency' => 'USD','currency_symbol' => '$','currency_code' => 'USD'),
+						);
+	
+	    	
+		return $result;
+   }
+    
+    
+   function getSiteCurrencyType(){
+	   
+	   $site_setting = DB::table('settings')->select('site_currency_type')->first();
+	  
+	   $currencies = getAllCurrencies();
+	   
+	   
+	   $result = (isset($site_setting->site_currency_type) && !empty($site_setting->site_currency_type)) ? $currencies[$site_setting->site_currency_type]['currency_symbol'] : '$';
+	   
+	   
+	   return $result;
+	  
+   }
+
+   function getuserdetail_byid($id)
+   {
+   		$userdetail = DB::table('users')->select('id','phone','first_name','last_name','username','email','address','postcode','city')->where('id', $id)->first();
+		
+		return $userdetail;
+   }   
+
+   function getProductSlugByProductId($product_id){
+	 
+	   $product_slug = DB::table('products')->select('slug')->where('id','=',$product_id)->first();
+	   $result = !empty($product_slug) ? $product_slug->slug : '';
+	   return $result;
+   }
+
+   function getmaincategoryname($id)
+   {	
+   		$category_name = array();
+   		$category_name = DB::table('categories')->select('name')->where('id', $id)->first();
+
+		return $category_name;
+   }   
+
+   function getsubcategoryname($id)
+   {	
+   		$category_name = array();
+   		$category_name = DB::table('categories')->select('name')->where('id', $id)->first();
+
+		return $category_name;
+   }   
+
+   function getcategoryname_byproduct_id($id)
+   {	
+   		$products = array();
+   		$products = DB::table('products')->select('category_id','sub_category_id')->where('id', $id)->first();
+   		$maincat = getmaincategoryname($products->category_id);
+   		$subcat = getsubcategoryname($products->sub_category_id);
+   		//echo '<pre>';print_r($maincat);die;
+   		$subcategory_names = (!empty($subcat->name))?'/'.ucwords($subcat->name):'';
+   		$catname = ucwords($maincat->name) .' '.$subcategory_names;
+		return $catname;
+   }   
+
+   function getpreorder_byorder_id($id)
+   {	
+   		$preorder = array();
+   		$preordernumber = 0;
+   		$preorder = DB::table('order_items')->where('order_id', $id)->get();
+   		foreach ($preorder as $key => $value) {
+   			if ($value->is_pre_order == 1) {
+   				$preordernumber = 1;
+   			}
+   		}
+
+		return $preordernumber;
+   }
+
+	function getTimeArr(){
+		
+		$timearray=array('12:00 AM','01:00 AM','02:00 AM','03:00 AM','04:00 AM','05:00 AM','06:00 AM','07:00 AM','08:00 AM','09:00 AM','10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM','08:00 PM','09:00 PM','10:00 PM','11:00 PM'); 
+		
+		return $timearray;
+	}	
+   
+
+
+   
+}

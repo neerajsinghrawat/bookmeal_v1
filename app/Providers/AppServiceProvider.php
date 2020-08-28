@@ -1,0 +1,135 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use App\Models\Category;
+use App\Models\Cart;
+use App\Models\Client;
+use App\Models\Page;
+use App\Models\OrderComplaint;
+use App\Models\Order;
+use App\Models\OrderItems
+;
+use View;
+use Auth;
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+
+        
+
+        View::composer('partials.header', function($view)
+            {
+                $category_list = Category::with('children')->where('parent_id','=',0)->where('status','=', 1)->get();
+                
+                $cart_count = Cart::where('user_id','=', 1)->get();
+                $view->with('category_list', $category_list);
+            });
+/*        View::composer('partials.header', function($view)
+            {
+                
+        $subcategory_list = Category::where('parent_id','!=',0)->where('status','=', 1)->get();
+                $view->with('subcategory_list', $subcategory_list);
+            });*/        
+
+        View::composer('partials.header', function($view)
+            {
+                
+                $cart_count = Cart::where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->count();
+                $view->with('cart_count', $cart_count);
+            });
+
+        View::composer('partials.footer', function($view)
+            {
+                
+                $pages_detail = Page::where('status','=', 1)->where('footer_page','=', 1)->orderBy('sort_number')->get();
+                $view->with('pages_detail', $pages_detail);
+            });
+
+        View::composer('partials.footer', function($view)
+            {
+                
+                $client_list = Client::where('status','=', 1)->where('featured','=', 1)->limit(6)->get();
+                $view->with('client_list', $client_list);
+            });
+
+        View::composer('partials.header', function($view)
+            {
+                
+                $pages_detail = Page::where('status','=', 1)->where('header_page','=', 1)->orderBy('sort_number')->get();
+                $view->with('pages_detail', $pages_detail);
+            });
+            
+            
+        
+		
+
+
+        $activeComplaints = OrderComplaint::select('order_number')->where('status','=',0)->where('user_type','=','customer')->distinct('order_number')->orderBy('created_at','desc')->get();
+        //echo '<pre>data_crawled_count'; print_r($activeComplaints); die;
+        $activeComplaintDataArr = array();
+        if(!empty($activeComplaints)){
+            $i = 0;
+            foreach($activeComplaints as $active_complaint){
+                
+                $lastComplaint = OrderComplaint::where('status','=',0)->where('order_number','=',$active_complaint['order_number'])->orderBy('created_at','desc')->first();
+                
+                if($lastComplaint->user_type == "customer"){
+                    $activeComplaintDataArr[$lastComplaint->order_number]['user_id'] = $lastComplaint->user_id;
+                    $activeComplaintDataArr[$lastComplaint->order_number]['order_number'] = $lastComplaint->order_number;
+                    //$activeComplaintDataArr[$i][$active_complaint->order_number][$i]['subject'] = $active_complaint->subject;
+                    $activeComplaintDataArr[$lastComplaint->order_number]['problem'] = $lastComplaint->problem;
+                    $activeComplaintDataArr[$lastComplaint->order_number]['user_type'] = $lastComplaint->user_type;
+                    $activeComplaintDataArr[$lastComplaint->order_number]['created_at'] = date('d M,Y  H:i A', strtotime($lastComplaint->created_at));
+                }
+                //echo '<pre>lastComplaint'; print_R($lastComplaint); die;
+                
+            $i++;
+            }
+            
+            //echo '<pre>activeComplaintArr'; print_R($activeComplaintArr); die;
+        }
+        View::share('activeComplaints', $activeComplaints);
+        View::share('activeComplaintDataArr', $activeComplaintDataArr);		
+
+
+/***************************pre order admin header**********************************************/
+        $orders_pre = Order::select('order_number','id','created_at')->with(['order_items' => function($test) {
+                        $test->where('is_pre_order', '=', 1);
+                    }])->where('order_status','=','Order Confirmed')->orderBy('created_at','desc')->get();
+
+//		echo '<pre>data_crawled_count'; print_r($orders_pre);die;
+		$preorderDataArr = array();
+		if(!empty($orders_pre)){			
+			foreach($orders_pre as $orders_pres){
+
+              foreach ($orders_pres->order_items as $key => $preorder_item) {
+                if (($preorder_item->is_pre_order == 1) && ($preorder_item->order_id == $orders_pres->id)){
+                     $preorderDataArr[$orders_pres->id]['order_number'] = $orders_pres->order_number;
+                     $preorderDataArr[$orders_pres->id]['date'] = date('d M,Y  H:i A', strtotime($orders_pres->created_at));
+                }               
+              }              
+			}
+		}
+       // echo '<pre>';print_r($preorderDataArr);die;
+		View::share('preorderDataArr', $preorderDataArr);
+/*************************************************************************************8*/
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}
