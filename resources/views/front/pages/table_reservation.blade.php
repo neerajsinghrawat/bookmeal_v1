@@ -49,7 +49,7 @@
                                         <?php } ?>
                                     </div>
                                 </div>
-                                <hr class="hr-md" style="margin-top: 15px;margin-bottom: 15px;"> 
+                                <hr class="hr-md" style="margin-top: 10px;margin-bottom: 10px;"> 
                                 <?php } ?>
                                 <br>
                         <h4 class="mb-0"><b>Call Us Now</b></h4>
