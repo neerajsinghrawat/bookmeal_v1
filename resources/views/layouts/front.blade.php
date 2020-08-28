@@ -343,7 +343,8 @@
     height: 1165px;
 ">
                 <div class="row justify-content-center">
-                    <div class="col-lg-10">
+                    <div class="col-lg-10  modal-content" style="padding-left: 0px;
+    padding-right: 0px;">
                         
                         <!-- Book a Table -->
                         <div class="utility-box">
@@ -391,7 +392,7 @@
                                
                                 <form action="" id="booking-form" class="booking-form">
                                     {{ csrf_field() }}
-                                    <div class="utility-box-content"><div id="dispmsg"><b></b></div>
+                                    <div class="utility-box-content"><div id="dispmsg" style="color: red"><b></b></div><div id="dispmsgSuccess" style="color: green"><b></b></div>
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
@@ -482,7 +483,52 @@
 		});
 	});
 </script>
+<script src="{{ asset('js/admin/jquery.min2.1.3.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
 
+  $('.saveTablereservation').click(function(){
+   // alert('mnlksdfjio');
+    var name= $('#name').val();
+    var email= $('#email').val();
+    var phone= $('#phone').val();
+    var date= $('#date').val();
+    if (name !='' && email !='' && phone !='' && date !='') {
+        var baseUrl = '{{ URL::to('/') }}';
+        var formData = $('#booking-form').serialize();
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+            url : baseUrl+'/pages/save_table_reservation',
+            type : 'POST',
+            data : $('#booking-form').serialize(),
+            dataType : 'json',
+            success : function(result){
+              
+            }
+          }).done(function(result){
+            
+            if(result['success'] == 1){
+
+                $('#dispmsgSuccess').html(result['msg']).show();
+                setTimeout(function(){ jQuery("#dispmsgSuccess").hide(); }, 3000);
+
+            }else{
+
+                $('#dispmsg').html(result['msg']).show();
+                setTimeout(function(){ jQuery("#dispmsg").hide(); }, 3000);
+
+                //alert(result['msg']);
+                //window.location.reload();
+            }
+          });
+    }else{
+        alert('Please Fill all * fields');
+    }
+  
+  });
+
+});
+</script>
     </body>
 
 </html>
