@@ -236,19 +236,50 @@ class PagesController extends Controller
             if (($date == $currentDate && $time > $currenttime) || ($date > $currentDate)) {
                 $openingTimes = OpeningTime::where('setting_id','=',$settings->id)->where('day_name','=',$day)->first();
                 if (!empty($openingTimes) && $openingTimes->is_close == 0) {
-                    $tableReservations = TableReservation::where('reservation_time','=', $time)->where('reservation_date','=', $date)->get()->toArray();
-                    if (!empty($tableReservations)) {
-                        $total_men = 0;
-                        foreach ($tableReservations as $key => $value) {
-                            $total_men += $value['people_count'];
+
+                    if ($openingTimes->start_time <= $time && $openingTimes->end_time > $time) { 
+
+                        $tableReservations = TableReservation::where('reservation_time','=', $time)->where('reservation_date','=', $date)->get()->toArray();
+                        if (!empty($tableReservations)) {
+                            $total_men = 0;
+                            foreach ($tableReservations as $key => $value) {
+                                $total_men += $value['people_count'];
+                                
+                            }
                             
-                        }
-                        
-                        if ($setting->total_men != $total_men) {
+                            if ($setting->total_men != $total_men) {
 
-                            $remaining = $setting->total_men - $total_men;
+                                $remaining = $setting->total_men - $total_men;
 
-                            if ($request->people_count <= $remaining) {
+                                if ($request->people_count <= $remaining) {
+                                    $tableReservation = new TableReservation;
+
+                                    $tableReservation->reservation_date = $date;
+                                    $tableReservation->people_count = $request->people_count;       
+                                    $tableReservation->reservation_time = $time;       
+                                    $tableReservation->name = $request->name;       
+                                    $tableReservation->email = $request->email;       
+                                    $tableReservation->phone = $request->phone; 
+                                            
+
+                                    if($tableReservation->save()){
+
+                                        $msg = 'Your Table Book successfully';
+                                        $result = 1;
+                                    }
+                                }else{
+
+                                        $msg = 'Only '.$remaining .' People Space on selected time';
+                                        $result = 0;
+
+                                }
+                                
+
+                            }else{
+                                        $msg = 'All Table reserved this selected time';
+                                        $result = 0;
+                            }
+                        }else{
                                 $tableReservation = new TableReservation;
 
                                 $tableReservation->reservation_date = $date;
@@ -264,35 +295,10 @@ class PagesController extends Controller
                                     $msg = 'Your Table Book successfully';
                                     $result = 1;
                                 }
-                            }else{
-
-                                    $msg = 'Only '.$remaining .' People Space on selected time';
-                                    $result = 0;
-
-                            }
-                            
-
-                        }else{
-                                    $msg = 'All Table reserved this selected time';
-                                    $result = 0;
                         }
-                    }else{
-                            $tableReservation = new TableReservation;
-
-                            $tableReservation->reservation_date = $date;
-                            $tableReservation->people_count = $request->people_count;       
-                            $tableReservation->reservation_time = $time;       
-                            $tableReservation->name = $request->name;       
-                            $tableReservation->email = $request->email;       
-                            $tableReservation->phone = $request->phone; 
-                                    
-
-                            if($tableReservation->save()){
-
-                                $msg = 'Your Table Book successfully';
-                                $result = 1;
-                            }
                     }
+
+
                 }else{
 
                         $msg = 'This day is week off please cahnge date';
@@ -309,7 +315,7 @@ class PagesController extends Controller
         
 
         return response()->json(['success'=> $result,'msg'=>$msg]);
-		die;
-    }    
+        die;
+    }     
 
 }
