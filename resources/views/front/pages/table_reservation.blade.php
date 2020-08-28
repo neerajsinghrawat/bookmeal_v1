@@ -59,10 +59,11 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                               <br>
+
+                               
                                 <form action="" id="booking-form" class="booking-form">
                                     {{ csrf_field() }}
-                                    <div class="utility-box-content">
+                                    <div class="utility-box-content"><div id="dispmsg"><b></b></div>
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
@@ -157,11 +158,11 @@ $(document).ready(function(){
                 alert(result['msg']);
 
             }else{
-               /* $('#dispmsg').html('Item quantity receive successfully').show();
-                setTimeout(function(){ jQuery("#dispmsg").hide(); }, 3000);*/
+                $('#dispmsg').html(result['msg']).show();
+                setTimeout(function(){ jQuery("#dispmsg").hide(); }, 3000);
 
-                alert(result['msg']);
-                window.location.reload();
+                //alert(result['msg']);
+                //window.location.reload();
             }
           });
     }else{
