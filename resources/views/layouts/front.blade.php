@@ -335,9 +335,13 @@
 </div>
 
 <div class="modal fade product-modal" id="odder" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="container">
+    <div class="modal-dialog" role="document" style="margin-left: 400px;
+    margin-right: 660px;
+    margin-top: 100px;">
+            <div class="container" style="
+    width: 1119px;
+    height: 1165px;
+">
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         
@@ -451,7 +455,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 <!-- Cookies Bar -->
