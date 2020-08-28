@@ -24,7 +24,7 @@
                         </ul>
                     </nav>
                     <div class="module left">
-                        <a href="menu-list-navigation.html" class="btn btn-outline-secondary"><span>Order</span></a>
+                        <a href="#odder" data-toggle="modal" class="btn btn-outline-secondary"><span>Order</span></a>
                     </div>
                 </div>
                 <div class="col-md-2">
