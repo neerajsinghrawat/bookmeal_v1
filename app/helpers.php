@@ -71,7 +71,7 @@ if (! function_exists('get_data')) {
 
 	function getProductitems($id){
 		
-		$items = DB::table('product_items')->select('title')->where('product_id', $id)->get();
+		$items = DB::table('product_items')->where('product_id', $id)->get();
 		
 		return $items;
 	}
