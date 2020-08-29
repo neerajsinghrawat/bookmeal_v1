@@ -31,7 +31,7 @@
                     <a href="#" class="module module-cart right" data-toggle="panel-cart">
                         <span class="cart-icon">
                             <i class="ti ti-shopping-cart"></i>
-                            <span class="notification">0</span>
+                            <span class="notification display-cart">0</span>
                         </span>
                         <span class="cart-value">$<span class="value">0.00</span></span>
                     </a>
