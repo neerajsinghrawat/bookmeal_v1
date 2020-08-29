@@ -86,7 +86,7 @@
                     <div class="row">                   
                         <div class="form-group col-md-3">
                           
-                          <input type="checkbox" name="openingTime[{{ $key }}][is_close]" value="1" <?php echo ($openingTimesArr[$day]['is_close'] == 1)?"checked='checked'":'' ; ?> >
+                          <input type="checkbox" class="dayoff" name="openingTime[{{ $key }}][is_close]" value="1" <?php echo ($openingTimesArr[$day]['is_close'] == 1)?"checked='checked'":'' ; ?> >
                         </div>                    
                         <div class="form-group col-md-3">
                           <input type="text" class="form-control" name="openingTime[{{ $key }}][day_name]" value="{{ $day }}" readonly="readonly">
@@ -209,5 +209,34 @@ $(document).ready(function(){
           Text = Text.replace(/[^a-zA-Z0-9]+/g,'-');
           $("#category_Slug").val(Text);        
     });
+
+   
+   $('.dayoff').change(function(){
+        var buttonval = $(this).val();
+       alert(buttonval);
+    if (buttonval == 'time') {
+    $('.timing').css('display','block');
+     $('.custom_text').css('display','none');
+       $('.ct').attr('disabled',true);
+       $('.st').attr('disabled',false);
+    } else if (buttonval == 'closed') {
+     $('.timing').css('display','none');
+     $('.custom_text').css('display','none');
+       $('.ct').attr('disabled',true);
+       $('.st').attr('disabled',true);
+    } else{
+
+      $('.timing').css('display','none');
+     $('.custom_text').css('display','block');
+       $('.st').attr('disabled',true);
+       $('.ct').attr('disabled',false);
+    }
+   });
+
+  /*if (buttonval == 'percentage') {
+    $('.labelclass').html('Percentage');
+  }*/
+
+
 });
 </script>
