@@ -86,25 +86,27 @@
                     <div class="row">                   
                         <div class="form-group col-md-3">
                           
-                          <input type="checkbox" class="dayoff" name="openingTime[{{ $key }}][is_close]" value="1" <?php echo ($openingTimesArr[$day]['is_close'] == 1)?"checked='checked'":'' ; ?> >
+                          <input type="checkbox" class="dayoff" name="openingTime[{{ $key }}][is_close]" value="1" <?php echo ($openingTimesArr[$day]['is_close'] == 1)?"checked='checked'":'' ; ?> day= "{{ $day }}">
                         </div>                    
                         <div class="form-group col-md-3">
                           <input type="text" class="form-control" name="openingTime[{{ $key }}][day_name]" value="{{ $day }}" readonly="readonly">
-                        </div>              
-                        <div class="form-group col-md-3">
-                          <select name="openingTime[{{ $key }}][start_time]" class="form-control">
-                            @foreach($timearray as $value)
-                            <option value="{{ $value }}" {{ ($start == $value)?'selected=selected':'' }}>{{ $value }}</option>
-                            @endforeach
-                          </select>
-                        </div>
+                        </div>     
+                        <div class="{{ $day }}">        
+                          <div class="form-group col-md-3">
+                            <select name="openingTime[{{ $key }}][start_time]" class="form-control">
+                              @foreach($timearray as $value)
+                              <option value="{{ $value }}" {{ ($start == $value)?'selected=selected':'' }}>{{ $value }}</option>
+                              @endforeach
+                            </select>
+                          </div>
 
-                        <div class="form-group col-md-3">
-                          <select name="openingTime[{{ $key }}][end_time]" class="form-control">
-                            @foreach($timearray as $value)
-                            <option value="{{ $value }}" {{ ($end == $value)?'selected=selected':'' }}>{{ $value }}</option>
-                            @endforeach
-                          </select>
+                          <div class="form-group col-md-3">
+                            <select name="openingTime[{{ $key }}][end_time]" class="form-control">
+                              @foreach($timearray as $value)
+                              <option value="{{ $value }}" {{ ($end == $value)?'selected=selected':'' }}>{{ $value }}</option>
+                              @endforeach
+                            </select>
+                          </div> 
                         </div>                    
                     </div>
 
@@ -202,7 +204,21 @@
 <script src="{{ asset('js/admin/jquery.min2.1.3.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  //alert('sdfdsf');
+
+    $( ".dayoff" ).each(function() {
+      if($(this).prop('checked')){
+
+        var day = $(this).attr('day');
+        $('.'+day).css('display','none');
+      
+      }else{
+
+        var day = $(this).attr('day');
+        $('.'+day).css('display','block');
+
+      }
+    });
+    
     $("#category_Name").keyup(function(){
           var Text = $(this).val();
           Text = Text.toLowerCase();
@@ -211,26 +227,21 @@ $(document).ready(function(){
     });
 
    
-   $('.dayoff').change(function(){
-        var buttonval = $(this).val();
-       alert(buttonval);
-    if (buttonval == 'time') {
-    $('.timing').css('display','block');
-     $('.custom_text').css('display','none');
-       $('.ct').attr('disabled',true);
-       $('.st').attr('disabled',false);
-    } else if (buttonval == 'closed') {
-     $('.timing').css('display','none');
-     $('.custom_text').css('display','none');
-       $('.ct').attr('disabled',true);
-       $('.st').attr('disabled',true);
-    } else{
+   $('.dayoff').click(function(){    
 
-      $('.timing').css('display','none');
-     $('.custom_text').css('display','block');
-       $('.st').attr('disabled',true);
-       $('.ct').attr('disabled',false);
+    if($(this).prop('checked')){
+
+      var day = $(this).attr('day');
+      $('.'+day).css('display','none');
+    
+    }else{
+
+      var day = $(this).attr('day');
+      $('.'+day).css('display','block');
+
     }
+
+
    });
 
   /*if (buttonval == 'percentage') {
