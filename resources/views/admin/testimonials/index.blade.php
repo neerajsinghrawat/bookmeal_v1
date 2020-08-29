@@ -55,7 +55,7 @@
             <td><?php echo $testimonial['designation']; ?></td>
              				  
 					  <td><?php echo ($testimonial['status'] == 1) ? '<small class="label bg-green">Active</small>' : '<small class="label bg-red">Inactive</small>'; ?></td>
-            <td><?php echo ($testimonial['Show in home page'] == 1) ? '<small class="label bg-green">Show</small>' : '<small class="label bg-red">Hide</small>'; ?></td>
+            <td><?php echo ($testimonial['show_inhome_page'] == 1) ? '<small class="label bg-green">Show</small>' : '<small class="label bg-red">Hide</small>'; ?></td>
 					  <td><?php echo (date('d-m-Y',strtotime($testimonial['created_at']))); ?></td>
 					  
 					 <td><a href="{{ URL::to('admin/testimonials/edit/'.$testimonial['id']) }}"><i class="fa fa-edit"></i></a>
