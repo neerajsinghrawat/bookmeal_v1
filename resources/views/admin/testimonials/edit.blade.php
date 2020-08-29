@@ -54,6 +54,10 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1">Status</label>
                    <input type="checkbox" name="status"  {{ ($testimonials['status'] == 1)?'checked':'unchecked' }}>
+                </div>        
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Show in home page</label>
+                   <input type="checkbox" name="show_inhome_page"  {{ ($testimonials['show_inhome_page'] == 1)?'checked':'unchecked' }}>
                 </div>
         
         

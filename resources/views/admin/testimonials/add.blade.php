@@ -49,6 +49,11 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1">Status</label>
                    <input type="checkbox" name="status">
+                </div>                
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Show in home page</label>
+                   <input type="checkbox" name="show_inhome_page">
                 </div>
         
         
