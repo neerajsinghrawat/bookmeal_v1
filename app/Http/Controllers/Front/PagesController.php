@@ -75,7 +75,7 @@ class PagesController extends Controller
         }
 
     	$sliders = Slider::where('status','=', 1)->get();
-    	$testimonials = Testimonial::where('status','=', 1)->get();
+    	$testimonials = Testimonial::where('status','=', 1)->where('show_inhome_page','=', 1)->get();
 
     	$products = Product::where('status','=', 1)->where('is_popular','=', 1)->orderBy(DB::raw('RAND()'))->limit(10)->get();
     	//$setting = Setting::where('status','=', 1)->first();
