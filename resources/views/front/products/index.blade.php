@@ -3,7 +3,7 @@
 @section('description', (!empty($categories->meta_description))? $categories->meta_description:'')
 @section('keywords', (!empty($categories->meta_keyword))? $categories->meta_keyword:'')
 @section('content')
-
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 <style type="text/css">
    .categoryPageSection {
    display: flex;
@@ -69,17 +69,28 @@
                                         <div class="col-sm-6 mb-2 mb-sm-0">
                                             <h6 class="mb-0">{{ ucwords($food['name']) }}</h6>
                                             <span class="text-muted text-sm">
-                                            <?php  $product_tag = getProducttag($food['id']);  ?>
-                                            <?php  
-                                                            $i = 1;
-                                                            foreach ($product_tag as $key => $productag) {
-                                                                $slashs = ($i < count($product_tag)) ? ', ' : '';
-                                                               echo '<a href="'.URL::to('product-tag/'.$productag->tag).'" >'.$productag->tag.$slashs.' </a>';
-                                                           $i++; } ?></span>
+                                            <?php  $product_items = getProductitems($food['id']); ?>
+                                            <?php 
+                                              $i = 1;
+                                              if(isset($product_items) && count($product_items) > 0 ){
+                                              
+                                                foreach ($product_items as $key => $product_item) {
+                                                   $slashs = ($i < count($product_items)) ? ', ' : '';
+                                                   echo ucwords($product_item->title.$slashs);
+                                                   $i++; 
+                                                 } 
+
+                                               } ?>
+                                                </span>
+
+
+
+
                                         </div>
                                         <div class="col-sm-6 text-sm-right">
                                             <span class="text-md mr-4"><span class="text-muted">from</span> <?php echo getSiteCurrencyType(); ?><span data-product-base-price>{{ $food['price'] }}</span></span>
-                                            <button class="btn btn-outline-secondary btn-sm" data-action="open-cart-modal" data-id="1"><span>Add to cart</span></button>
+                                            
+                                            <button class="btn btn-outline-secondary btn-sm addToCart" product_id="{{ $food['id'] }}"><span>Add to cart</span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -108,8 +119,8 @@ $(document).ready(function() {
   $('.addToCart').click(function(){
         
         var productid = $(this).attr('product_id');     
-        alert(productid);
-        //alert('zfsdfsdffsd');
+        //alert(productid);
+        
             $.ajax({
       
                 url: baseUrl+'/products/add_to_cart',
@@ -122,8 +133,8 @@ $(document).ready(function() {
                 
                 success: function(result) {
 
-                  alert(result.response);
-                  //$('#successFlashMsg').delay(1000).hide('highlight', {color: '#66cc66'}, 1500);
+                  /*alert(result.response);
+                  //$('#successFlashMsg').delay(1000).hide('highlight', {color: '#66cc66'}, 1500);*/
                   
                   $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('body');
                   
@@ -148,4 +159,3 @@ $(document).ready(function() {
   });  
 });
 </script>
-
