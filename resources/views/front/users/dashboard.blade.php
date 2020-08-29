@@ -5,81 +5,68 @@
 @section('content')
 
 <!-- Breadcrumb Start -->
-<div class="bread-crumb">
+<div class="page-title bg-light">
+    <div class="bg-image bg-parallax"><img src="http://assets.suelo.pl/soup/img/photos/bg-desk.jpg" alt=""></div>
     <div class="container">
-        <div class="matter">
-            <h2>Dashboard</h2>
-            <ul class="list-inline">
-                <li class="list-inline-item"><a href="<?php echo URL::to('/'); ?>">HOME <?php //echo $_COOKIE['first_name']; ?></a></li>
-                <li class="list-inline-item"><a href="#">Dashboard</a></li>
-            </ul>
+        <div class="row">
+            <div class="col-lg-8 offset-lg-4">
+                <h1 class="mb-0">Dashboard</h1>
+                <h4 class="text-muted mb-0">Some informations about our restaurant</h4>
+            </div>
         </div>
     </div>
 </div>
 <!-- Breadcrumb End -->
-
-<!-- Login Start -->
-<div class="dashboard">
+<section class="section">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-12 commontop text-center">
-                <h4>User Dashboard</h4>
-                <div class="divider style-1 center">
-                    <span class="hr-simple left"></span>
-                    <i class="icofont icofont-ui-press hr-icon"></i>
-                    <span class="hr-simple right"></span>
-                </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur placerat nulla, in suscipit erat sodales id. Nullam ultricies eu turpis at accumsan. Mauris a sodales mi, eget lobortis nulla.</p>
-            </div>
-
-            <div class="col-lg-12 col-md-12 user-profile">
+            <div class="col-md-12 user-profile">
                 <div class="row">
-                    <div class="col-md-3 col-lg-2">
+                    <div class="col-md-3 ">
                         <div class="user-profile-tabs">
                             <!--  Menu Tabs Start  -->
                             <ul class="nav nav-tabs flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link active dashboardTab overview_tab" data-toggle="tab" href="#overview" aria-expanded="true">
+                                    <a href="#overview" class="nav-link">
                                         <i class="icofont icofont-dashboard-web"></i>
                                         <span>Overview</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link dashboardTab profile_tab" data-toggle="tab" href="#profile" aria-expanded="true">
+                                    <a href="#profile"  class="nav-link">
                                         <i class="icofont icofont-ui-user"></i>
                                         <span>Profile</span>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link dashboardTab addresses_tab" data-toggle="tab" href="#addresses" aria-expanded="true">
+                                    <a href="#addresses"  class="nav-link">
                                         <i class="icofont icofont-ui-home"></i>
                                         <span>Addresses</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link dashboardTab history_tab" data-toggle="tab" href="#history" aria-expanded="true">
+                                    <a href="#history" class="nav-link">
                                         <i class="icofont icofont-history"></i>
                                         <span>Order History</span>
                                     </a>
                                 </li>
                                 
-								<?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){ ?>
+                                <?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){ ?>
                                 <li class="nav-item">
-                                    <a class="nav-link dashboardTab complaint_tab" data-toggle="tab" href="#complaint" aria-expanded="true">
+                                    <a href="#complaint" class="nav-link">
                                         <i class="icofont icofont-support-faq"></i>
                                         <span>Complaint</span>
                                     </a>
                                 </li>
-								<?php } ?>
+                                <?php } ?>
 
                             </ul>
                             <!--  Menu Tabs Start  -->
                         </div>
                     </div>
 
-                    <div class="col-md-9 col-lg-10">
-                        <div class="tab-content">
+                    <div class="col-md-8 offset-md-1">
+                      
                             <div id="overview" class="tab-pane fade overview_tab1">
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -106,21 +93,21 @@
 
                                         <div class="most-recent-order">
                                             <h5>Recent Orders</h5>
-            							<?php 
-            								if(!empty($recentOrders) && count($recentOrders) > 0){
-            									foreach($recentOrders as $order){
-            									//echo '<pre>order'; print_R($order); die;
-            							?>
-            							   <div class="field-entry">
+                                        <?php 
+                                            if(!empty($recentOrders) && count($recentOrders) > 0){
+                                                foreach($recentOrders as $order){
+                                                //echo '<pre>order'; print_R($order); die;
+                                        ?>
+                                           <div class="field-entry">
                                                 <div class="row">
                                                     <div class="col-5">
                                                         <p><?php echo $order->order_number ?></p>
                                                     </div>
-            										<div class="col">
+                                                    <div class="col">
                                                         <p class=""><?php echo date('d/m/Y', strtotime($order->created_at)) ?></p>
                                                     </div>
-            										
-            										<div class="col">
+                                                    
+                                                    <div class="col">
                                                         <p class="confirmed"><?php echo getSiteCurrencyType(); ?><?php echo $order->total_amount ?></p>
                                                     </div>
                                                    <!-- <div class="col">
@@ -131,66 +118,20 @@
                                                     </div> -->
                                                 </div>
                                             </div>
-            								<?php } }else{ ?>
-            									 <div class="field-entry">
+                                            <?php } }else{ ?>
+                                                 <div class="field-entry">
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <p>No any order</p>
                                                     </div>
-            										
+                                                    
                                                 </div>
                                             </div>
-            								<?php } ?> 
+                                            <?php } ?> 
 
-            							   </div>
+                                           </div>
                                     </div>
 
-                                    <!-- <div class="col-lg-6">
-                                        <div class="user-profile-offer">
-                                            <h5>Offers For You</h5>
-                                            <div class="offer-body">
-                                                <div class="offer-entry">
-                                                    <div class="row">
-                                                        <div class="col-md-4 col-sm-4 align-self-center offer-left text-center">	
-                                                            <p>25% OFF</p>
-                                                        </div>
-                                                        <div class="col-md-8 col-sm-8 offer-right">
-                                                            <p>Get 25% OFF on Lunch when you pay with your Bank of America Credit Card. <a href="#">Book Now</a></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="offer-entry">
-                                                    <div class="row">
-                                                        <div class="col-md-4 col-sm-4 align-self-center offer-left text-center">	
-                                                            <p>35% OFF</p>
-                                                        </div>
-                                                        <div class="col-md-8 col-sm-8 offer-right">
-                                                            <p>Get 25% OFF on Dinner when you pay with your SBI Credit Card. <a href="#">Book Now</a></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="user-notification">
-                                            <h5>Notification</h5>
-                                            <div class="notification-body">
-                                                <div class="notification-entry">
-                                                    <p><i class="icofont icofont-lunch"></i> Lunch Starting from $199 <span>1 hr ago</span></p>
-                                                </div>
-                                                <div class="notification-entry">
-                                                    <p><i class="icofont icofont-pizza"></i> 20% Cashback on Pizza <span>1 hr ago</span></p>
-                                                </div>
-                                                <div class="notification-entry">
-                                                    <p><i class="icofont icofont-food-cart"></i> 50% off on all items <span>2 Days ago</span></p>
-                                                </div>
-                                                <div class="notification-entry">
-                                                    <p><i class="icofont icofont-sun-alt"></i> New Year special offer <span>1 Month ago</span></p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
 
@@ -425,25 +366,25 @@
                             </div>
 
                             <div id="history" class="tab-pane fade history_tab1">
-                        		<?php 
-                        			if(!empty($orders) && count($orders) > 0){
-                        				foreach($orders as $order){ ?>
+                                <?php 
+                                    if(!empty($orders) && count($orders) > 0){
+                                        foreach($orders as $order){ ?>
                                 <div class="item-entry">
                                     <span class="order-id">Order ID: <?php echo $order->order_number; ?></span>
-                        			<a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>"><span class="order-id view_order_button"> View Order</span></a>
+                                    <a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>"><span class="order-id view_order_button"> View Order</span></a>
                                     
                                     <div class="item-content">
                                         <div class="item-body">
                                             <div class="row">
                                                 <div class="col-md-6 col-sm-6">
-                        							<h4>Items </h4>
-                                        			<?php
-                                        				$i = 1;
-                                        				foreach($order->order_items as $order_item){
-															$product_slug = getProductSlugByProductId($order_item->product_id);
-													?>
+                                                    <h4>Items </h4>
+                                                    <?php
+                                                        $i = 1;
+                                                        foreach($order->order_items as $order_item){
+                                                            $product_slug = getProductSlugByProductId($order_item->product_id);
+                                                    ?>
                                                         <p><?php echo $i; ?>. <a href="{{ URL::to('product/'.$product_slug) }}"><?php echo $order_item->product_name ?></a> </p>
-                            				        <?php $i++; } ?>				
+                                                    <?php $i++; } ?>                
                                                 </div>
 
                                                 <div class="col-md-4 col-sm-3 text-right">
@@ -454,7 +395,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        			<?php } } ?>
+                                    <?php } } ?>
                             </div>
 
                             <div id="complaint" class="tab-pane fade complaint_tab1">
@@ -463,94 +404,94 @@
                                 <div class="complaint-tabs">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item" ><a data-toggle="tab" href="#active-complaint" class="nav-link text-center active" aria-expanded="false"><i class="icofont icofont-flash"></i> Active (<?php echo count($activeComplaintArr); ?>)</a></li>
-                                        <li class="nav-item"><a data-toggle="tab" href="#resolved-complaint" class="nav-link text-center" aria-expanded="false"><i class="icofont icofont-history"></i> Resolved (<?php echo count($resolvedComplaintArr); ?>)</a></li>	
+                                        <li class="nav-item"><a data-toggle="tab" href="#resolved-complaint" class="nav-link text-center" aria-expanded="false"><i class="icofont icofont-history"></i> Resolved (<?php echo count($resolvedComplaintArr); ?>)</a></li> 
                                     </ul>
                                 </div>
                                 <div class="tab-content">
                                     <div id="active-complaint" class="tab-pane fade active show">
                                         <div id="accordion_active_complaint">
-                                    	    <h3  style="display:none">test</h3><div style="display:none"><p>test</p></div>
-                                    		   
+                                            <h3  style="display:none">test</h3><div style="display:none"><p>test</p></div>
+                                               
                                               <?php if(!empty($activeComplaintArr) && count($activeComplaintArr) >0){ 
-                                            			foreach($activeComplaintArr as $key => $active_complaint){ 	
-                                            	?>
+                                                        foreach($activeComplaintArr as $key => $active_complaint){  
+                                                ?>
                                             <h3>Order ID <?php echo $key ?>:
                                               <?php 
-                                            	$i = 1;
-                                            	foreach($active_complaint as $complaint){ 
-                                            		if($i == 1){
-                                            			echo $complaint['subject'];
-                                            		}
-                                            	$i++; } ?>
+                                                $i = 1;
+                                                foreach($active_complaint as $complaint){ 
+                                                    if($i == 1){
+                                                        echo $complaint['subject'];
+                                                    }
+                                                $i++; } ?>
                                             </h3>
                                             <div>
                                                 <p>
-                                                	<label class="switch">
+                                                    <label class="switch">
                                                       <input type="checkbox" class="issue_resolved_checkbox" value="1" order_number="<?php echo $key ?>" user_id="<?php echo $user_id; ?>">
                                                       <span class="slider round"></span>
                                                     </label>
                                                     Resolved ? <br/>
                                                     Note: please on this switch button if your issue resolved.
-                                                	       <?php foreach($active_complaint as $complaint){  ?>
+                                                           <?php foreach($active_complaint as $complaint){  ?>
                                                         <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text">
                                                             <span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?>            
                                                             </span>
-                                                    		<span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?>
+                                                            <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?>
                                                             </span>
-                                                		</div>
-                                                	<?php } ?>
+                                                        </div>
+                                                    <?php } ?>
                                                 </p>
                                             </div>
-                                		    <?php } } ?>
+                                            <?php } } ?>
                                         </div>
                                     </div>
                                     <div id="resolved-complaint" class="tab-pane">
-                        		      <div id="resolved_active_complaint">
-                        		          <h3 style="display:none">test</h3>
+                                      <div id="resolved_active_complaint">
+                                          <h3 style="display:none">test</h3>
                                         <div style="display:none"><p>test</p></div>
-                                        													
+                                                                                            
                                         <?php if(!empty($resolvedComplaintArr) && count($resolvedComplaintArr) >0){ 
-                                        			foreach($resolvedComplaintArr as $key => $resolved_complaint){ 	
-                                        	?>
+                                                    foreach($resolvedComplaintArr as $key => $resolved_complaint){  
+                                            ?>
                                           <h3>Order ID <?php echo $key ?>:
                                           <?php 
-                                        	$i = 1;
-                                        	foreach($resolved_complaint as $complaint){ 
-                                        		if($i == 1){
-                                        			echo $complaint['subject'];
-                                        		}
-                                        	$i++; } ?>
+                                            $i = 1;
+                                            foreach($resolved_complaint as $complaint){ 
+                                                if($i == 1){
+                                                    echo $complaint['subject'];
+                                                }
+                                            $i++; } ?>
                                           </h3>
                                           <div>
                                             <p>
-                                        	<?php foreach($resolved_complaint as $complaint){  ?>
-                                        		<div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text"><span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?></span> <!--<span class="complaint_subject"><?php echo $complaint['subject']; ?></span><br/>-->
-                                        		<span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?></span>
-                                        			</div>
-                                        	<?php } ?>
+                                            <?php foreach($resolved_complaint as $complaint){  ?>
+                                                <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text"><span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?></span> <!--<span class="complaint_subject"><?php echo $complaint['subject']; ?></span><br/>-->
+                                                <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?></span>
+                                                    </div>
+                                            <?php } ?>
                                             </p>
                                           </div>
-                        		          <?php } } ?>
+                                          <?php } } ?>
                                      </div>
                                     </div>
 
                                     <h4 class="mt-5">New Requests</h4>
                                     <div class="submit-complaint">
                                         <form action="{{ url('/save_complaint') }}" enctype="multipart/form-data" method="POST" >
-                        				 {{ csrf_field() }}
+                                         {{ csrf_field() }}
                                             <div class="form-row">
                                                 <div class="form-group col-12">
                                                    
-                        							<?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){?>
-                        							
-                        							<select class="form-control" name="order_number" required>
-                        								<option value="">-Select Order ID-</option>
-                        								<?php foreach($userOrderNumbers as $order_number){ ?>
-                        									<option value="<?php echo $order_number->order_number; ?>"><?php echo $order_number->order_number; ?></option>
-                        								<?php } ?>
-                        							</select>
-                        								
-                        							<?php } ?>
+                                                    <?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){?>
+                                                    
+                                                    <select class="form-control" name="order_number" required>
+                                                        <option value="">-Select Order ID-</option>
+                                                        <?php foreach($userOrderNumbers as $order_number){ ?>
+                                                            <option value="<?php echo $order_number->order_number; ?>"><?php echo $order_number->order_number; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                        
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -573,13 +514,13 @@
                                 </div>
                              </div>
                             </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
-        </div>
     </div>
-</div>
+</section>
+
 <!-- Login End -->
 
  <input type="hidden" id="totaladdress" value="<?php echo (isset($addressesArr['other']) && count($addressesArr['other']) > 0)?count($addressesArr['other']):0; ?>" />
