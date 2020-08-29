@@ -266,9 +266,9 @@
         <li>
           <a href="{{ URL::to('admin/featureGroups') }}"><i class="fa fa-bars" aria-hidden="true"></i> Feature Group</a>
         </li> -->
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'franchises'))?'active':'' }}">
+        <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'franchises'))?'active':'' }}">
           <a href="{{ URL::to('admin/franchises') }}"><i class="fa fa-building-o" aria-hidden="true"></i>Franchise</a>
-        </li>
+        </li> -->
 
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'postcodes'))?'active':'' }}">
           <a href="{{ URL::to('admin/postcodes') }}"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>Post Codes</a>
@@ -311,9 +311,9 @@
           <a href="{{ URL::to('admin/contact_us') }}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact us</a>
         </li>
         
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'openHours'))?'active':'' }}">
+        <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'openHours'))?'active':'' }}">
           <a href="{{ URL::to('admin/openHours') }}"><i class="fa fa-clock-o" aria-hidden="true"></i>Open Hours</a>
-        </li>
+        </li> -->
         
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'clients'))?'active':'' }}">
           <a href="{{ URL::to('admin/clients') }}"><i class="fa fa-group" aria-hidden="true"></i>Client</a>
