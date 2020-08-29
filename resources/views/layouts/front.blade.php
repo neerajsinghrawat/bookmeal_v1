@@ -103,49 +103,77 @@
                 <button class="close" data-toggle="panel-cart"><i class="ti ti-close"></i></button>
             </div>
             <div class="panel-cart-content cart-details">
-                <table class="cart-table">
-                    <tr>
-                        <td class="title">
-                            <span class="name"><a href="#product-modal" data-toggle="modal">Beef Burger</a></span>
-                            <span class="caption text-muted">Large (500g)</span>
-                        </td>
-                        <td class="price">$9.00</td>
-                        <td class="actions">
-                            <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
-                            <a href="#" class="action-icon"><i class="ti ti-close"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <span class="name"><a href="#product-modal" data-toggle="modal">Extra Burger</a></span>
-                            <span class="caption text-muted">Small (200g)</span>
-                        </td>
-                        <td class="price text-success">$9.00</td>
-                        <td class="actions">
-                            <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
-                            <a href="#" class="action-icon"><i class="ti ti-close"></i></a>
-                        </td>
-                    </tr>
-                </table>
-                <div class="cart-summary">
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Order total:</div>
-                        <div class="col-5"><strong>$<span class="cart-products-total">0.00</span></strong></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Devliery:</div>
-                        <div class="col-5"><strong>$<span class="cart-delivery">0.00</span></strong></div>
-                    </div>
-                    <hr class="hr-sm">
-                    <div class="row text-lg">
-                        <div class="col-7 text-right text-muted">Total:</div>
-                        <div class="col-5"><strong>$<span class="cart-total">0.00</span></strong></div>
-                    </div>
-                </div>
-                <div class="cart-empty">
+
+
+
+
+                                <table class="table-cart">
+                                   <tbody>
+                                        <?php $total = 0;
+                                        if (!empty($cart_list[0])) {
+                                                foreach ($cart_list as $key => $cartlistdetail) {  
+                                                               $iImgPath = asset('image/no_product_image.jpg');
+                                                              if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
+                                                                $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
+                                                              }
+                                                $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+                                         ?>
+                                        <tr class="cart_{{ $cartlistdetail->id }}">
+                                            <td class="title">
+                                                <span class="name"><a href="#product-modal" data-toggle="modal">{{ ucwords($cartlistdetail->product->name) }}</a></span>
+                                                <span class="caption text-muted">Large (500g)</span>
+                                            </td>
+                                            <td class="price">{{ getSiteCurrencyType().$cartlistdetail->product->price }}</td>
+                                            <td class="actions">
+                                                <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
+                                                
+                                                <button type="button" class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-close"></i></button>
+                                            </td>
+                                        </tr>
+                                       
+                                        <?php } }else { ?>
+                                        <tr>
+                                            <td>No items found</td>
+                                        </tr>
+                                        <?php } ?>
+                                        </tbody>
+                                    </table>
+                                    <div class="cart-summary">
+                                        <div class="row">
+                                            <div class="col-7 text-right text-muted">Order total:</div>
+                                            <div class="col-5"><strong><span class="cart-products-total">{{ getSiteCurrencyType().$total}}</span></strong></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-7 text-right text-muted">Devliery:</div>
+                                            <div class="col-5"><strong><span class="cart-delivery"><?php $total_amount = $total; 
+                                                    if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
+                                                         $total_amount = $shipping_taxes->shipping_amount + $total_amount;       
+
+                                                         echo getSiteCurrencyType().$shipping_taxes->shipping_amount;
+                                                     }else{
+                                                        echo 'Free';
+                                                     } 
+
+
+                                                    if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
+                                                        if ($total_amount > Session::get('apply_coupon.amount')) {
+                                                            $total_amount = $total_amount - Session::get('apply_coupon.amount');
+                                                        }else{
+                                                            $total_amount = 0;
+                                                        }
+                                                        
+                                                    } ?></span></strong></div>
+                                        </div>
+                                        <hr class="hr-sm">
+                                        <div class="row text-lg">
+                                            <div class="col-7 text-right text-muted">Total:</div>
+                                            <div class="col-5"><strong><span class="cart-total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
+                                        </div>
+                                    </div>
+                <!-- <div class="cart-empty">
                     <i class="ti ti-shopping-cart"></i>
                     <p>Your cart is empty...</p>
-                </div>
+                </div> -->
             </div>
         </div>
         <a href="checkout.html" class="panel-cart-action btn btn-secondary btn-block btn-lg"><span>Go to checkout</span></a>
