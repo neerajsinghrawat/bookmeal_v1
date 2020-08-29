@@ -309,7 +309,7 @@ class ProductsController extends Controller
       if ($request->isMethod('post')) {
 
         $set_id = new Cart;
-        $qty = $request->productqty;
+        $qty = 1;
         $products = Product::where('status','=', 1)->where('id','=', $request->productid)->first();
         $cart_list = Cart::where('product_id','=',$request->productid)->first();
 
