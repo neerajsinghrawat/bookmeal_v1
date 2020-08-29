@@ -55,8 +55,8 @@
         </section>
 
 
-            <!-- Breadcrumb Start -->
-            <div class="bread-crumb">
+            
+            <!-- <div class="bread-crumb">
                 <div class="container">
                     <div class="matter">
                         <h2>Login</h2>
@@ -67,9 +67,9 @@
                     </div>
                 </div>
             </div>
-            <!-- Breadcrumb End -->
+            
 
-            <!-- Login Start -->
+           
             <div class="login">
                 <div class="container">
                     <div class="row justify-content-center">
@@ -112,7 +112,7 @@
                                             <div class="form-group row">
                                                 <div class="col-md-6"><input type="submit" value="SIGN IN" class="btn btn-theme btn-md btn-wide" /></div>
                                                 <div class="col-md-6">
-                                                   <!--  <label><input type="checkbox" class="radio-inline"/>Remember Me</label> --> <a class="clforgot_password" href="{{ url('/forgot-password') }}">Forgot Password?</a>
+                                                    <a class="clforgot_password" href="{{ url('/forgot-password') }}">Forgot Password?</a>
                                                 </div>
                                                 
                                                 
@@ -135,6 +135,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Login End -->
+            </div> -->
+            
 @endsection
