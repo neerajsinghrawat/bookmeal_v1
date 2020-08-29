@@ -60,6 +60,7 @@ class TestimonialsController extends Controller
         $testimonial->designation = trim($request->designation);
         $testimonial->description = $request->description;
         $testimonial->status = ($request->status == 'on')?1:0;
+        $testimonial->show_inhome_page = ($request->show_inhome_page == 'on')?1:0;
 
         if($testimonial->save()){
             Session::flash('success','Testimonial Save successfully');
@@ -102,7 +103,8 @@ class TestimonialsController extends Controller
         $testimonial->designation = trim($request->designation);
         $testimonial->description = $request->description;
         $testimonial->status = ($request->status == 'on')?1:0;
-
+        $testimonial->show_inhome_page = ($request->show_inhome_page == 'on')?1:0;
+        
         if($testimonial->save()){
             Session::flash('success','Testimonial Update successfully');
             }else{
