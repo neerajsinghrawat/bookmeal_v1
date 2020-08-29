@@ -11,7 +11,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <!-- Navigation -->
                     <nav class="module module-navigation left mr-4">
                         <ul id="nav-main" class="nav nav-main">
@@ -20,6 +20,22 @@
                             <li><a href="{{ URL::to('category/menu') }}">Menu</a></li>
                             
                             <li><a href="{{ url('/contact-us') }}">Contact</a></li>
+                                        
+                        @if (Auth::guest())
+                            <li ><a href="{{ route('login') }}">Login</a></li>
+                            <li ><a href="{{ route('register') }}">Register</a></li>
+                        @else
+                            <li class="has-dropdown">
+                                <a href="#">My Account ({{ Auth::user()->username }})</a>
+                                <div class="dropdown-container">
+                                    <ul class="dropdown-mega">
+                                        <li><a href="<?php echo URL::to('/').'/dashboard'; ?>">Dashboard</a></li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endif
                     
                         </ul>
                     </nav>
@@ -27,6 +43,7 @@
                         <a href="#odder" data-toggle="modal" class="btn btn-outline-secondary"><span>Order</span></a>
                     </div>
                 </div>
+
                 <div class="col-md-2">
                     <a href="#" class="module module-cart right" data-toggle="panel-cart">
                         <span class="cart-icon">
@@ -36,6 +53,7 @@
                         <span class="cart-value">$<span class="value">0.00</span></span>
                     </a>
                 </div>
+                
             </div>
         </div>
 
