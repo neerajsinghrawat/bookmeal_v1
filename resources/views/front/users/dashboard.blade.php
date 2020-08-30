@@ -3,7 +3,234 @@
 @section('description', 'Dashboard')
 @section('keywords', 'food','Dashboard')
 @section('content')
+<style type="text/css">
+    .Bb-color{
+            background: #e6e6e6;
+            margin: 0px;
+            padding: 12px 15px;
+            font-size: 18px;
+    }
+    .new-padding{
+        padding: 12px;
+    }
+    .right{
+        float:right;
+    }
 
+    .menu-category{
+        padding-left: 10px;
+    }
+
+    .ui-accordion .ui-accordion-header {    
+        display: block;
+        cursor: pointer;
+        position: relative;
+        margin: 2px 0 0 0;
+        padding: .5em .5em .5em .7em;
+        font-size: 100%
+    }
+
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+        border: 1px solid #003eff;
+        background: #007fff;
+        font-weight: normal;
+        color: #ffffff;
+    }  
+
+.view_order_button{float:right}
+.order_item_img{max-height:100px;}
+.product_homeitem_img{height:210px !important;}
+.ui-accordion .ui-accordion-content {height: auto !important; }
+.user-profile .recent-complaint .tab-content p { background:none !important}
+.complaint_usertype{font-weight: bold;}
+.complaint_subject{font-weight: bold;}
+.complaint_problem{font-size: 14px;}
+.user_complaint_text{background:#c5c5c5 !important; padding:10px !important;margin-bottom: 4px;}
+.admin_complaint_text{background:lightgoldenrodyellow  !important; padding:10px !important;margin-bottom: 4px;}
+
+/*n----------------g*/
+.product_homeitem_img{height:210px !important;}
+.product_menu_img{
+    width: 130px;
+    height: 134px;
+}
+.testimonials-inner{
+    margin: 80px 0;
+}
+
+/*n----------------g*/
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 24px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+.selected_star_rating{color:#FFA41F !important}
+.not_selected_star_rating{color:#b1b1b1 !important}
+.rating_user_img{width:100px; height:100px}
+.icon_class{margin-bottom: 10px;margin-top: -10px;}
+
+
+
+.slide-detail p {color: #e54c2a; font-size: 26px;}
+.list_img{ width: 130px;height: 134px;}
+
+
+.delevery_staff_detail_box{
+    background: #fafafa;
+    margin: 10px !important;
+    margin-top: 26px !important;
+    padding-top: 20px;
+    padding-bottom: 14px;
+    padding-left: 40px;
+    margin-left: 25% !important;
+}
+
+.invoice_page .invoice-title h3{color: #e54c2a;font-weight: bold;margin-top: 20px;}
+.invoice_page .order_item_img { max-height: 56px;}
+
+.invoice_page .delevery_staff_detail_box { background: lightgoldenrodyellow;}
+
+.invoice_page .invoice-title h2,.invoice_page  .invoice-title h3 {
+    display: inline-block;
+}
+
+.invoice_page .table > tbody > tr > .no-line {
+    border-top: none;
+}
+
+.invoice_page .table > thead > tr > .no-line {
+    border-bottom: none;
+}
+
+.invoice_page .table > tbody > tr > .thick-line {
+    border-top: 2px solid;
+}
+
+.postcodeimg {
+ padding:0 25px 0 0 !important;
+}
+
+.dactive {
+  cursor: not-allowed;
+  
+}
+
+.forgotpasswordnow {
+
+  height: auto !important;
+
+}
+/*.mycart .nav-tabs li .dactive span {
+    background: #f1f1f1;
+}*/
+
+
+
+/** updated css 22 jan 2019 **/ 
+.msg_class{margin-top: 4px;margin-left: 4px;margin-right: 29px;width: 99%;z-index: 999;text-align: center;}
+#popup_overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+/** updated css 23 jan 2019 **/ 
+.fontfor_items{
+  font-size: 10px;
+  font-weight: 700;
+}  
+.product_sub_cat_title {
+  font-size: 13px !important;
+  color: #e54c2a !important;
+  font-weight: 700 !important;
+}
+.product_title{
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+}
+.product_detail_cat_title{
+    color: #e54c2a !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+.clforgot_password{
+    color: #e54c2a !important;
+    
+}
+.clforgot_password:hover {
+    color: #e54c2a !important;
+    
+} 
+.tabcontent {
+  display: none;
+}     
+</style>
 <!-- Breadcrumb Start -->
 <div class="page-title bg-light">
     <div class="bg-image bg-parallax"><img src="http://assets.suelo.pl/soup/img/photos/bg-desk.jpg" alt=""></div>
@@ -16,37 +243,38 @@
         </div>
     </div>
 </div>
-<!-- Breadcrumb End -->
-<section class="section">
+
+
+
+<div class="page-content">
     <div class="container">
-            <div class="col-md-12 user-profile">
-                <div class="row">
-                    <div class="col-md-3 ">
-                        <div class="user-profile-tabs">
-                            <!--  Menu Tabs Start  -->
-                            <ul class="nav nav-tabs flex-column">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                <!-- Menu Navigation -->
+                <nav id="menu-navigation" class="stick-to-content" data-local-scroll>
+                    <ul class="nav nav-menu bg-dark dark">
                                 <li class="nav-item">
                                     <a href="#overview" class="nav-link">
-                                        <i class="icofont icofont-dashboard-web"></i>
+                                        <i class="ti ti-image"></i>
                                         <span>Overview</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#profile"  class="nav-link">
-                                        <i class="icofont icofont-ui-user"></i>
+                                        <i class="ti ti-user"></i>
                                         <span>Profile</span>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a href="#addresses"  class="nav-link">
-                                        <i class="icofont icofont-ui-home"></i>
+                                        <i class="ti ti-home"></i>
                                         <span>Addresses</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#history" class="nav-link">
-                                        <i class="icofont icofont-history"></i>
+                                        <i class="ti ti-loop"></i>
                                         <span>Order History</span>
                                     </a>
                                 </li>
@@ -54,472 +282,480 @@
                                 <?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){ ?>
                                 <li class="nav-item">
                                     <a href="#complaint" class="nav-link">
-                                        <i class="icofont icofont-support-faq"></i>
+                                        <i class="ti ti-support"></i>
                                         <span>Complaint</span>
                                     </a>
                                 </li>
-                                <?php } ?>
+                                <?php } ?>                      
+                        </ul>
+                </nav>
+            </div>
+            <div class="col-md-9">
+                
+                <!--  -->
 
-                            </ul>
-                            <!--  Menu Tabs Start  -->
+                <div id="overview" class="menu-category">
+                   
+                        
+                            <div class="menu-category-content new-padding">
+                            <div class="brief-info">
+                                <div class="media">
+                                    <?php  $img = asset('image/no_product_image.jpg');
+                                                if(!empty($userDetail['picture'])){
+                                                    $img = asset('image/user/150x150/'.$userDetail['picture']);
+                                                }
+                                                ?>
+                                                <img class="mr-3 img-thumbnail" src="{{ $img }}" alt="" style="width: 100px;height: 100px;">
+                               
+                                    <div class="media-body">
+                                        <h4><?php echo $userDetail['first_name'].' '.$userDetail['last_name'] ?></h4>
+                                        <p><i class="icofont icofont-envelope"></i> <?php echo $userDetail['email'] ?></p>
+                                        <p><i class="icofont icofont-phone"></i> <?php echo $userDetail['phone'] ?></p>
+                                        <p><i class="icofont icofont-location-pin"></i>  <?php //echo $userDetail['city'].', '.$userDetail['country']. ?></p>
+                                    </div>
+                                </div>
+                                 <!--<div class="brief-info-footer">
+                                   <a href="#"><i class="icofont icofont-edit"></i>Edit Profile</a> 
+                                </div>-->
+                            </div>
+
+                            <div class="most-recent-order ">
+                                <h5 class="bg-dark dark p-4">Recent Orders</h5>
+
+                            <?php 
+                                if(!empty($recentOrders) && count($recentOrders) > 0){
+                                    foreach($recentOrders as $order){
+                                    //echo '<pre>order'; print_R($order); die;
+                            ?>
+                               <div class="field-entry">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <p><?php echo $order->order_number ?></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class=""><?php echo date('d/m/Y', strtotime($order->created_at)) ?></p>
+                                        </div>
+                                        
+                                        <div class="col">
+                                            <p class="confirmed"><?php echo getSiteCurrencyType(); ?><?php echo $order->total_amount ?></p>
+                                        </div>
+                                       <!-- <div class="col">
+                                            <p class="confirmed"><i class="icofont icofont-check"></i>Confirmed</p>
+                                        </div>
+                                        <div class="col text-right">
+                                            <a href="#">Detail</a>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <hr class="hr-md" style="margin-top: 10px;margin-bottom: 10px;">
+                                <?php } }else{ ?>
+                                     <div class="field-entry">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p>No any order</p>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <?php } ?> 
+
+                               </div>
+                        </div>
+
+                    
+                </div>
+
+                <div id="profile" class="menu-category">
+                     <div class="menu-category-content new-padding">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="user-personal-info">
+                                <h5 class="bg-dark dark p-4">Personal Information</h5>
+                                <div class="user-info-body">
+                                {!! Form::open(array('url' => url('users/edit_profile/'.Auth::user()->id),'files'=>true ,'method'=>'put')) !!}
+                                
+                                {{ csrf_field() }}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <input name="first_name" required="required" placeholder="First Name" class="form-control" type="text" value="{{ Auth::user()->first_name }}">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <input name="last_name" required="required" placeholder="Last Name" class="form-control" type="text" value="{{ Auth::user()->last_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="email" required="required" placeholder="Enter Email" class="form-control" type="email" value="{{ Auth::user()->email }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="phone" required="required" placeholder="Contact Number" class="form-control" type="number" value="{{ Auth::user()->phone }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <label class="col-12">Date Of Birth</label>
+                                        <div class="col-12 form-group">
+                                            <input name="dob" class="form-control" placeholder="Date Of Birth" type="date" value="{{ Auth::user()->dob }}" >
+                                        </div>
+                                
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <textarea placeholder="Your Current Address" id="current-address" class="form-control" rows="3">{{ Auth::user()->address }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-6">
+                                            <input name="postcode" class="form-control" placeholder="Zip Code" type="text" value="{{ Auth::user()->postcode }}" required="required">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <input name="city" class="form-control" placeholder="City" type="text" value="{{ Auth::user()->city }}" >
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+
+                                        <div class="form-group col-6">
+                                            <input name="state" class="form-control" placeholder="State" type="text" value="{{ Auth::user()->state }}" >
+                                        </div>
+                                       <div class="form-group col-6 select-container">
+                                           <select class="form-control" name="country_id">
+                                            <option value="">-Select Country-</option>
+                                           @foreach($countries as $country)
+                                              <option value="{{ $country->id }}" {{ (Auth::user()->country_id == $country->id)?'selected':'' }}>{{ $country->name }}</option>
+                                            @endforeach                                                         
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <label>Upload Photo</label>
+                                            <input name="picture" class="upload-pic form-control-file" type="file"><br>
+                                            <?php  $img = asset('image/no_product_image.jpg');
+                                            if(!empty(Auth::user()->picture)){
+                                                $img = asset('image/user/150x150/'.Auth::user()->picture);
+                                            }
+                                            ?>
+                                            <img class="img-thumbnail" src="{{ $img }}" alt="" style="width: 100px;height: 100px;">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group mb-0 pt-4 col-12 text-center">
+                                            <button class="btn btn-primary" type="submit">SAVE CHANGES</button>
+                                           
+                                        </div>
+                                    </div>
+                                    {!! Form::close() !!}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="user-change-password">
+                                <h5 class="bg-dark dark p-4">Change Password</h5>
+                                <div class="change-password-body">
+                                    <form action="{{ route('users.change_password.post') }}" method="POST" >
+                                        {{ csrf_field() }}
+                                        <div class="form-group">
+                                            <input placeholder="Old Password" class="form-control" name="old_password" type="password" required="required">
+                                            @if ($errors->has('old_password'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('old_password') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <input placeholder="New Password" class="form-control" name="new_password" type="password" required="required">
+                                            @if ($errors->has('new_password'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('new_password') }}</strong>
+                                            </span>
+                                            @endif
+
+                                        </div>
+                                        <div class="form-group">
+                                            <input placeholder="Confirm Password" class="form-control" name="confirm_password" type="password" required="required">
+                                            @if ($errors->has('confirm_password'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('confirm_password') }}</strong>
+                                            </span>
+                                            @endif                                                                    
+                                        </div>
+
+                                        <div class="form-group mb-0 pt-4 text-center">
+                                        <button class="btn btn-primary" type="submit">SAVE CHANGES</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                </div>
 
-                    <div class="col-md-8 offset-md-1">
-                      
-                            <div id="overview" class="tab-pane fade overview_tab1">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="brief-info">
-                                            <div class="media">
-                                                <?php  $img = asset('image/no_product_image.jpg');
-                                                            if(!empty($userDetail['picture'])){
-                                                                $img = asset('image/user/150x150/'.$userDetail['picture']);
-                                                            }
-                                                            ?>
-                                                            <img class="mr-3 img-thumbnail" src="{{ $img }}" alt="" style="width: 100px;height: 100px;">
-                                           
-                                                <div class="media-body">
-                                                    <h4><?php echo $userDetail['first_name'].' '.$userDetail['last_name'] ?></h4>
-                                                    <p><i class="icofont icofont-envelope"></i> <?php echo $userDetail['email'] ?></p>
-                                                    <p><i class="icofont icofont-phone"></i> <?php echo $userDetail['phone'] ?></p>
-                                                    <p><i class="icofont icofont-location-pin"></i>  <?php //echo $userDetail['city'].', '.$userDetail['country']. ?></p>
-                                                </div>
-                                            </div>
-                                             <!--<div class="brief-info-footer">
-                                               <a href="#"><i class="icofont icofont-edit"></i>Edit Profile</a> 
-                                            </div>-->
-                                        </div>
+                <div id="addresses" class="menu-category">
+                     <div class="menu-category-content new-padding">
+                        <div class="col-lg-10">
+                            <div class="user-personal-info">
+                                <h5 class="bg-dark dark p-4">Addresses</h5>
+                                <div class="user-info-body">
+                                    {!! Form::open(array('url' => url('users/user_address/'.Auth::user()->id),'files'=>true ,'method'=>'put')) !!}
+                                    {{ csrf_field() }}
 
-                                        <div class="most-recent-order">
-                                            <h5>Recent Orders</h5>
-                                        <?php 
-                                            if(!empty($recentOrders) && count($recentOrders) > 0){
-                                                foreach($recentOrders as $order){
-                                                //echo '<pre>order'; print_R($order); die;
-                                        ?>
-                                           <div class="field-entry">
-                                                <div class="row">
-                                                    <div class="col-5">
-                                                        <p><?php echo $order->order_number ?></p>
-                                                    </div>
-                                                    <div class="col">
-                                                        <p class=""><?php echo date('d/m/Y', strtotime($order->created_at)) ?></p>
-                                                    </div>
-                                                    
-                                                    <div class="col">
-                                                        <p class="confirmed"><?php echo getSiteCurrencyType(); ?><?php echo $order->total_amount ?></p>
-                                                    </div>
-                                                   <!-- <div class="col">
-                                                        <p class="confirmed"><i class="icofont icofont-check"></i>Confirmed</p>
-                                                    </div>
-                                                    <div class="col text-right">
-                                                        <a href="#">Detail</a>
-                                                    </div> -->
-                                                </div>
-                                            </div>
-                                            <?php } }else{ ?>
-                                                 <div class="field-entry">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <p>No any order</p>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <?php } ?> 
-
-                                           </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div id="profile" class="tab-pane fade profile_tab1">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="user-personal-info">
-                                            <h5>Personal Information</h5>
-                                            <div class="user-info-body">
-                                            {!! Form::open(array('url' => url('users/edit_profile/'.Auth::user()->id),'files'=>true ,'method'=>'put')) !!}
-                                            
-                                            {{ csrf_field() }}
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-6">
-                                                        <input name="first_name" required="required" placeholder="First Name" class="form-control" type="text" value="{{ Auth::user()->first_name }}">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <input name="last_name" required="required" placeholder="Last Name" class="form-control" type="text" value="{{ Auth::user()->last_name }}">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="email" required="required" placeholder="Enter Email" class="form-control" type="email" value="{{ Auth::user()->email }}">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="phone" required="required" placeholder="Contact Number" class="form-control" type="number" value="{{ Auth::user()->phone }}">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <label class="col-12">Date Of Birth</label>
-                                                    <div class="col-12 form-group">
-                                                        <input name="dob" class="form-control" placeholder="Date Of Birth" type="date" value="{{ Auth::user()->dob }}" >
-                                                    </div>
-                                            
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <textarea placeholder="Your Current Address" id="current-address" class="form-control" rows="3">{{ Auth::user()->address }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-6">
-                                                        <input name="postcode" class="form-control" placeholder="Zip Code" type="text" value="{{ Auth::user()->postcode }}" required="required">
-                                                    </div>
-                                                    <div class="form-group col-6">
-                                                        <input name="city" class="form-control" placeholder="City" type="text" value="{{ Auth::user()->city }}" >
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-
-                                                    <div class="form-group col-6">
-                                                        <input name="state" class="form-control" placeholder="State" type="text" value="{{ Auth::user()->state }}" >
-                                                    </div>
-                                                   <div class="form-group col-6">
-                                                       <select class="form-control" name="country_id">
-                                                        <option value="">-Select Country-</option>
-                                                       @foreach($countries as $country)
-                                                          <option value="{{ $country->id }}" {{ (Auth::user()->country_id == $country->id)?'selected':'' }}>{{ $country->name }}</option>
-                                                        @endforeach                                                         
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <label>Upload Photo</label>
-                                                        <input name="picture" class="upload-pic form-control-file" type="file"><br>
-                                                        <?php  $img = asset('image/no_product_image.jpg');
-                                                        if(!empty(Auth::user()->picture)){
-                                                            $img = asset('image/user/150x150/'.Auth::user()->picture);
-                                                        }
-                                                        ?>
-                                                        <img class="img-thumbnail" src="{{ $img }}" alt="" style="width: 100px;height: 100px;">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group mb-0 pt-4 col-12 text-center">
-                                                        <button class="btn btn-theme btn-md" type="submit">SAVE CHANGES</button>
-                                                       
-                                                    </div>
-                                                </div>
-                                                {!! Form::close() !!}
-                                            </div>
+                                    <label><b>Home Address</b></label>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <textarea name="address[home][address]" placeholder="Enter Address" class="form-control" ><?php echo isset($addressesArr['home']->address) ? $addressesArr['home']->address : '' ?></textarea>
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        <div class="user-change-password">
-                                            <h5>Change Password</h5>
-                                            <div class="change-password-body">
-                                                <form action="{{ route('users.change_password.post') }}" method="POST" >
-                                                    {{ csrf_field() }}
-                                                    <div class="form-group">
-                                                        <input placeholder="Old Password" class="form-control" name="old_password" type="password" required="required">
-                                                        @if ($errors->has('old_password'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('old_password') }}</strong>
-                                                        </span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input placeholder="New Password" class="form-control" name="new_password" type="password" required="required">
-                                                        @if ($errors->has('new_password'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('new_password') }}</strong>
-                                                        </span>
-                                                        @endif
-
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input placeholder="Confirm Password" class="form-control" name="confirm_password" type="password" required="required">
-                                                        @if ($errors->has('confirm_password'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('confirm_password') }}</strong>
-                                                        </span>
-                                                        @endif                                                                    
-                                                    </div>
-
-                                                    <div class="form-group mb-0 pt-4 text-center">
-                                                    <button class="btn btn-theme btn-md" type="submit">SAVE CHANGES</button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="address[home][postcode]" value="<?php echo isset($addressesArr['home']->postcode) ? $addressesArr['home']->postcode : '' ?>" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div id="addresses" class="tab-pane fade addresses_tab1">
-                                <div class="row">
-                                    <div class="col-lg-10">
-                                        <div class="user-personal-info">
-                                            <h5>Addresses</h5>
-                                            <div class="user-info-body">
-                                                {!! Form::open(array('url' => url('users/user_address/'.Auth::user()->id),'files'=>true ,'method'=>'put')) !!}
-                                                {{ csrf_field() }}
+                                    <input name="address[home][title]" type="hidden" value="Home">
+                                    <input name="address[home][type]" type="hidden" value="home">
 
-                                                <label><b>Home Address</b></label>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <textarea name="address[home][address]" placeholder="Enter Address" class="form-control" ><?php echo isset($addressesArr['home']->address) ? $addressesArr['home']->address : '' ?></textarea>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="address[home][postcode]" value="<?php echo isset($addressesArr['home']->postcode) ? $addressesArr['home']->postcode : '' ?>" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
-                                                    </div>
-                                                </div>
-
-                                                <input name="address[home][title]" type="hidden" value="Home">
-                                                <input name="address[home][type]" type="hidden" value="home">
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="address[home][phone]" value="<?php echo isset($addressesArr['home']->phone) ? $addressesArr['home']->phone : '' ?>" placeholder="Enter Phone No." class="form-control" type="number">
-                                                    </div>
-                                                </div>
-
-                                                <label><b>Office Address</b></label>
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <textarea name="address[office][address]" placeholder="Enter Address" class="form-control" ><?php echo isset($addressesArr['office']->address) ? $addressesArr['office']->address : '' ?></textarea>
-                                                    </div>
-                                                </div>
-
-                                                <input name="address[office][title]" type="hidden" value="office">
-                                                <input name="address[office][type]" type="hidden" value="office">
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="address[office][postcode]" value="<?php echo isset($addressesArr['office']->postcode) ? $addressesArr['office']->postcode : '' ?>" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                        <input name="address[office][phone]" value="<?php echo isset($addressesArr['office']->phone) ? $addressesArr['office']->phone : '' ?>" placeholder="Enter Phone No." class="form-control" type="number">
-                                                    </div>
-                                                </div>
-
-                                                <div class="addAddress_fields">
-                                                    <?php if(isset($addressesArr['other']) && count($addressesArr['other']) > 0){
-                                                            foreach ($addressesArr['other'] as $key => $addressesAr) { ?>
-
-                                                    <div class="address{{ $addressesAr->id }}"> 
-                                                        <label><b>{{ $addressesAr->title }}</b></label>
-                                                        <i class="icofont icofont-bin delete_address" address_id="{{ $addressesAr->id }}" style="cursor:pointer;color: #d33b3b;float:right;"/></i>
-
-                                                        <div class="form-row">
-                                                            <div class="form-group col-12">
-                                                                <textarea name="address[other][<?php echo $key;?>][address]" placeholder="Enter Address" class="form-control" >{{ $addressesAr->address }}</textarea>
-                                                            </div>
-                                                        </div>
-
-                                                        <input name="address[other][<?php echo $key;?>][title]" type="hidden" value="{{ $addressesAr->title }}">
-                                                        <input name="address[other][<?php echo $key;?>][type]" type="hidden" value="other">
-
-                                                        <div class="form-row">
-                                                            <div class="form-group col-12">
-                                                                <input name="address[other][<?php echo $key;?>][postcode]" value="{{ $addressesAr->postcode }}" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-row">
-                                                            <div class="form-group col-12">
-                                                                <input name="address[other][<?php echo $key;?>][phone]" value="{{ $addressesAr->phone }}" placeholder="Enter Phone No." class="form-control" type="number">
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <?php } } ?>
-                                                </div>   
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-12">
-                                                       <a href="javascript:void(0)" class="add_address">Add Address</a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-row">
-                                                    <div class="form-group mb-0 pt-4 col-12 text-center">
-                                                        <button class="btn btn-theme btn-md" type="submit">SAVE CHANGES</button>
-                                                    </div>
-                                                </div>
-                                                {!! Form::close() !!}
-                                            </div>                    
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="address[home][phone]" value="<?php echo isset($addressesArr['home']->phone) ? $addressesArr['home']->phone : '' ?>" placeholder="Enter Phone No." class="form-control" type="number">
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div id="history" class="tab-pane fade history_tab1">
-                                <?php 
-                                    if(!empty($orders) && count($orders) > 0){
-                                        foreach($orders as $order){ ?>
-                                <div class="item-entry">
-                                    <span class="order-id">Order ID: <?php echo $order->order_number; ?></span>
-                                    <a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>"><span class="order-id view_order_button"> View Order</span></a>
-                                    
-                                    <div class="item-content">
-                                        <div class="item-body">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <h4>Items </h4>
-                                                    <?php
-                                                        $i = 1;
-                                                        foreach($order->order_items as $order_item){
-                                                            $product_slug = getProductSlugByProductId($order_item->product_id);
-                                                    ?>
-                                                        <p><?php echo $i; ?>. <a href="{{ URL::to('product/'.$product_slug) }}"><?php echo $order_item->product_name ?></a> </p>
-                                                    <?php $i++; } ?>                
-                                                </div>
-
-                                                <div class="col-md-4 col-sm-3 text-right">
-                                                    <h5><strong>Order Date: </strong> <?php echo date('d M Y', strtotime($order->created_at)); ?><strong> <br/><br/>Order Total: </strong> <?php echo getSiteCurrencyType(); ?><?php echo $order->total_amount; ?>
-                                                    </h5>
-                                                </div>
-                                            </div>
+                                    <label><b>Office Address</b></label>
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <textarea name="address[office][address]" placeholder="Enter Address" class="form-control" ><?php echo isset($addressesArr['office']->address) ? $addressesArr['office']->address : '' ?></textarea>
                                         </div>
                                     </div>
-                                </div>
-                                    <?php } } ?>
-                            </div>
 
-                            <div id="complaint" class="tab-pane fade complaint_tab1">
-                             <div class="recent-complaint">
-                                <h4>Service Requests</h4>
-                                <div class="complaint-tabs">
-                                    <ul class="nav nav-tabs">
-                                        <li class="nav-item" ><a data-toggle="tab" href="#active-complaint" class="nav-link text-center active" aria-expanded="false"><i class="icofont icofont-flash"></i> Active (<?php echo count($activeComplaintArr); ?>)</a></li>
-                                        <li class="nav-item"><a data-toggle="tab" href="#resolved-complaint" class="nav-link text-center" aria-expanded="false"><i class="icofont icofont-history"></i> Resolved (<?php echo count($resolvedComplaintArr); ?>)</a></li> 
-                                    </ul>
-                                </div>
-                                <div class="tab-content">
-                                    <div id="active-complaint" class="tab-pane fade active show">
-                                        <div id="accordion_active_complaint">
-                                            <h3  style="display:none">test</h3><div style="display:none"><p>test</p></div>
-                                               
-                                              <?php if(!empty($activeComplaintArr) && count($activeComplaintArr) >0){ 
-                                                        foreach($activeComplaintArr as $key => $active_complaint){  
-                                                ?>
-                                            <h3>Order ID <?php echo $key ?>:
-                                              <?php 
-                                                $i = 1;
-                                                foreach($active_complaint as $complaint){ 
-                                                    if($i == 1){
-                                                        echo $complaint['subject'];
-                                                    }
-                                                $i++; } ?>
-                                            </h3>
-                                            <div>
-                                                <p>
-                                                    <label class="switch">
-                                                      <input type="checkbox" class="issue_resolved_checkbox" value="1" order_number="<?php echo $key ?>" user_id="<?php echo $user_id; ?>">
-                                                      <span class="slider round"></span>
-                                                    </label>
-                                                    Resolved ? <br/>
-                                                    Note: please on this switch button if your issue resolved.
-                                                           <?php foreach($active_complaint as $complaint){  ?>
-                                                        <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text">
-                                                            <span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?>            
-                                                            </span>
-                                                            <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?>
-                                                            </span>
-                                                        </div>
-                                                    <?php } ?>
-                                                </p>
-                                            </div>
-                                            <?php } } ?>
+                                    <input name="address[office][title]" type="hidden" value="office">
+                                    <input name="address[office][type]" type="hidden" value="office">
+
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="address[office][postcode]" value="<?php echo isset($addressesArr['office']->postcode) ? $addressesArr['office']->postcode : '' ?>" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
                                         </div>
                                     </div>
-                                    <div id="resolved-complaint" class="tab-pane">
-                                      <div id="resolved_active_complaint">
-                                          <h3 style="display:none">test</h3>
-                                        <div style="display:none"><p>test</p></div>
-                                                                                            
-                                        <?php if(!empty($resolvedComplaintArr) && count($resolvedComplaintArr) >0){ 
-                                                    foreach($resolvedComplaintArr as $key => $resolved_complaint){  
-                                            ?>
-                                          <h3>Order ID <?php echo $key ?>:
-                                          <?php 
-                                            $i = 1;
-                                            foreach($resolved_complaint as $complaint){ 
-                                                if($i == 1){
-                                                    echo $complaint['subject'];
-                                                }
-                                            $i++; } ?>
-                                          </h3>
-                                          <div>
-                                            <p>
-                                            <?php foreach($resolved_complaint as $complaint){  ?>
-                                                <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text"><span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?></span> <!--<span class="complaint_subject"><?php echo $complaint['subject']; ?></span><br/>-->
-                                                <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?></span>
-                                                    </div>
-                                            <?php } ?>
-                                            </p>
-                                          </div>
-                                          <?php } } ?>
-                                     </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                            <input name="address[office][phone]" value="<?php echo isset($addressesArr['office']->phone) ? $addressesArr['office']->phone : '' ?>" placeholder="Enter Phone No." class="form-control" type="number">
+                                        </div>
                                     </div>
 
-                                    <h4 class="mt-5">New Requests</h4>
-                                    <div class="submit-complaint">
-                                        <form action="{{ url('/save_complaint') }}" enctype="multipart/form-data" method="POST" >
-                                         {{ csrf_field() }}
+                                    <div class="addAddress_fields">
+                                        <?php if(isset($addressesArr['other']) && count($addressesArr['other']) > 0){
+                                                foreach ($addressesArr['other'] as $key => $addressesAr) { ?>
+
+                                        <div class="address{{ $addressesAr->id }}"> 
+                                            <label><b>{{ $addressesAr->title }}</b></label>
+                                            <i class="icofont icofont-bin delete_address" address_id="{{ $addressesAr->id }}" style="cursor:pointer;color: #d33b3b;float:right;"/></i>
+
                                             <div class="form-row">
                                                 <div class="form-group col-12">
-                                                   
-                                                    <?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){?>
-                                                    
-                                                    <select class="form-control" name="order_number" required>
-                                                        <option value="">-Select Order ID-</option>
-                                                        <?php foreach($userOrderNumbers as $order_number){ ?>
-                                                            <option value="<?php echo $order_number->order_number; ?>"><?php echo $order_number->order_number; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                        
-                                                    <?php } ?>
+                                                    <textarea name="address[other][<?php echo $key;?>][address]" placeholder="Enter Address" class="form-control" >{{ $addressesAr->address }}</textarea>
                                                 </div>
                                             </div>
+
+                                            <input name="address[other][<?php echo $key;?>][title]" type="hidden" value="{{ $addressesAr->title }}">
+                                            <input name="address[other][<?php echo $key;?>][type]" type="hidden" value="other">
+
                                             <div class="form-row">
                                                 <div class="form-group col-12">
-                                                    <input class="form-control" name="subject" placeholder="Subject" type="text" required>
+                                                    <input name="address[other][<?php echo $key;?>][postcode]" value="{{ $addressesAr->postcode }}" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text">
                                                 </div>
                                             </div>
+
                                             <div class="form-row">
                                                 <div class="form-group col-12">
-                                                    <textarea class="form-control" rows="4" name="problem" placeholder="Your Issue"></textarea>
+                                                    <input name="address[other][<?php echo $key;?>][phone]" value="{{ $addressesAr->phone }}" placeholder="Enter Phone No." class="form-control" type="number">
                                                 </div>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-12 text-center mb-0">
-                                                    <button class="btn btn-theme btn-md btn-wide submitComplaint" name="submitComplaint" type="submit">SUBMIT REQUEST</button>
-                                                </div>
-                                            </div>
-                                        </form>
+
+                                        </div>
+                                        <?php } } ?>
+                                    </div>   
+
+                                    <div class="form-row">
+                                        <div class="form-group col-12">
+                                           <a href="javascript:void(0)" class="add_address">Add Address</a>
+                                        </div>
                                     </div>
-                                </div>
-                             </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group mb-0 pt-4 col-12 text-center">
+                                            <button class="btn btn-primary" type="submit">SAVE CHANGES</button>
+                                        </div>
+                                    </div>
+                                    {!! Form::close() !!}
+                                </div>                    
                             </div>
-                       
+                        </div>
                     </div>
                 </div>
+
+                <div id="history" class="menu-category">
+                    <?php 
+                        if(!empty($orders) && count($orders) > 0){
+                            foreach($orders as $order){ ?>
+                    <div class="menu-category-content new-padding">
+                        <span class="btn btn-primary order-id">Order ID: <?php echo $order->order_number; ?></span>
+                        <a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>"><span class="btn btn-primary order-id view_order_button right" > View Order</span></a>
+                        
+                        <div class="item-content">
+                            <div class="item-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6">
+                                        
+                                        <?php
+                                            $i = 1;
+                                            foreach($order->order_items as $order_item){
+                                                $product_slug = getProductSlugByProductId($order_item->product_id);
+                                        ?>
+                                            <p><?php echo $i; ?>. <a href="{{ URL::to('product/'.$product_slug) }}"><?php echo $order_item->product_name ?></a> </p>
+                                        <?php $i++; } ?>                
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6 class="Bb-color"><strong>Order Date: </strong> <?php echo date('d M Y', strtotime($order->created_at)); ?><strong> <br/><br/>Order Total: </strong> <?php echo getSiteCurrencyType(); ?><?php echo $order->total_amount; ?>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <?php } } ?>
+                </div>
+
+                <div id="complaint" class="menu-category">
+                 <div class="recent-complaint menu-category-content new-padding">
+                    <h4 class="bg-dark dark p-4">Service Requests</h4>
+                    <div class="complaint-tabs">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item" ><a href="#active-complaint" class="nav-link text-center tablink" onclick="openPage('active-complaint', event)"  id="defaultOpen"><i class="ti ti-clip"></i> Active (<?php echo count($activeComplaintArr); ?>)</a></li>
+                            <li class="nav-item"><a href="#resolved-complaint" class="nav-link text-center tablink" onclick="openPage('resolved-complaint', event)" ><i class="ti ti-loop"></i> Resolved (<?php echo count($resolvedComplaintArr); ?>)</a></li> 
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div id="active-complaint" class="tabcontent menu-category-content new-padding">
+                            <div id="accordion_active_complaint">
+                                <h4  style="display:none">test</h4><div style="display:none"><p>test</p></div>
+                                   
+                                  <?php if(!empty($activeComplaintArr) && count($activeComplaintArr) >0){ 
+                                            foreach($activeComplaintArr as $key => $active_complaint){  
+                                    ?>
+                                <h4 class="Bb-color">Order ID <?php echo $key ?>:
+                                  <?php 
+                                    $i = 1;
+                                    foreach($active_complaint as $complaint){ 
+                                        if($i == 1){
+                                            echo $complaint['subject'];
+                                        }
+                                    $i++; } ?>
+                                </h4>
+                                <div>
+                                    <p>
+                                        <label class="switch">
+                                          <input type="checkbox" class="issue_resolved_checkbox" value="1" order_number="<?php echo $key ?>" user_id="<?php echo $user_id; ?>">
+                                          <span class="slider round"></span>
+                                        </label>
+                                        Resolved ? <br/>
+                                        Note: please on this switch button if your issue resolved.
+                                               <?php foreach($active_complaint as $complaint){  ?>
+                                            <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text">
+                                                <span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?>            
+                                                </span>
+                                                <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?>
+                                                </span>
+                                            </div>
+                                        <?php } ?>
+                                    </p>
+                                </div>
+                                <?php } } ?>
+                            </div>
+                        </div>
+                        <div id="resolved-complaint" class="tabcontent menu-category-content new-padding">
+                          <div id="resolved_active_complaint">
+                              <h4 style="display:none">test</h4>
+                            <div style="display:none"><p>test</p></div>
+                                                                                
+                            <?php if(!empty($resolvedComplaintArr) && count($resolvedComplaintArr) >0){ 
+                                        foreach($resolvedComplaintArr as $key => $resolved_complaint){  
+                                ?>
+                              <h4 class="Bb-color">Order ID <?php echo $key ?>:
+                              <?php 
+                                $i = 1;
+                                foreach($resolved_complaint as $complaint){ 
+                                    if($i == 1){
+                                        echo $complaint['subject'];
+                                    }
+                                $i++; } ?>
+                              </h4>
+                              <div>
+                                <p>
+                                <?php foreach($resolved_complaint as $complaint){  ?>
+                                    <div class="<?php echo ($complaint['user_type'] == 'customer') ? 'user' : 'admin'; ?>_complaint_text"><span class="complaint_usertype"><?php echo ($complaint['user_type'] == 'customer') ? 'You: ' : 'Admin: '; ?></span>
+                                    <span class="complaint_problem"><?php echo $complaint['problem']; ?> <br/><?php echo $complaint['created_at']; ?></span>
+                                        </div>
+                                <?php } ?>
+                                </p>
+                              </div>
+                              <?php } } ?>
+                         </div>
+                        </div>
+
+                        <h4 class="bg-dark dark p-3">New Requests</h4>
+                        <div class="submit-complaint">
+                            <form action="{{ url('/save_complaint') }}" enctype="multipart/form-data" method="POST" >
+                             {{ csrf_field() }}
+                                <div class="form-row">
+                                    <div class="form-group col-12 select-container">
+                                       
+                                        <?php if(isset($userOrderNumbers[0]) && !empty($userOrderNumbers[0])){?>
+                                        
+                                        <select class="form-control" name="order_number" required>
+                                            <option value="">-Select Order ID-</option>
+                                            <?php foreach($userOrderNumbers as $order_number){ ?>
+                                                <option value="<?php echo $order_number->order_number; ?>"><?php echo $order_number->order_number; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                            
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input class="form-control" name="subject" placeholder="Subject" type="text" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <textarea class="form-control" rows="4" name="problem" placeholder="Your Issue"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 text-center mb-0">
+                                        <button class="btn btn-primary submitComplaint" name="submitComplaint" type="submit">SUBMIT REQUEST</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                 </div>
+                </div>                                
+               
+                
             </div>
+        </div>
     </div>
-</section>
+</div>
+
+
+
+
 
 <!-- Login End -->
 
@@ -530,22 +766,34 @@
 
 </script>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+<script src="{{ asset('js/admin/jquery.min2.1.3.js') }}"></script>
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script> --><!-- 
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <script src="{{ asset('js/fornt/devlopment.js') }}"></script>
 <script type="text/javascript">
-  $( function() {
-    $( "#accordion_active_complaint" ).accordion();
-  } );
+    
+ function openPage(pageName,elmnt) {
+   // alert('jhhgc');
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(pageName).style.display = "block";
+  elmnt.currentTarget.className += " active";
+}
+</script>
+<script type="text/javascript">
  
- 
- $( function() {
-    $( "#resolved_active_complaint" ).accordion();
-  } );
-  
-  
   $(window).load(function(){
 	  var cookie_tab_name = getCookie("username"); 
 	  //alert(cookie_tab_name);
@@ -556,8 +804,10 @@
 	  
   })
   
-  $(document).ready(function(){
+$(document).ready(function(){
+     
 	  $('.issue_resolved_checkbox').click(function(){
+        alert('gsg');
 		  var order_number = $(this).attr('order_number');
 		  var user_id = $(this).attr('user_id');
 		  var baseUrl = '{{ URL::to('/') }}';
@@ -625,7 +875,7 @@
   })
   
   	  
-	  function setCookie(cname, cvalue, exdays) {
+function setCookie(cname, cvalue, exdays) {
   var d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
   var expires = "expires="+d.toUTCString();
@@ -652,12 +902,13 @@ function getCookie(cname) {
 $(document).ready(function() {
   
   $(document).on('click','.add_address',function(){
-     var baseUrl = '{{ URL::to('/') }}';
+    //alert('jh');
+    var baseUrl = '{{ URL::to('/') }}';
     var totaladdress = $("#totaladdress").val();
      totaladdress = parseInt(totaladdress) + 1;
      $("#totaladdress").val(totaladdress);
 
-     $(".addAddress_fields").append('<div><label><b>Other Address</b></label><i class="icofont icofont-bin deleteCurrentRow_1" style="cursor:pointer;color: #d33b3b;float:right;"/></i><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][title]" required="required" placeholder="Enter Title" class="form-control" type="text"></div></div><input name="address[other]['+totaladdress+'][type]" type="hidden" value="other"><div class="form-row"><div class="form-group col-12"><textarea name="address[other]['+totaladdress+'][address]" required="required" placeholder="Enter Address" class="form-control" ></textarea></div></div><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][postcode]" required="required" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text"></div></div><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][phone]" required="required" placeholder="Enter Phone No." class="form-control" type="number"></div></div></div>');
+     $(".addAddress_fields").append('<div><label><b>Other Address</b></label><i class="ti ti-trash deleteCurrentRow_1" style="cursor:pointer;color: #d33b3b;float:right;"/></i><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][title]" required="required" placeholder="Enter Title" class="form-control" type="text"></div></div><input name="address[other]['+totaladdress+'][type]" type="hidden" value="other"><div class="form-row"><div class="form-group col-12"><textarea name="address[other]['+totaladdress+'][address]" required="required" placeholder="Enter Address" class="form-control" ></textarea></div></div><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][postcode]" required="required" placeholder="Enter Postcode" class="form-control postalAutoComplete" type="text"></div></div><div class="form-row"><div class="form-group col-12"><input name="address[other]['+totaladdress+'][phone]" required="required" placeholder="Enter Phone No." class="form-control" type="number"></div></div></div>');
 
   });
   
