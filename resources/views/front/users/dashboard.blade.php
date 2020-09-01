@@ -552,7 +552,7 @@ input:checked + .slider:before {
 
                                         <div class="address{{ $addressesAr->id }}"> 
                                             <label><b>{{ $addressesAr->title }}</b></label>
-                                            <i class="icofont icofont-bin delete_address" address_id="{{ $addressesAr->id }}" style="cursor:pointer;color: #d33b3b;float:right;"/></i>
+                                            <i class="ti ti-trash delete_address" address_id="{{ $addressesAr->id }}" style="cursor:pointer;color: #d33b3b;float:right;"/></i>
 
                                             <div class="form-row">
                                                 <div class="form-group col-12">
@@ -581,7 +581,7 @@ input:checked + .slider:before {
 
                                     <div class="form-row">
                                         <div class="form-group col-12">
-                                           <a href="javascript:void(0)" class="add_address">Add Address</a>
+                                           <span class="add_address" style="cursor: pointer;">Add Address</span>
                                         </div>
                                     </div>
 

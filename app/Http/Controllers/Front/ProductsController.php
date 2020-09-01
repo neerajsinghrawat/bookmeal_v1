@@ -16,6 +16,8 @@ use App\Models\UserAddress;
 use App\Models\ShippingTax;
 use App\Models\Couponcode;
 use App\Models\Order;
+use App\Models\ProductFeatureItems;
+
 use Session;
 use Auth;
 use DB;
@@ -203,10 +205,16 @@ class ProductsController extends Controller
 			}
 		}
 
-    $related_products  = Product::where('sub_category_id','=',$product_details->sub_category_id)->where('id','!=',$product_details->id)->where('status','=',1)->get(); 		
-		$productReviews = ProductReview::with('user')->where('product_id','=',$product_details->id)->get();
+    $related_products  = Product::where('sub_category_id','=',$product_details->sub_category_id)->where('id','!=',$product_details->id)->where('status','=',1)->get();
+
+    $productFeatureItems = ProductFeatureItems::with('productFeature')->where('product_id','=', $product_details->id)->get()->toArray();	
+
+    //echo "<pre>";print_r($productFeatureItems);die;
+
+
+    $productReviews = ProductReview::with('user')->where('product_id','=',$product_details->id)->get();
 		
-    return view('front.products.detail',["product_details" => $product_details,'productReviews'=>$productReviews,'related_products'=>$related_products,'productImages'=>$productImages]);
+    return view('front.products.detail',["product_details" => $product_details,'productReviews'=>$productReviews,'related_products'=>$related_products,'productImages'=>$productImages,'productFeatureItems'=>$productFeatureItems]);
   }
 
 /**
@@ -305,11 +313,12 @@ class ProductsController extends Controller
     $result['cart_count'] = 0;
     $result['response'] = 0;
     $oldqty = 0;
+    //echo '<pre>';print_r($_POST);die;
     if(Auth::check()){
       if ($request->isMethod('post')) {
 
         $set_id = new Cart;
-        $qty = 1;
+        $qty = isset($request->productqty)?$request->productqty:1;
         $products = Product::where('status','=', 1)->where('id','=', $request->productid)->first();
         $cart_list = Cart::where('product_id','=',$request->productid)->first();
 
@@ -327,6 +336,74 @@ class ProductsController extends Controller
             $cart->user_id = Auth::user()->id;
             $cart->product_id = $request->productid;
             $cart->qty = $qty+$oldqty;       
+            
+            $cart->save();
+
+            $cart_count = Cart::where('user_id','=', Auth::user()->id)->count();
+            $result['cart_count'] = $cart_count;
+            $result['response'] = 1;
+
+            if (Session::has('cart_count')) {
+                Session::forget('cart_count');
+            }
+            Session::put('cart_count', $cart_count);
+        }        
+      }
+    }else{
+
+    }
+    return response()->json($result);
+  }
+/**
+ * add_to_cart
+ *
+ * ajax
+ * @param \Illuminate\Http\Request  $request
+ *
+ * @return \Illuminate\Http\Response
+ */
+  public function add_to_cart_new(Request $request)
+  {         
+    $result['cart_count'] = 0;
+    $result['response'] = 0;
+    $oldqty = 0;
+    //echo '<pre>';print_r($_POST);die;
+    if(Auth::check()){
+      if ($request->isMethod('post')) {
+
+        $set_id = new Cart;
+        $qty = isset($request->quantity)?$request->quantity:1;
+        $products = Product::where('status','=', 1)->where('id','=', $request->product_id)->first();
+       // echo '<pre>';print_r($_POST);die;
+        //$cart_list = Cart::where('product_id','=',$request->productid)->first();
+        $cart_list = array();
+
+        if (!empty($cart_list)) {
+          $set_id = Cart::find($cart_list->id);
+          $oldqty = $cart_list->qty;
+        }
+
+        if (Session::has('shoppingstep')) {
+          Session::forget('shoppingstep');
+        }
+
+        if(!empty($products)){
+         // echo '<pre>';print_r($_POST);die;
+            $cart = $set_id;
+            $cart->user_id = Auth::user()->id;
+            $cart->product_id = $request->product_id;
+            $cart->qty = $qty+$oldqty; 
+
+            if (isset($request->productFeatureItem) && !empty($request->productFeatureItem)) {
+               foreach ($request->productFeatureItem as $key => $value) {
+                   $cart->productFeatureItem_id = $key; 
+                   $cart->productFeatureItem_price = $value; 
+                } 
+            }
+
+            if (isset($request->productItem) && !empty($request->productItem)) {
+               $cart->productItem_ids = serialize($request->productItem);
+            }  
             
             $cart->save();
 

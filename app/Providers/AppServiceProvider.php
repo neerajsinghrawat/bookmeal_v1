@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             {
                 $category_list = Category::with('children')->where('parent_id','=',0)->where('status','=', 1)->get();
                 
-                $cart_count = Cart::where('user_id','=', 1)->get();
+                $cart_count = Cart::where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
                 $view->with('category_list', $category_list);
             });
 /*        View::composer('partials.header', function($view)
@@ -76,6 +76,78 @@ class AppServiceProvider extends ServiceProvider
                 
                 $pages_detail = Page::where('status','=', 1)->where('header_page','=', 1)->orderBy('sort_number')->get();
                 $view->with('pages_detail', $pages_detail);
+            });
+
+        View::composer('*', function($view)
+            {
+
+
+          $current_date = date('Y-m-d');
+          $conditions = array(1 => 1,0 => 0);
+
+          $cart_list = Cart::with('product')->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
+             //echo '<pre>couponn'; print_r($cart_list); die;
+          
+          $couponcode_lists = Couponcode::with('couponItem')->where('status','=', 1)->where('start_date','<=', $current_date)->where('expire_date','>=', $current_date)->whereIn('group_id',$conditions)->get();
+          //echo '<pre>couponcode_lists'; print_r($couponcode_lists); die;
+          
+          $couponn = array();
+          foreach ($cart_list as $key1 => $cart_value) {
+              foreach ($couponcode_lists as $key3 => $couponcodeList) {
+                //echo '<pre>couponcodeList'; print_r($couponcodeList); die;
+
+                $appliedCoupon = order::where('coupon_code','=', $couponcodeList->code)->count();
+
+                $appliedUserCoupon = order::where('coupon_code','=', $couponcodeList->code)->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->count();
+
+                if (($couponcodeList->coupon_count > $appliedCoupon) && ($couponcodeList->use_code_times > $appliedUserCoupon)) {
+                  if($couponcodeList->apply_for == "cart"){
+                     $couponn[$couponcodeList->id] = $couponcodeList->id; 
+
+                  }else{
+                    foreach ($couponcodeList->couponItem as $key4 => $value) {
+                     if ($value->apply_for == 'product' && $value->product_id == $cart_value->product_id) {
+                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
+                     }elseif ($value->apply_for == 'category' && $value->category_id == $cart_value['product']['sub_category_id']){
+                      //
+                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
+
+                     }
+                    }
+                  }
+
+                }else{
+
+                }
+                
+              }      
+          }
+   
+          $couponcode_list = Couponcode::whereIn('id',$couponn)->get();
+
+      //die('asfsdfd');
+          $shipping_taxes = ShippingTax::first();
+
+          $addressesArr = array();
+          $addresses = UserAddress::where('user_id','=',((Auth::check())?Auth::user()->id:'1'))->get();
+          if(!empty($addresses)){
+            $i = 0;
+            foreach ($addresses as $key => $address) {
+              if($address->type == "other"){
+                $addressesArr[$address->type][$i] = $address;
+                $i++;
+              }else{
+                $addressesArr[$address->type] = $address;
+              }          
+            }   
+          }
+
+          
+                $view->with('cart_list', $cart_list);
+                $view->with('addressesArr', $addressesArr);
+                $view->with('shipping_taxes', $shipping_taxes);
+                $view->with('couponcode_list', $couponcode_list);
+
             });
             
             
@@ -120,71 +192,6 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-
-        $current_date = date('Y-m-d');
-        $conditions = array(1 => 1,0 => 0);
-
-        $cart_list = Cart::with('product')->where('user_id','=', 1)->get();
-
-        
-        $couponcode_lists = Couponcode::with('couponItem')->where('status','=', 1)->where('start_date','<=', $current_date)->where('expire_date','>=', $current_date)->whereIn('group_id',$conditions)->get();
-        //echo '<pre>couponcode_lists'; print_r($couponcode_lists); die;
-        
-        $couponn = array();
-        foreach ($cart_list as $key1 => $cart_value) {
-            foreach ($couponcode_lists as $key3 => $couponcodeList) {
-              //echo '<pre>couponcodeList'; print_r($couponcodeList); die;
-
-              $appliedCoupon = order::where('coupon_code','=', $couponcodeList->code)->count();
-
-              $appliedUserCoupon = order::where('coupon_code','=', $couponcodeList->code)->where('user_id','=', 1)->count();
-
-              if (($couponcodeList->coupon_count > $appliedCoupon) && ($couponcodeList->use_code_times > $appliedUserCoupon)) {
-                if($couponcodeList->apply_for == "cart"){
-                   $couponn[$couponcodeList->id] = $couponcodeList->id; 
-
-                }else{
-                  foreach ($couponcodeList->couponItem as $key4 => $value) {
-                   if ($value->apply_for == 'product' && $value->product_id == $cart_value->product_id) {
-                    $couponn[$value->couponcode_id] = $value->couponcode_id; 
-                   }elseif ($value->apply_for == 'category' && $value->category_id == $cart_value['product']['sub_category_id']){
-                    //
-                    $couponn[$value->couponcode_id] = $value->couponcode_id; 
-
-                   }
-                  }
-                }
-
-              }else{
-
-              }
-              
-            }      
-        }
-    //echo '<pre>couponn'; print_r($couponn); die;
-        $couponcode_list = Couponcode::whereIn('id',$couponn)->get();
-
-    //die('asfsdfd');
-        $shipping_taxes = ShippingTax::first();
-
-        $addressesArr = array();
-        $addresses = UserAddress::where('user_id','=',1)->get();
-        if(!empty($addresses)){
-          $i = 0;
-          foreach ($addresses as $key => $address) {
-            if($address->type == "other"){
-              $addressesArr[$address->type][$i] = $address;
-              $i++;
-            }else{
-              $addressesArr[$address->type] = $address;
-            }          
-          }   
-        }
-
-        View::share('cart_list', $cart_list);
-        View::share('addressesArr', $addressesArr);
-        View::share('shipping_taxes', $shipping_taxes);
-        View::share('couponcode_list', $couponcode_list);
 
 
 

@@ -1,4 +1,19 @@
     <!-- Header -->
+
+    <style type="text/css">
+    .notificationaa{ border-radius: 30px;
+        position: absolute;
+        top: -11.2px;
+        top: -0.8rem;
+        right: 0;
+        background-color: #4aa36b;
+        color: #fff;
+        font-weight: 600;
+        font-size: 9.799px;
+        font-size: 0.7rem;
+        display: inline-block;
+        padding: 0.15rem 0.3rem 0.2rem 0.35rem;
+        line-height: 1; }</style>
     <header id="header" class="light">
 
         <div class="container">
@@ -45,13 +60,16 @@
                 </div>
 
                 <div class="col-md-2">
+                    @if (Auth::guest())
+                    @else
                     <a href="#" class="module module-cart right" data-toggle="panel-cart">
                         <span class="cart-icon">
                             <i class="ti ti-shopping-cart"></i>
-                            <span class="notification display-cart">0</span>
+                            <span class="notificationaa"><?php echo (Session::has('cart_count'))?Session::get('cart_count'):$cart_count;?></span>
                         </span>
-                        <span class="cart-value">$<span class="value">0.00</span></span>
+                        <span class="cart-value"></span>
                     </a>
+                    @endif
                 </div>
                 
             </div>
@@ -75,7 +93,7 @@
 
         <a href="#" class="module module-cart" data-toggle="panel-cart">
             <i class="ti ti-shopping-cart"></i>
-            <span class="notification">0</span>
+            <span class="notificationaa">0</span>
         </a>
 
     </header>

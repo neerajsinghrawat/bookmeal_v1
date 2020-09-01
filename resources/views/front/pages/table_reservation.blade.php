@@ -22,7 +22,7 @@
                             <div class="utility-box-title bg-dark dark">
                                 <div class="bg-image"><img src="http://assets.suelo.pl/soup/img/photos/modal-review.jpg" alt=""></div>
                                 <div>
-                                    <span class="icon icon-primary"><i class="ti ti-bookmark-alt"></i></span>
+                                    <!-- <span class="icon icon-primary"><i class="ti ti-bookmark-alt"></i></span> -->
                                     <h4 class="mb-0">Book a table</h4>
                                     <p class="lead text-muted mb-0">Details about your reservation.</p>
                                 </div>

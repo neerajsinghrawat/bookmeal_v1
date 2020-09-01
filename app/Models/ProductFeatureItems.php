@@ -14,4 +14,9 @@ class ProductFeatureItems extends Model
      * @var array
      */
     protected $guarded = ['product_feature_items'];
+
+    public function productFeature()
+    {
+        return $this->belongsTo('App\Models\ProductFeature');
+    }    
 }

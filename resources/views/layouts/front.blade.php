@@ -30,6 +30,7 @@
 
 </head>
     <body>
+        <meta name="csrf-token" content="{{ csrf_token() }}" />  
         @include('partials._front_messages')
         
     <div id="body-wrapper" class="animsition">
@@ -103,73 +104,69 @@
                 <button class="close" data-toggle="panel-cart"><i class="ti ti-close"></i></button>
             </div>
             <div class="panel-cart-content cart-details">
+                <table class="table-cart">
+                   <tbody>
+                        <?php $total = 0;
+                        if (!empty($cart_list[0])) {
+                                foreach ($cart_list as $key => $cartlistdetail) {  
+                                               $iImgPath = asset('image/no_product_image.jpg');
+                                              if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
+                                                $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
+                                              }
+                                $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+                         ?>
+                        <tr class="cart_{{ $cartlistdetail->id }}">
+                            <td class="title">
+                                <span class="name"><a href="#product-modal" data-toggle="modal">{{ ucwords($cartlistdetail->product->name) }}</a></span>
+                                <span class="caption text-muted">Large (500g)</span>
+                            </td>
+                            <td class="price">{{ getSiteCurrencyType().$cartlistdetail->product->price }}</td>
+                            <td class="actions">
+                                <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
+                                
+                                <span class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-trash"></i></span>
+                            </td>
+                        </tr>
+                       
+                        <?php } }else { ?>
+                        <tr>
+                            <td>No items found</td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+                <div class="cart-summary">
+                    <div class="row">
+                        <div class="col-7 text-right text-muted">Order total:</div>
+                        <div class="col-5"><strong><span class="cart-products-total">{{ getSiteCurrencyType().$total}}</span></strong></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7 text-right text-muted">Devliery:</div>
+                        <div class="col-5"><strong><span class="cart-delivery"><?php $total_amount = $total; 
+                                if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
+                                     $total_amount = $shipping_taxes->shipping_amount + $total_amount;       
+
+                                     echo getSiteCurrencyType().$shipping_taxes->shipping_amount;
+                                 }else{
+                                    echo 'Free';
+                                 } 
 
 
-
-
-                                <table class="table-cart">
-                                   <tbody>
-                                        <?php $total = 0;
-                                        if (!empty($cart_list[0])) {
-                                                foreach ($cart_list as $key => $cartlistdetail) {  
-                                                               $iImgPath = asset('image/no_product_image.jpg');
-                                                              if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
-                                                                $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
-                                                              }
-                                                $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
-                                         ?>
-                                        <tr class="cart_{{ $cartlistdetail->id }}">
-                                            <td class="title">
-                                                <span class="name"><a href="#product-modal" data-toggle="modal">{{ ucwords($cartlistdetail->product->name) }}</a></span>
-                                                <span class="caption text-muted">Large (500g)</span>
-                                            </td>
-                                            <td class="price">{{ getSiteCurrencyType().$cartlistdetail->product->price }}</td>
-                                            <td class="actions">
-                                                <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
-                                                
-                                                <button type="button" class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-close"></i></button>
-                                            </td>
-                                        </tr>
-                                       
-                                        <?php } }else { ?>
-                                        <tr>
-                                            <td>No items found</td>
-                                        </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
-                                    <div class="cart-summary">
-                                        <div class="row">
-                                            <div class="col-7 text-right text-muted">Order total:</div>
-                                            <div class="col-5"><strong><span class="cart-products-total">{{ getSiteCurrencyType().$total}}</span></strong></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-7 text-right text-muted">Devliery:</div>
-                                            <div class="col-5"><strong><span class="cart-delivery"><?php $total_amount = $total; 
-                                                    if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
-                                                         $total_amount = $shipping_taxes->shipping_amount + $total_amount;       
-
-                                                         echo getSiteCurrencyType().$shipping_taxes->shipping_amount;
-                                                     }else{
-                                                        echo 'Free';
-                                                     } 
-
-
-                                                    if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
-                                                        if ($total_amount > Session::get('apply_coupon.amount')) {
-                                                            $total_amount = $total_amount - Session::get('apply_coupon.amount');
-                                                        }else{
-                                                            $total_amount = 0;
-                                                        }
-                                                        
-                                                    } ?></span></strong></div>
-                                        </div>
-                                        <hr class="hr-sm">
-                                        <div class="row text-lg">
-                                            <div class="col-7 text-right text-muted">Total:</div>
-                                            <div class="col-5"><strong><span class="cart-total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
-                                        </div>
-                                    </div>
+                                if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
+                                    if ($total_amount > Session::get('apply_coupon.amount')) {
+                                        $total_amount = $total_amount - Session::get('apply_coupon.amount');
+                                    }else{
+                                        $total_amount = 0;
+                                    }
+                                    
+                                } ?></span></strong></div>
+                    </div>
+                    <hr class="hr-sm">
+                    <div class="row text-lg">
+                        <div class="col-7 text-right text-muted">Total:</div>
+                        <div class="col-5"><strong><span class="cart-total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
+                    </div>
+                </div>
                 <!-- <div class="cart-empty">
                     <i class="ti ti-shopping-cart"></i>
                     <p>Your cart is empty...</p>
@@ -363,7 +360,7 @@
 </div>
 
 <div class="modal fade product-modal" id="odder" role="dialog">
-    <div class="modal-dialog" role="document" style="margin-left: 400px;
+    <div class="modal-dialog" role="document" style="
     margin-right: 660px;
     margin-top: 100px;">
             <div class="container" style="
@@ -378,10 +375,14 @@
                         <div class="utility-box">
                             <div class="utility-box-title bg-dark dark">
                                 <div class="bg-image"><img src="http://assets.suelo.pl/soup/img/photos/modal-review.jpg" alt=""></div>
-                                <div>
-                                    <span class="icon icon-primary"><i class="ti ti-bookmark-alt"></i></span>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                            <span class="icon icon-primary"><i class="ti ti-bookmark-alt"></i></span>
+                                     </div>
+                                     <div class="col-md-6">
                                     <h4 class="mb-0">Book a table</h4>
                                     <p class="lead text-muted mb-0">Details about your reservation.</p>
+                                </div>
                                 </div>
                             </div> 
                             <div class="row">
@@ -450,7 +451,7 @@
                                                     <select name="reservation_time" class="form-control" required>
                                                         <?php foreach ($timearray as $value) {
                                                              ?>
-                                                        <option value="{{$value}}">{{$value}} people</option>
+                                                        <option value="{{$value}}">{{$value}} </option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -515,7 +516,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $('.saveTablereservation').click(function(){
+    $('.saveTablereservation').click(function(){
    // alert('mnlksdfjio');
     var name= $('#name').val();
     var email= $('#email').val();
@@ -555,6 +556,53 @@ $(document).ready(function(){
   
   });
 
+  var baseUrl = '{{ URL::to('/') }}';
+      
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+  $('.delete_cart').click(function(){
+    alert('jjh');
+        
+        var cartid = $(this).attr('cart_id'); 
+        
+            $.ajax({
+      
+                url: baseUrl+'/delete-cart',
+                
+                type: 'post',
+                
+                data: {cartid: cartid,_token: CSRF_TOKEN},
+                
+                dataType: 'json',
+                
+                success: function(result) {
+
+                  //alert(result.response);
+                  
+                  if (result.response == 1) {
+
+                    $('.cart_'+cartid).remove();
+
+                   $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item Remove from cart successfully !</p></div>').prependTo('.msgcart');
+                  
+                    $('.display-cart').html(result.cart_count);
+                    location.reload();
+                  }else {
+
+                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not Remove from cart!</p></div>').prependTo('.msgcart');
+                  }           
+                  
+                  
+                  setTimeout(function(){
+                    $("#successFlashMsg").fadeOut('slow');
+                  },5000);
+                  
+                  
+                
+                }
+                
+              });
+          
+  });
 });
 </script>
     </body>
