@@ -78,7 +78,7 @@
                   <input type="text" class="form-control" name="server_text_heading" placeholder="Enter Server Text heading" >
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Main Category</label>
                     <select class="form-control" name="category_id" id="main_category" required="required">
                       <option class="selectcategory" value="">-Select Category-</option>
@@ -87,15 +87,26 @@
                         @endforeach
                     </select>
                   
+                </div> -->
+                <input type="hidden" name="category_id" value="7">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Category</label>
+                    <select class="form-control" name="sub_category_id" required="required">
+                      <option value="">-Select Category-</option>
+                        @foreach($category_list as $category)
+                            <option value="{{ $category->id }}">{{ ucwords($category->name) }}</option>
+                        @endforeach
+                    </select>
+                  
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="exampleInputEmail1">Sub Category</label>
                     <select class="form-control" name="sub_category_id" id="sub_category">
                        <option class="selectcategory" value="">-Select Main Category-</option>
                     </select>
                   
-                </div>
+                </div> -->
 
                 
                 <div class="form-group">
@@ -128,59 +139,91 @@
                     </span>
                     @endif
                 </div>              
-                <div class="form-group box-footer box-comments">
+                
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Is varaible Product</label>
+                   <input type="checkbox" class="is_varaible_product" name="is_varaible_product">
+                </div>
+                <div class="attachment_fields" style="display: none;">
+                  <div class="form-group box-footer box-comments">
                     <label for="exampleInputEmail1">Product Feature</label><br>
 
                     <div class="row"> 
-                    <?php foreach ($productFeatures as $key => $productFeature) {
-                     ?> 
-                     <div class="col-md-6" style="margin-bottom: 15px;">                     
-                     <div class="col-md-4">                     
-                       <input type="checkbox" name="ProductFeature[{{ $key }}][active]">
-                     <b> {{$productFeature->value}}</b></div><div class="col-md-4"> <input type="text" class="form-control" name="ProductFeature[{{ $key }}][price]" placeholder="Enter Price" ><input type="hidden" name="ProductFeature[{{ $key }}][id]" value="{{$productFeature->id}}"></div>
-                     </div>
+                        <?php foreach ($productFeatures as $key => $productFeature) {
+                         ?> 
+                         <div class="col-md-3" style="margin-bottom: 15px;">                     
+                         <div class="col-md-4">                     
+                           <input type="checkbox" name="ProductFeature[{{ $key }}]" class="attachmentinput_fields" value="{{$productFeature->id}}">
+                         <b> {{$productFeature->value}}</b></div>
+                         </div>
 
-                      <?php } ?>
-                  </div>
-                  
-                  </div>                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Tag</label>
-                  <input type="text" class="form-control" name="tag[]" placeholder="Enter Tag">
-                </div>
+                        <?php } ?>
+                    </div>
+                    <div class="form-group box-footer box-comments child_feature" style="display: none;">
+                      <div class="form-group">
+                        <a href="javascript:void(0)" class="add_more btn btn-info"><i class="fa fa-plus"> Add More</i></a>
+                      </div>
+                        <div class="row">
+                            <div class="col-md-1">  
+                              <label>Is Same price ?</label>
+                            </div>
+                            <div class="col-md-6 row form-group"> 
+                              <?php foreach ($productFeatures as $key => $productFeature) { ?> 
+                                <div class="col-md-6 feature_label_{{ $productFeature['id'] }}" style="display: none"> 
+                                  <label for="exampleInputEmail1">{{ $productFeature['value'] }}</label>
+                                </div>
+                              <?php } ?>
+                            </div>
+                            <div class="col-md-2"> 
+                              <label for="exampleInputEmail1">Increment/Decrement</label>
+                            </div>
+                            <div class="col-md-2"> 
+                              <label for="exampleInputEmail1">price</label>
+                            </div>
+                            <div class="col-md-1">
+                              <label for="exampleInputEmail1">Action</label>
+                            </div>  
+                        </div>
+                        <div id="clone">                      
+                          <div class="row" > 
+                            <div class="col-md-1">                 
+                               <input type="checkbox" name="Productattribute[1][is_same_price]" value="1" class="is_same_price" count="1">
+                            
+                            </div>
+                                                  
+                            <div class="col-md-6 row form-group"> 
+                                <?php foreach ($productFeatures as $key => $productFeature) { ?> 
+                                <div class="col-md-6 feature_{{ $productFeature['id'] }}" style="display: none"> 
+                                <select class="form-control feature_value_{{ $productFeature['id'] }}" name="Productattribute[1][attribute][]" id="main_category" required="required" disabled="disabled">
+                                  
+                                    @foreach($productFeatureAttributes[$productFeature['id']] as $category)
+                                        <option class="selectcategory" value="{{ $category['id'] }}">{{ ucwords($category['name']) }}</option>
+                                    @endforeach
+                                </select>
+                              </div>
+                              <?php } ?>
+                            </div>  
 
-                <div class="form-group attachment_fields">
-                
-                </div>
-                <div class="form-group">
-                  <a href="javascript:void(0)" class="add_tag btn btn-info"><i class="fa fa-plus"> Add More Tag</i></a>
-                </div>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Title</label>
-                  <input type="text" class="form-control" name="Item[1][title]" placeholder="Enter Item Title">
-                </div>
+                            <div class="col-md-2"> 
+                              <select class="form-control remove_1" name="Productattribute[1][price_type]">
+                                <option value="Increment">Increment</option>
+                                <option value="Decrement">Decrement</option>
+                              </select>
+                            </div> 
+                            <div class="col-md-2" > 
+                              <input type="text" class="form-control remove_1" name="Productattribute[1][price]" placeholder="Enter Price" >
+                            </div> 
+                            <div class="col-md-1">
+                              
+                              <!-- <i class="fa fa-users"></i> -->
+                            </div>
 
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Price</label>
-                   <input type="text" class="form-control" name="Item[1][price]" placeholder="Enter Price">
+                          </div>
+                        </div>
+                      
+                      </div>                  
+                  </div> 
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Price type</label>
-                    <select class="form-control" name="Item[1][price_type]">
-                      <option value="Increment">+(Increment)</option>
-                      <option value="Decrement">-(Decrement)</option>
-                    </select>
-                </div> 
-
-                <div class="form-group item_fields">
-                
-                </div>
-                <div class="form-group">
-                  <a href="javascript:void(0)" class="add_item btn btn-info"><i class="fa fa-plus"> Add Items</i></a>
-                </div>
-
-
                 <div class="form-group">
                   <label for="exampleInputEmail1">Allergen Key</label>
                   <textarea class="form-control" name="allergen_key" placeholder="Enter Allergen Key"></textarea> 
@@ -252,6 +295,9 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function() {
+  var productFeatureAttributes = <?php echo json_encode($productFeatureAttributes) ?>;
+
+  console.log(productFeatureAttributes);
   
   $(document).on('click','.add_tag',function(){
     //alert('baseUrl');
@@ -260,6 +306,41 @@ $(document).ready(function() {
     
      $(".attachment_fields").append('<div class="form-group"><div class="input-group my-colorpicker2 colorpicker-element"><input type="text" class="form-control" name="tag[]" placeholder="Enter Tag"><div class="input-group-addon"><i class="fa fa-close deleteCurrentRow_1" style="cursor:pointer;color: #d33b3b;float:right;"/></i></div></div></div>');
 
+  });  
+
+  $(document).on('click','.is_varaible_product',function(){
+    
+    if($(this).prop('checked')){
+       $(".attachment_fields").show();
+       $(".attachmentinput_fields").prop('disabled', false);
+    }else{
+
+        $('.attachment_fields').hide();
+        $('.attachmentinput_fields').prop('disabled', 'disabled');
+    }
+
+  });  
+
+  $(document).on('click','.attachmentinput_fields',function(){
+    var valNew =$(this).val();
+    if($('.attachmentinput_fields:checked').length){
+         $(".child_feature").show();
+
+    }else{
+      
+         $(".child_feature").hide();
+      
+    }
+      if($(this).prop('checked')){
+        //alert(valNew);
+         $(".feature_"+valNew).show();
+         $(".feature_label_"+valNew).show();
+         $(".feature_value_"+valNew).prop('disabled', false);
+      }else{
+         $(".feature_"+valNew).hide();
+         $(".feature_label_"+valNew).hide();
+         $(".feature_value_"+valNew).prop('disabled', 'disabled');        
+      }
   });
   
   $(document).on('click','.deleteCurrentRow_1',function(){
@@ -268,7 +349,7 @@ $(document).ready(function() {
     }
   }); 
    
-
+   
 });
 </script>
 
@@ -285,6 +366,39 @@ $(document).ready(function() {
 
         $(".item_fields").append('<div class="box-footer box-comments" style="margin-bottom: 12px"><div class="form-group"><label for="exampleInputEmail1">Item Title</label><i class="fa fa-close deleteitem_1" style="cursor:pointer;color: #d33b3b;float:right;"/></i><input type="text" class="form-control" name="Item['+totalitems+'][title]" placeholder="Enter Item Title" required="required"></div><div class="form-group"><label for="exampleInputEmail1">Item Price</label><input type="text" class="form-control" name="Item['+totalitems+'][price]" placeholder="Enter Price" required="required"></div><div class="form-group"><label for="exampleInputEmail1">Item Price type</label><select class="form-control" name="Item['+totalitems+'][price_type]" required="required"><option value="Increment">+(Increment)</option><option value="Decrement">-(Decrement)</option></select></div></div>');
 
+  });  
+
+  $(document).on('click','.add_more',function(){
+    
+
+      
+     var baseUrl = '{{ URL::to('/') }}';
+     var totalitems = $("#totalitems").val();
+     totalitems = parseInt(totalitems) + 1;
+     $("#totalitems").val(totalitems);
+      var html = '<div class="row" ><div class="col-md-1"> <input type="checkbox" name="Productattribute['+totalitems+'][is_same_price]" class="is_same_price" count="'+totalitems+'"></div>';
+        html += '<div class="col-md-6 row form-group">';
+        <?php foreach ($productFeatures as $key => $productFeature) { ?> 
+          html += '<div class="col-md-6 feature_<?php echo $productFeature['id']; ?>" style="display: none">';
+          html += '<select class="form-control feature_value_<?php echo $productFeature['id']; ?>" name="Productattribute['+totalitems+'][attribute][]" id="main_category" required="required" disabled="disabled">';
+          <?php foreach($productFeatureAttributes[$productFeature['id']] as $category) { ?>
+            html += '<option class="selectcategory" value="<?php echo $category['id'] ?>"><?php echo $category['name'] ?></option>';  
+
+
+          <?php } ?> 
+          html += '</select></div>';
+        <?php } ?> 
+        html += '</div><div class="col-md-2"><select class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price_type]"><option value="Increment">Increment</option><option value="Decrement">Decrement</option></select></div> <div class="col-md-2"><input type="text" class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price]" placeholder="Enter Price" ></div>';
+
+        html += '<div class="col-md-1"><i class="fa fa-trash deleteitem_1"></i></div></div>';
+        $('#clone').append(html);
+        $(".attachmentinput_fields:checked").each(function() {
+          
+          var valNew = $(this).val();
+          $(".feature_"+valNew).show();
+          $(".feature_value_"+valNew).prop('disabled', false);
+        });
+
   });
   
   $(document).on('click','.deleteitem_1',function(){
@@ -299,6 +413,25 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(document).on('click','.is_same_price',function(){  
+
+    if($(this).prop('checked')){
+
+      var count = $(this).attr('count');
+      $('.remove_'+count).css('display','none');
+      $('.remove_'+count).prop('disabled', 'disabled');
+    
+    }else{
+
+      var count = $(this).attr('count');
+      $('.remove_'+count).css('display','block');
+      $('.remove_'+count).prop('disabled', false);
+
+    }
+
+
+   });  
   
     $('#main_category').on('change',function(){
       

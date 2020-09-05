@@ -71,7 +71,7 @@ class CategoriesController extends Controller
         $category->name = trim($request->name);
         $category->status = ($request->status == 'on')?1:0;
         $category->slug = trim($request->slug.'-'.$unqid);
-        $category->parent_id = $request->parent_id;
+        $category->parent_id = 7;
         $category->start_time = $start_time;
         $category->end_time = $end_time;
         $category->meta_title = $request->meta_title;
@@ -155,7 +155,7 @@ class CategoriesController extends Controller
         $category->slug = trim($request->slug);
          $category->start_time = $start_time;
         $category->end_time = $end_time;
-        $category->parent_id = $request->parent_id;
+        $category->parent_id = 7;
         $category->meta_title = $request->meta_title;
         $category->meta_keyword = $request->meta_keyword;
         $category->meta_description = $request->meta_description;

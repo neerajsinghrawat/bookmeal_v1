@@ -19,8 +19,8 @@ Route::group(['middleware' => ['web']], function() {
     Route::get('/facebook-login', 'Auth\LoginController@facebook_login');
     Route::post('login', ['as' => 'login', 'uses' => 'Auth\LoginController@login']);
    
-    Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
-
+    //Route::post('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout' );
     Route::get('/redirect', 'Auth\LoginController@redirectToProvider');
     Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
 
@@ -269,7 +269,15 @@ Route::get('/products', 'Front\ProductsController@index');
     Route::post('/productFeatures/add',  ['as' => 'admin.productFeatures.add.post',   'uses' => 'Admin\ProductFeaturesController@create']);
     Route::get('/productFeatures/edit/{id}', 'Admin\ProductFeaturesController@edit');
     Route::put('/productFeatures/edit/{id}', 'Admin\ProductFeaturesController@update');
+
+    Route::get('/productFeatures/editfeatures_attribute/{pf_id}/{id}', 'Admin\ProductFeaturesController@editfeaturesAttribute');
+    Route::put('/productFeatures/editfeatures_attribute/{pf_id}/{id}', 'Admin\ProductFeaturesController@updatefeaturesAttribute');
     Route::get('/productFeatures/delete/{id}', 'Admin\ProductFeaturesController@destroy');
+    Route::get('/productFeatures/deletefeatures_attribute/{pf_id}/{id}', 'Admin\ProductFeaturesController@deletefeaturesAttribute');
+    Route::get('/productFeatures/addfeatures_attribute/{id}', 'Admin\ProductFeaturesController@addfeaturesAttribute');
+    Route::post('/productFeatures/addfeatures_attribute',  ['as' => 'admin.productFeatures.addfeatures_attribute.post',   'uses' => 'Admin\ProductFeaturesController@createfeaturesAttribute']);
+
+    Route::get('/productFeatures/features_attribute/{id}', 'Admin\ProductFeaturesController@featuresAttribute');
 
 
 
@@ -299,6 +307,7 @@ Route::get('/products', 'Front\ProductsController@index');
     //Route::get('admin', 'Admin\AdminController@dashboard');
     
    Route::get('/contact_us', 'Admin\PagesController@contact_us');
+   Route::get('/book_table', 'Admin\PagesController@book_table');
 
 
     Route::get('/emailTemplates',  ['as' => 'admin.emailTemplates.index',   'uses' => 'Admin\EmailTemplatesController@index']);

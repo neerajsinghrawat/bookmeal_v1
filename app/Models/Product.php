@@ -33,6 +33,11 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\ProductFeatureItems');
     }
+
+    public function productAttribute()
+    {
+        return $this->hasMany('App\Models\ProductAttribute');
+    }
     
     public function productTag()
     {

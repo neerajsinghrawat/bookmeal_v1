@@ -255,10 +255,40 @@
           <a href="{{ URL::to('admin/categories') }}"><i class="fa fa-list-alt" aria-hidden="true"></i>Category</a>
         </li>
 
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'products'))?'active':'' }}">
+        <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'products'))?'active':'' }}">
           <a href="{{ URL::to('admin/products') }}"><i class="fa fa-cubes"></i> Products</a>
         </li>
-       <!--  <li>
+ -->        <li class="treeview menu">
+          <a href="#">
+            <i class="fa fa-cubes"></i> <span>Products</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="{{ ((!empty($controller_name)) && ($controller_name == 'products'))?'active':'' }}"><a href="{{ URL::to('admin/products') }}"><i class="fa fa-circle-o"></i> All Products</a></li>
+            <li class="{{ ((!empty($controller_name)) && ($controller_name == 'productFeatures'))?'active':'' }}"><a href="{{ URL::to('admin/productFeatures') }}"><i class="fa fa-circle-o"></i> Product Attributes</a></li>
+          </ul>
+        </li>
+
+
+        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'sliders'))?'active':'' }}">
+          <a href="{{ URL::to('admin/sliders') }}"> <i class="fa fa-picture-o" aria-hidden="true"></i>Slider Manager</a>
+        </li>  
+        
+
+        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'pages'))?'active':'' }}">
+          <a href="{{ URL::to('admin/pages') }}"> <i class="fa fa-file-text" aria-hidden="true"></i>Pages</a>
+        </li>        
+
+        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'book_table'))?'active':'' }}">
+          <a href="{{ URL::to('admin/book_table') }}"><i class="fa fa-square-o" aria-hidden="true"></i>Table Reservations</a>
+        </li>
+        
+        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'orders'))?'active':'' }}">
+          <a href="{{ URL::to('admin/orders') }}"><i class="fa fa-bars" aria-hidden="true"></i>Orders</a>
+        </li>
+        <!--  <li>
           <a href="{{ URL::to('admin/features') }}"><i class="fa fa-bars" aria-hidden="true"></i>
 
  Feature</a>
@@ -278,38 +308,30 @@
           <a href="{{ URL::to('admin/couponcodes') }}"><i class="fa fa-ticket" aria-hidden="true"></i>Coupon Codes</a>
         </li>  
 
-
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'sliders'))?'active':'' }}">
-          <a href="{{ URL::to('admin/sliders') }}"> <i class="fa fa-picture-o" aria-hidden="true"></i>Slider Manager</a>
-        </li>  
+ 
 
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'popups'))?'active':'' }}">
           <a href="{{ URL::to('admin/popups') }}"> <i class="fa fa-square-o" aria-hidden="true"></i>Popups Manager</a>
         </li> 
         
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'pages'))?'active':'' }}">
-          <a href="{{ URL::to('admin/pages') }}"> <i class="fa fa-file-text" aria-hidden="true"></i>Pages</a>
-        </li> 
 
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'testimonials'))?'active':'' }}">
           <a href="{{ URL::to('admin/testimonials') }}"> <i class="fa fa-group" aria-hidden="true"></i>Testimonial Manager</a>
         </li>          
 
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'productFeatures'))?'active':'' }}">
+        <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'productFeatures'))?'active':'' }}">
           <a href="{{ URL::to('admin/productFeatures') }}"> <i class="fa fa-group" aria-hidden="true"></i>Product Features Manager</a>
-        </li>  
+        </li>  --> 
 
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'news_letters'))?'active':'' }}">
           <a href="{{ URL::to('admin/news_letters') }}"> <i class="fa fa-paper-plane-o" aria-hidden="true"></i>Newsletter Manager</a>
         </li> 
 
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'orders'))?'active':'' }}">
-          <a href="{{ URL::to('admin/orders') }}"><i class="fa fa-bars" aria-hidden="true"></i>Orders</a>
-        </li>
         
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'contact_us'))?'active':'' }}">
           <a href="{{ URL::to('admin/contact_us') }}"><i class="fa fa-envelope" aria-hidden="true"></i>Contact us</a>
         </li>
+
         
         <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'openHours'))?'active':'' }}">
           <a href="{{ URL::to('admin/openHours') }}"><i class="fa fa-clock-o" aria-hidden="true"></i>Open Hours</a>
@@ -319,9 +341,9 @@
           <a href="{{ URL::to('admin/clients') }}"><i class="fa fa-group" aria-hidden="true"></i>Client</a>
         </li>    
 
-        <li class="{{ ((!empty($controller_name)) && ($controller_name == 'blogs'))?'active':'' }}">
+        <!-- <li class="{{ ((!empty($controller_name)) && ($controller_name == 'blogs'))?'active':'' }}">
           <a href="{{ URL::to('admin/blogs') }}"><i class="fa fa-clone" aria-hidden="true"></i>Blogs</a>
-        </li>
+        </li> -->
 
         <li class="{{ ((!empty($controller_name)) && ($controller_name == 'staffs'))?'active':'' }}">
           <a href="{{ URL::to('admin/staffs') }}"><i class="fa fa-users" aria-hidden="true"></i>Staffs</a>

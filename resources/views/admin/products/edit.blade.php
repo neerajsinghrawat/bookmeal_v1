@@ -81,6 +81,31 @@
                 </div>
 
 
+                <!-- <div class="form-group">
+                  <label for="exampleInputEmail1">Main Category</label>
+                    <select class="form-control" name="category_id" id="main_category" required="required">
+                      <option class="selectcategory" value="">-Select Category-</option>
+                        @foreach($category_list as $category)
+                            <option class="selectcategory" value="{{ $category->id }}" {{ ($products['category_id'] == $category->id)?'selected':'' }}>{{ ucwords($category->name) }}</option>
+                        @endforeach
+                    </select>
+                  
+                </div> -->
+                <input type="hidden" name="category_id" value="7">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Category</label>
+                    <select class="form-control" name="sub_category_id">
+
+                      @if(!empty($category_list))
+                           @foreach($category_list as $sub_category)
+                            <option value="{{ $sub_category->id }}" {{ ($products['sub_category_id'] == $sub_category->id)?'selected':'' }}>{{ ucwords($sub_category->name) }}</option>
+                        @endforeach
+
+                        @endif
+
+                    </select>
+                  
+                </div><!-- 
                 <div class="form-group">
                   <label for="exampleInputEmail1">Main Category</label>
                     <select class="form-control" name="category_id" id="main_category" required="required">
@@ -107,7 +132,7 @@
                       @endif
                     </select>
                   
-                </div>
+                </div> -->
 
                 
                 <div class="form-group">
@@ -138,137 +163,138 @@
                         <strong>{{ $errors->first('description') }}</strong>
                     </span>
                     @endif
-                </div>              
-                <div class="form-group box-footer box-comments">
+                </div>  
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Is varaible Product</label>
+                   <input type="checkbox" class="is_varaible_product" name="is_varaible_product" {{ ($products['is_varaible_product'] == 1)?'checked':'unchecked' }}>
+                </div>
+                <div class="attachment_fields" style="display: none;">
+                  <div class="form-group box-footer box-comments">
                     <label for="exampleInputEmail1">Product Feature</label><br>
 
                     <div class="row"> 
-                    <?php foreach ($productFeatures as $key => $productFeature) {
-                      if (!empty($productFeatureItemsarr) && !empty($productFeatureItemsarr[$productFeature->id])) {
-                     ?> 
-                         <div class="col-md-6" style="margin-bottom: 15px;">                     
-                           <div class="col-md-4">                     
-                               <input type="checkbox" name="ProductFeature[{{ $key }}][active]" checked="checked">
-                             <b> {{$productFeature->value}}</b>
-                           </div>
-                           <div class="col-md-4"> 
-                              <input type="text" class="form-control" name="ProductFeature[{{ $key }}][price]" placeholder="Enter Price" value="{{ $productFeatureItemsarr[$productFeature->id]['price'] }}"><input type="hidden" name="ProductFeature[{{ $key }}][id]" value="{{$productFeature->id}}">
-                            </div>
+                        <?php $new = explode(',', $products['product_feature']);
+                        
+
+                        foreach ($productFeatures as $key => $productFeature) {
+                         ?> 
+                         <div class="col-md-3" style="margin-bottom: 15px;">                     
+                         <div class="col-md-4">                     
+                           <input type="checkbox" name="ProductFeature[{{ $key }}]" class="attachmentinput_fields" value="{{$productFeature->id}}" {{ (in_array($productFeature->id,$new))?'checked':'unchecked' }}>
+                         <b> {{$productFeature->value}}</b></div>
                          </div>
 
-                      <?php }else{ ?>
-                         <div class="col-md-6" style="margin-bottom: 15px;">                     
-                           <div class="col-md-4">                     
-                               <input type="checkbox" name="ProductFeature[{{ $key }}][active]">
-                             <b> {{$productFeature->value}}</b>
-                           </div>
-                           <div class="col-md-4"> 
-                              <input type="text" class="form-control" name="ProductFeature[{{ $key }}][price]" placeholder="Enter Price" ><input type="hidden" name="ProductFeature[{{ $key }}][id]" value="{{$productFeature->id}}">
+                        <?php } ?>
+                    </div>
+                    <div class="form-group box-footer box-comments child_feature" style="display: none;">
+                      <div class="form-group">
+                        <a href="javascript:void(0)" class="add_more btn btn-info"><i class="fa fa-plus"> Add More</i></a>
+                      </div>
+                        <div class="row">
+                            <div class="col-md-1">  
+                              <label>Is Same price ?</label>
                             </div>
-                         </div>                      
-                      <?php } } ?>
-                  </div>
-                  
-                  </div> 
-    <?php 
-    if(isset($products->productTag) && count($products->productTag) >0 ) {
-        
-                    foreach ($products->productTag as $key => $producttags) {
+                            <div class="col-md-6 row form-group"> 
+                              <?php foreach ($productFeatures as $key => $productFeature) { ?> 
+                                <div class="col-md-6 feature_label_{{ $productFeature['id'] }}" style="display: none"> 
+                                  <label for="exampleInputEmail1">{{ $productFeature['value'] }}</label>
+                                </div>
+                              <?php } ?>
+                            </div>
+                            <div class="col-md-2"> 
+                              <label for="exampleInputEmail1">Increment/Decrement</label>
+                            </div>
+                            <div class="col-md-2"> 
+                              <label for="exampleInputEmail1">price</label>
+                            </div>
+                            <div class="col-md-1">
+                              <label for="exampleInputEmail1">Action</label>
+                            </div>  
+                        </div>
+                        <div id="clone"> 
+                        <?php if(isset($products->productAttribute) && count($products->productAttribute) >0 ) {
+                          foreach ($products->productAttribute as $key => $product_items) {
+                            $productAttribute_value = explode(',', $product_items['attribute']);
+                            //print_r($productAttribute_value);die;
+                            if($key == 0){ ?>                      
+                          <div class="row" > 
+                            <div class="col-md-1">                 
+                               <input type="checkbox" name="Productattribute[{{ $key }}][is_same_price]" value="1" {{ ($product_items['is_same_price'] == 1)?'checked':'unchecked' }}  class="is_same_price"  count="{{ $key }}">
+                            
+                            </div>
+                                                  
+                            <div class="col-md-6 row form-group"> 
+                                <?php 
+                                foreach ($productFeatures as $key_val => $productFeature) { 
+                                  ?> 
+                                <div class="col-md-6 feature_{{ $productFeature['id'] }}" style="display: none"> 
+                                <select class="form-control feature_value_{{ $productFeature['id'] }}" name="Productattribute[{{ $key }}][attribute][]" id="main_category" required="required" disabled="disabled">
+                                  
+                                    @foreach($productFeatureAttributes[$productFeature['id']] as $category)
+                                        <option class="selectcategory" value="{{ $category['id'] }}" {{ (isset($productAttribute_value[$key_val]) && $category['id'] == $productAttribute_value[$key_val])?'selected':'' }}>{{ ucwords($category['name']) }}</option>
+                                    @endforeach
+                                </select>
+                              </div>
+                              <?php } ?>
+                            </div>  
+
+                            <div class="col-md-2"> 
+                              <select class="form-control remove_{{ $key }}" name="Productattribute[{{ $key }}][price_type]">
+                                <option value="Increment" {{ ($product_items->price_type == 'Increment')?'selected':'' }}>Increment</option>
+                                <option value="Decrement" {{ ($product_items->price_type == 'Decrement')?'selected':'' }}>Decrement</option>
+                              </select>
+                            </div> 
+                            <div class="col-md-2"> 
+                              <input type="text" class="form-control remove_{{ $key }}" name="Productattribute[{{ $key }}][price]" placeholder="Enter Price" value="{{ $product_items->price }}">
+                            </div> 
+                            <div class="col-md-1">
+                              
+                              <!-- <i class="fa fa-users"></i> -->
+                            </div>
+
+                          </div> 
+                          <?php }else{ ?>
+                          <div class="row" > 
+                            <div class="col-md-1">                 
+                               <input type="checkbox" name="Productattribute[{{ $key }}][is_same_price]" value="1" {{ ($product_items['is_same_price'] == 1)?'checked':'unchecked' }} class="is_same_price"  count="{{ $key }}">
+                            
+                            </div>
+                                                  
+                            <div class="col-md-6 row form-group"> 
+                                <?php foreach ($productFeatures as $key_val => $productFeature) { ?> 
+                                <div class="col-md-6 feature_{{ $productFeature['id'] }}" style="display: none"> 
+                                <select class="form-control feature_value_{{ $productFeature['id'] }}" name="Productattribute[{{ $key }}][attribute][]" id="main_category" required="required" disabled="disabled">
+                                  
+                                    @foreach($productFeatureAttributes[$productFeature['id']] as $category)
+                                        <option class="selectcategory" value="{{ $category['id'] }}" {{ (isset($productAttribute_value[$key_val]) && $category['id'] == $productAttribute_value[$key_val])?'selected':'' }}>{{ ucwords($category['name']) }}</option>
+                                    @endforeach
+                                </select>
+                              </div>
+                              <?php } ?>
+                            </div>  
+
+                            <div class="col-md-2"> 
+                              <select class="form-control remove_{{ $key }}" name="Productattribute[{{ $key }}][price_type]">
+                                <option value="Increment" {{ ($product_items->price_type == 'Increment')?'selected':'' }}>Increment</option>
+                                <option value="Decrement" {{ ($product_items->price_type == 'Decrement')?'selected':'' }}>Decrement</option>
+                              </select>
+                            </div> 
+                            <div class="col-md-2"> 
+                              <input type="text" class="form-control remove_{{ $key }}" name="Productattribute[{{ $key }}][price]" placeholder="Enter Price" value="{{ $product_items->price }}">
+                            </div> 
+                            <div class="col-md-1">
+                              
+                              <i class="fa fa-trash delete_item" item_id="{{ $product_items->id }}" style="cursor:pointer;color: #d33b3b;"/></i>
+                            </div>
+
+                          </div> 
+                          <?php } } }?>
+
+                        </div>
                       
-                      if($key == 0){ ?>
-                      
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Tag</label>
-                  <input type="text" class="form-control" name="tag[{{ $key }}]" placeholder="Enter Tag" value="{{ $producttags->tag }}">
-                </div>
-                <?php }else{ ?>
-
-                <div class="form-group tag{{ $producttags->id }}"><div class="input-group my-colorpicker2 colorpicker-element"><input type="text" class="form-control" name="tag[{{ $key }}]" placeholder="Enter Tag"  value="{{ $producttags->tag }}"><div class="input-group-addon"><i class="fa fa-close delete_tag" tag_id="{{ $producttags->id }}" style="cursor:pointer;color: #d33b3b;float:right;"/></i></div></div></div>
-                <?php } ?>
-
-                <?php } }else{ ?>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Tag</label>
-                  <input type="text" class="form-control" name="tag[]" placeholder="Enter Tag">
-                </div>
-                <?php } ?>
-                <div class="form-group attachment_fields">
-                
-                </div>
-                <div class="form-group">
-                  <a href="javascript:void(0)" class="add_tag btn btn-info"><i class="fa fa-plus"> Add More Tag</i></a>
-                </div>
-
-
-    <?php if(isset($products->productItem) && count($products->productItem) >0 ) {
-        
-                    foreach ($products->productItem as $key => $product_items) {
-                      if($key == 0){ ?>
-
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Title</label>
-                    <input type="text" class="form-control" name="Item[{{ $key }}][title]" value="{{ $product_items->title }}" placeholder="Enter Item Title">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Price</label>
-                     <input type="text" class="form-control" name="Item[{{ $key }}][price]" placeholder="Enter Price" value="{{ $product_items->price }}">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Price type</label>
-                      <select class="form-control" name="Item[{{ $key }}][price_type]">
-                        <option value="Increment" {{ ($product_items->price_type == 'Increment')?'selected':'' }}>+(Increment)</option>
-                        <option value="Decrement" {{ ($product_items->price_type == 'Decrement')?'selected':'' }}>-(Decrement)</option>
-                      </select>
+                      </div>                  
                   </div> 
-                <?php }else{?>
-                <div class="item{{ $product_items->id }} box-footer box-comments" style="margin-bottom: 12px">
-                  
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Title</label><i class="fa fa-close delete_item" item_id="{{ $product_items->id }}" 
-                      style="cursor:pointer;color: #d33b3b;float:right;"/></i>
-                    <input type="text" class="form-control" value="{{ $product_items->title }}" name="Item[{{ $key }}][title]" placeholder="Enter Item Title">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Price</label>
-                     <input type="text" class="form-control" name="Item[{{ $key }}][price]" placeholder="Enter Price" value="{{ $product_items->price }}">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Item Price type</label>
-                      <select class="form-control" name="Item[{{ $key }}][price_type]">
-                        <option value="Increment" {{ ($product_items->price_type == 'Increment')?'selected':'' }}>+(Increment)</option>
-                        <option value="Decrement" {{ ($product_items->price_type == 'Decrement')?'selected':'' }}>-(Decrement)</option>
-                      </select>
-                  </div>                   
                 </div>
-<?php } } } else { ?>
-                
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Title</label>
-                  <input type="text" class="form-control" name="Item[1][title]" placeholder="Enter Item Title">
-                </div>
-
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Price</label>
-                   <input type="text" class="form-control" name="Item[1][price]" placeholder="Enter Price">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Item Price type</label>
-                    <select class="form-control" name="Item[1][price_type]">
-                      <option value="Increment">+(Increment)</option>
-                      <option value="Decrement">-(Decrement)</option>
-                    </select>
-                </div> 
-
-<?php } ?>
-                <div class="form-group item_fields">
-                
-                </div>
-                <div class="form-group">
-                  <a href="javascript:void(0)" class="add_item btn btn-info"><i class="fa fa-plus"> Add Items</i></a>
-                </div>
-
                 <div class="form-group">
                   <label for="exampleInputEmail1">Allergen Key</label>
                   <textarea class="form-control" name="allergen_key" placeholder="Enter Allergen Key">{{ $products['allergen_key'] }}</textarea> 
@@ -318,12 +344,36 @@
       <!-- /.row -->
     </section>
 
-<input type="hidden" id="totalitems" value="<?php echo ((isset($products->productItem)) && (count($products->productItem) > 0)) ? count($products->productItem) : 1; ?>" />
+<input type="hidden" id="totalitems" value="<?php echo ((isset($products->productAttribute)) && (count($products->productAttribute) > 0)) ? count($products->productAttribute) : 1; ?>" />
 @endsection
 
 <script src="{{ asset('js/admin/jquery.min2.1.3.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+
+    if($('.is_varaible_product').prop('checked')){
+       $(".attachment_fields").show();
+       $(".attachmentinput_fields").prop('disabled', false);
+    }else{
+
+        $('.attachment_fields').hide();
+        $('.attachmentinput_fields').prop('disabled', 'disabled');
+    }
+
+
+    if($('.attachmentinput_fields:checked').length){
+        $(".child_feature").show();
+        $(".attachmentinput_fields:checked").each(function() {
+          //alert('nnb');
+          var valNew = $(this).val();
+          $(".feature_"+valNew).show();
+           $(".feature_label_"+valNew).show();
+          $(".feature_value_"+valNew).prop('disabled', false);
+        });      
+    }
+
+
+
   //alert('sdfdsf');
     $("#product_Name").keyup(function(){
           var Text = $(this).val();
@@ -376,7 +426,41 @@ $(document).ready(function(){
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
-  
+
+  $(document).on('click','.is_varaible_product',function(){
+    
+    if($(this).prop('checked')){
+       $(".attachment_fields").show();
+       $(".attachmentinput_fields").prop('disabled', false);
+    }else{
+
+        $('.attachment_fields').hide();
+        $('.attachmentinput_fields').prop('disabled', 'disabled');
+    }
+
+  });  
+
+  $(document).on('click','.attachmentinput_fields',function(){
+    var valNew =$(this).val();
+    if($('.attachmentinput_fields:checked').length){
+         $(".child_feature").show();
+
+    }else{
+      
+         $(".child_feature").hide();
+      
+    }
+      if($(this).prop('checked')){
+        //alert(valNew);
+         $(".feature_"+valNew).show();
+         $(".feature_label_"+valNew).show();
+         $(".feature_value_"+valNew).prop('disabled', false);
+      }else{
+         $(".feature_"+valNew).hide();
+         $(".feature_label_"+valNew).hide();
+         $(".feature_value_"+valNew).prop('disabled', 'disabled');        
+      }
+  });  
   $(document).on('click','.add_item',function(){
     //alert('baseUrl');
      var baseUrl = '{{ URL::to('/') }}';
@@ -396,6 +480,7 @@ $(document).ready(function() {
   }); 
 
   $('.delete_item').click(function(){
+    if (confirm('Are You Sure?')){
     var baseUrl = '{{ URL::to('/admin') }}';
     var item_id = $(this).attr('item_id');
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -412,18 +497,84 @@ $(document).ready(function() {
         
         if(result['success'] == 1){
 
-          $('.item'+item_id).remove();
+          $(this).parent().parent().remove();
 
         }
       });
+    }
   });
-   
+
+  $(document).on('click','.add_more',function(){
+    
+
+      
+     var baseUrl = '{{ URL::to('/') }}';
+     var totalitems = $("#totalitems").val();
+     totalitems = parseInt(totalitems) + 1;
+     $("#totalitems").val(totalitems);
+      var html = '<div class="row" ><div class="col-md-1"> <input type="checkbox" name="Productattribute['+totalitems+'][is_same_price]" value="1" class="is_same_price" count="'+totalitems+'"></div>';
+        html += '<div class="col-md-6 row form-group">';
+        <?php foreach ($productFeatures as $key => $productFeature) { ?> 
+          html += '<div class="col-md-6 feature_<?php echo $productFeature['id']; ?>" style="display: none">';
+          html += '<select class="form-control feature_value_<?php echo $productFeature['id']; ?>" name="Productattribute['+totalitems+'][attribute][]" id="main_category" required="required" disabled="disabled">';
+          <?php foreach($productFeatureAttributes[$productFeature['id']] as $category) { ?>
+            html += '<option class="selectcategory" value="<?php echo $category['id'] ?>"><?php echo $category['name'] ?></option>';  
+
+
+          <?php } ?> 
+          html += '</select></div>';
+        <?php } ?> 
+        html += '</div><div class="col-md-2"><select class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price_type]"><option value="Increment">Increment</option><option value="Decrement">Decrement</option></select></div> <div class="col-md-2"><input type="text" class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price]" placeholder="Enter Price" ></div>';
+
+        html += '<div class="col-md-1"><i class="fa fa-trash deleteitem_1" style="cursor:pointer;color: #d33b3b;"></i></div></div>';
+        $('#clone').append(html);
+        $(".attachmentinput_fields:checked").each(function() {
+          
+          var valNew = $(this).val();
+          $(".feature_"+valNew).show();
+          $(".feature_value_"+valNew).prop('disabled', false);
+        });
+
+  });   
 
 });
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
-  
+  $( ".is_same_price" ).each(function() {
+    //alert('jjh');
+      if($(this).prop('checked')){
+
+        var count = $(this).attr('count');
+        $('.remove_'+count).css('display','none');
+        $('.remove_'+count).prop('disabled', 'disabled');
+      
+      }else{
+
+        var count = $(this).attr('count');
+        $('.remove_'+count).css('display','block');
+        $('.remove_'+count).prop('disabled', false);
+
+      }
+    });
+  $(document).on('click','.is_same_price',function(){  
+
+    if($(this).prop('checked')){
+
+      var count = $(this).attr('count');
+      $('.remove_'+count).css('display','none');
+      $('.remove_'+count).prop('disabled', 'disabled');
+    
+    }else{
+
+      var count = $(this).attr('count');
+      $('.remove_'+count).css('display','block');
+      $('.remove_'+count).prop('disabled', false);
+
+    }
+
+
+   });    
     $('#main_category').on('change',function(){
       
       var category_id = $(this).val();

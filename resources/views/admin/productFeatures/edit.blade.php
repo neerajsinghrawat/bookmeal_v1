@@ -7,12 +7,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Edit Product Features
+        Edit Product Attributes
       </h1>
      <ol class="breadcrumb">
         <li><a href="{{ URL::to('admin') }}"><i class="fa fa-dashboard"></i><b class="a_tag_color">Home</b></a></li>
-        <li><a href="{{ URL::to('admin/productFeatures') }}" ><b class="a_tag_color">Product Features Manager</b></a></li>
-        <li><b >Edit Product Features</b></li>
+        <li><a href="{{ URL::to('admin/productFeatures') }}" ><b class="a_tag_color">Product Attributes Manager</b></a></li>
+        <li><b >Edit Product Attributes</b></li>
       </ol>
     </section>
 

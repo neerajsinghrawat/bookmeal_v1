@@ -71,12 +71,14 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>S.No.</th>
+                  <th>S.No.</th><!-- 
                   <th>Main Category</th>
-                  <th>Sub Category</th>
+                  <th>Sub Category</th> -->
+                  <th>Category</th>
                   <th>Product Name</th>
                   <th>Status</th>
                   <th>Product status</th>
+                  <th>Created</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -92,8 +94,8 @@
 				 $index++;
 				 ?>
 					<tr>
-					  <td><?php echo $index; ?></td>
-            <td><?php echo ucwords($product_data->category['name']); ?></td>            
+					  <td><?php echo $index; ?></td><!-- 
+            <td><?php echo ucwords($product_data->category['name']); ?></td>   -->          
             <td><?php echo ucwords($product_data->categorysub['name']); ?></td>            
             <td><?php echo $product_data['name']; ?></td>     				  
             <td><?php echo ($product_data['status'] == 1) ? '<small class="label bg-green">Active</small>' : '<small class="label bg-red">Inactive</small>'; ?></td>

@@ -193,5 +193,15 @@ class FeaturesController extends Controller
 
         return response()->json(['success'=> $result]);
     }
-
+    
+/**
+ * Show all recoreds in table a new resource.
+ *
+ * @return \Illuminate\Http\Response
+ */ 
+      public function index()
+    {
+        $features = Feature::OrderBy('created_at','DESC')->paginate(10);
+        return view('admin.features.index',["features" => $features]);
+    }
 }

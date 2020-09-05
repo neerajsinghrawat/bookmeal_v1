@@ -67,7 +67,7 @@
                                 <div class="menu-item menu-list-item">
                                     <div class="row align-items-center">
                                         <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <h6 class="mb-0">{{ ucwords($food['name']) }}</h6>
+                                            <h6 class="mb-0"><a href="{{ URL::to('product/'.$food['slug']) }}">{{ ucwords($food['name']) }}</a></h6>
                                             <span class="text-muted text-sm">
                                             <?php  $product_items = getProductitems($food['id']); ?>
                                             <?php 

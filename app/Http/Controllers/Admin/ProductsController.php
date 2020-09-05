@@ -13,7 +13,8 @@ use App\Models\FeatureGroup;
 use App\Models\ProductFeature;
 use App\Models\ProductTag;
 use App\Models\ProductItem;
-use App\Models\ProductFeatureItems;
+use App\Models\ProductAttribute;
+use App\Models\ProductFeatureAttribute;
 
 use App\Models\ProductReview;
 use App\Http\Controllers\Controller;
@@ -68,11 +69,17 @@ class ProductsController extends Controller
  */  
      public function add()
     {
-       	
-        $category_list = Category::where('status','=', 1)->where('parent_id','=', 0)->get();
+       	$productFeatureAttributes = array();
+        $category_list = Category::where('status','=', 1)->where('parent_id','=', 7)->get();
         $productFeatures = ProductFeature::where('status','=', 1)->get();
+        $product_featureAttributes = ProductFeatureAttribute::with('productFeature')->where('status','=', 1)->get()->toArray();
+        foreach ($product_featureAttributes as $key => $value) {
+           $productFeatureAttributes[$value['product_feature_id']][] = $value;
+        }
 
-        return view('admin.products.add',["category_list" => $category_list,"productFeatures" => $productFeatures,]);
+        //echo '<pre>';print_r($productFeatureAttributes);die;
+
+        return view('admin.products.add',["category_list" => $category_list,"productFeatures" => $productFeatures,"productFeatureAttributes" => $productFeatureAttributes]);
     }
 
 
@@ -107,6 +114,7 @@ class ProductsController extends Controller
             $product->meta_keyword = $request->meta_keyword;
             $product->meta_description = $request->meta_description;
             $product->short_description = $request->short_description;
+            $product->is_varaible_product = ($request->is_varaible_product == 'on')?1:0;
           
           
             if (!empty($request->file('image'))) {
@@ -131,54 +139,34 @@ class ProductsController extends Controller
                 Image::make($destinationPath.'/'.$name)->resize(400, 330)->save(public_path('/image/product/400x330/'.$name));                      
             }
             }
+
+            if (!empty($request->ProductFeature)) {
+
+                 $product->product_feature = implode($request->ProductFeature, ',');
+                
+            }
 		       
             if($product->save()){
-                if (!empty($request->tag)) {
+               
+                if (!empty($request->Productattribute)) {
 
-                    foreach ($request->tag as $key => $value) {
-                       if (!empty($value)) {
-                            $productTag = new ProductTag;
+                    foreach ($request->Productattribute as $key => $productFeature_add) {
+                        if (isset($productFeature_add['attribute'])) {
+                            $ProductAttribute = new ProductAttribute;
 
-                            $productTag->product_id = $product->id;
-                            $productTag->tag = strtolower(trim($value));
+                            $ProductAttribute->product_id = $product->id;
+                            $ProductAttribute->is_same_price = (isset($productFeature_add['is_same_price']) && $productFeature_add['is_same_price'] == 1)?1:0;
+                            
+                            $ProductAttribute->attribute = implode($productFeature_add['attribute'], ',');
 
-                            $productTag->save();
-                       }
-                    }
+                            //$ProductAttribute->attribute = $productFeature_add['attribute'];                            
+                            if (isset($productFeature_add['price_type'])) {
+                                $ProductAttribute->price_type = $productFeature_add['price_type'];
+                                $ProductAttribute->price = $productFeature_add['price'];
+                            }
+                            $ProductAttribute->save(); 
 
-                }
-                if (!empty($request->Item)) {
-
-                    foreach ($request->Item as $key => $item_add) {
-                           if(!empty($item_add['title'])){
-                               $productItem = new ProductItem;
-
-                                $productItem->product_id = $product->id;
-                                $productItem->title = $item_add['title'];
-                                $productItem->price = $item_add['price'];
-                                $productItem->price_type = $item_add['price_type'];
-    
-                                $productItem->save(); 
-                           }     
-                           
-
-                    }
-
-                }
-                if (!empty($request->ProductFeature)) {
-
-                    foreach ($request->ProductFeature as $key => $productFeature_add) {
-                           if(isset($productFeature_add['active']) && !empty($productFeature_add['active'])){
-                               $ProductFeatureItems = new ProductFeatureItems;
-
-                                $ProductFeatureItems->product_id = $product->id;
-                                $ProductFeatureItems->product_feature_id = $productFeature_add['id'];
-                                //$ProductFeatureItems->title = $item_add['title'];
-                                $ProductFeatureItems->price = $productFeature_add['price'];
-                                //$ProductFeatureItems->price_type = $item_add['price_type'];
-    
-                                $ProductFeatureItems->save(); 
-                           }     
+                        }                               
                            
 
                     }
@@ -201,26 +189,24 @@ class ProductsController extends Controller
  */
     public function edit($id)
     {
-    	//die($id);
-    	
-    
-        
-        $products = Product::where('id','=',$id)->with('productTag','productItem')->first();
+    	$productFeatureAttributes = array();
+        $products = Product::where('id','=',$id)->with('productTag','productItem','productAttribute')->first();
         //echo '<pre>';print_r($products);die;
-        $category_list = Category::where('status','=', 1)->where('parent_id','=', 0)->get();
+        $category_list = Category::where('status','=', 1)->where('parent_id','=', 7)->get();
 
         $sub_category_list = Category::where('status','=', 1)->where('parent_id','=', $products->category_id)->get();
         $productFeatures = ProductFeature::where('status','=', 1)->get();
-
-        $productFeatureItems = ProductFeatureItems::where('product_id','=', $products->id)->get()->toArray();
-        $productFeatureItemsarr = array();
+        $product_featureAttributes = ProductFeatureAttribute::with('productFeature')->where('status','=', 1)->get()->toArray();
+        foreach ($product_featureAttributes as $key => $value) {
+           $productFeatureAttributes[$value['product_feature_id']][] = $value;
+        }/*
         foreach ($productFeatureItems as $key => $value) {
             $productFeatureItemsarr[$value['product_feature_id']] = $value;
-        }
+        }*/
 
-        //echo '<pre>';print_r($productFeatureItemsarr);die;
+        //echo '<pre>';print_r($products);die;
      
-        return view('admin.products.edit',["products" => $products,"category_list" => $category_list,"sub_category_list" => $sub_category_list,"productFeatureItemsarr" => $productFeatureItemsarr,"productFeatures" => $productFeatures]);
+        return view('admin.products.edit',["products" => $products,"category_list" => $category_list,"sub_category_list" => $sub_category_list,"productFeatureAttributes" => $productFeatureAttributes,"productFeatures" => $productFeatures]);
        
     }
 
@@ -235,7 +221,11 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
 
+       // echo '<pre>';print_r($_POST);die;
+
         $product = Product::find($id);
+
+
 		
         $category = Category::select('name')->where('id','=',$request->category_id)->first();
 
@@ -244,10 +234,10 @@ class ProductsController extends Controller
         $categorynew = (!empty($category['name']))?$category['name']:'';
         $sub_categorynew = (!empty($sub_category['name']))?$sub_category['name']:'';
 
-        $changeslug = $categorynew.' '.$sub_categorynew.' '.$request->slug;
+        //$changeslug = $request->slug;
        
-        $newslug = str_slug($changeslug);
-/*        $request->slug 
+        $newslug = $request->slug;
+                /*        $request->slug 
           toLowerCase();
           replace(/[^a-zA-Z0-9]+/g,'-');*/
 
@@ -270,6 +260,7 @@ class ProductsController extends Controller
             $product->meta_keyword = $request->meta_keyword;                    
             $product->meta_description = $request->meta_description;                    
             $product->short_description = $request->short_description;                    
+            $product->is_varaible_product = ($request->is_varaible_product == 'on')?1:0;
                    
         if (!empty($request->file('image'))) {
 
@@ -294,60 +285,39 @@ class ProductsController extends Controller
                 }
 
         }
-	
-		  if($product->save()){
-            $this->tag_delete($id);
-                if (!empty($request->tag)) {
-                    foreach ($request->tag as $key => $value) {
-                       if (!empty($value)) {
-                            $productTag = new ProductTag;
 
-                            $productTag->product_id = $product->id;
-                            $productTag->tag = strtolower(trim($value));
+            if (!empty($request->ProductFeature)) {
 
-                            $productTag->save();
-                       }
-                    }
-                }
-
-
+                 $product->product_feature = implode($request->ProductFeature, ',');
                 
-                $this->item_delete($id);
-                if (!empty($request->Item)) {
-                    foreach ($request->Item as $key => $item_add) {
-                         if(!empty($item_add['title'])){   
-                            $productItem = new ProductItem;
+            }
+               
+            if($product->save()){
 
-                            $productItem->product_id = $product->id;
-                            $productItem->title = $item_add['title'];
-                            $productItem->price = $item_add['price'];
-                            $productItem->price_type = $item_add['price_type'];
-
-                            $productItem->save();
-                         }
-
-                    }
-                }
-
-                if (!empty($request->ProductFeature)) {
+               
+                if (!empty($request->Productattribute)) {
                     $this->productFeature_delete($id);
-                    foreach ($request->ProductFeature as $key => $productFeature_add) {
-                           if(isset($productFeature_add['active']) && !empty($productFeature_add['active'])){
-                               $ProductFeatureItems = new ProductFeatureItems;
+                    foreach ($request->Productattribute as $key => $productFeature_add) {
+                        if (isset($productFeature_add['attribute'])) {
+                           $ProductAttribute = new ProductAttribute;
 
-                                $ProductFeatureItems->product_id = $product->id;
-                                $ProductFeatureItems->product_feature_id = $productFeature_add['id'];
-                                //$ProductFeatureItems->title = $item_add['title'];
-                                $ProductFeatureItems->price = $productFeature_add['price'];
-                                //$ProductFeatureItems->price_type = $item_add['price_type'];
-    
-                                $ProductFeatureItems->save(); 
-                           }     
-                           
+                            $ProductAttribute->product_id = $product->id;
+                            $ProductAttribute->is_same_price = (isset($productFeature_add['is_same_price']) && $productFeature_add['is_same_price'] == 1)?1:0;
+                            
+                            $ProductAttribute->attribute = implode($productFeature_add['attribute'], ',');
 
+                            //$ProductAttribute->attribute = $productFeature_add['attribute'];
+                            if (isset($productFeature_add['price_type'])) {
+                                $ProductAttribute->price_type = $productFeature_add['price_type'];
+                                $ProductAttribute->price = $productFeature_add['price'];
+                            }
+
+                            $ProductAttribute->save();                        
+                        }
                     }
 
                 }
+              
 
                 Session::flash('success','Product Update successfully');
             }else{
@@ -401,11 +371,11 @@ public function item_delete($id)
  */
 public function productFeature_delete($id)
 {
-    $product_items = ProductFeatureItems::where('product_id','=',$id)->get();
+    $product_items = ProductAttribute::where('product_id','=',$id)->get();
 
     foreach ($product_items as $key => $productitem) {
 
-        $productItem = ProductFeatureItems::find($productitem->id);
+        $productItem = ProductAttribute::find($productitem->id);
         $productItem->delete();
     }
 
@@ -442,11 +412,12 @@ public function productFeature_delete($id)
     public function delete_ajax_item(Request $request)
     {
         //die($request);
-       // echo '<pre>';print_r($_POST);die();
+       //echo '<pre>';print_r($_POST);die();
         $result = 0;
-        $productItem = ProductItem::where('id','=', $request->item_id)->first();   
-        $product_item = ProductItem::find($productItem->id);  
-        
+        $productItem = ProductAttribute::where('id','=', $request->item_id)->first();  
+         
+        $product_item = ProductAttribute::find($productItem->id);  
+       // echo '<pre>';print_r($product_item);die();
         if($product_item->delete()){
             $result = 1;
         }

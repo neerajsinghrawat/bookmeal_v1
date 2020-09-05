@@ -16,7 +16,8 @@ use App\Models\UserAddress;
 use App\Models\ShippingTax;
 use App\Models\Couponcode;
 use App\Models\Order;
-use App\Models\ProductFeatureItems;
+use App\Models\ProductFeature;
+use App\Models\ProductFeatureAttribute;
 
 use Session;
 use Auth;
@@ -189,7 +190,7 @@ class ProductsController extends Controller
  */
   public function detail($slug = null)
   {
-    $product_details = Product::with('category','productItem')->where('slug','=', $slug)->where('status','=',1)->first();
+    $product_details = Product::with('category','productItem','productAttribute')->where('slug','=', $slug)->where('status','=',1)->first();
 		$productImages = array();
 		if(!empty($product_details)){
 			$iImgPath = asset('image/no_product_image.jpg');
@@ -207,14 +208,13 @@ class ProductsController extends Controller
 
     $related_products  = Product::where('sub_category_id','=',$product_details->sub_category_id)->where('id','!=',$product_details->id)->where('status','=',1)->get();
 
-    $productFeatureItems = ProductFeatureItems::with('productFeature')->where('product_id','=', $product_details->id)->get()->toArray();	
+    /*$productFeatureItems = ProductFeatureItems::with('productFeature')->where('product_id','=', $product_details->id)->get()->toArray();	*/
 
     //echo "<pre>";print_r($productFeatureItems);die;
 
-
     $productReviews = ProductReview::with('user')->where('product_id','=',$product_details->id)->get();
 		
-    return view('front.products.detail',["product_details" => $product_details,'productReviews'=>$productReviews,'related_products'=>$related_products,'productImages'=>$productImages,'productFeatureItems'=>$productFeatureItems]);
+    return view('front.products.detail',["product_details" => $product_details,'productReviews'=>$productReviews,'related_products'=>$related_products,'productImages'=>$productImages]);
   }
 
 /**

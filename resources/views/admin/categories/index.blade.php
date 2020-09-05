@@ -29,7 +29,7 @@
                 <tr>
                   <th>S.No.</th>
                   <th>Category Name</th>
-                  <th>Parent Category</th>
+                  <!-- <th>Parent Category</th> -->
                   <th>Status</th>
                   <th>Created</th>
                   <th>Action</th>
@@ -43,12 +43,14 @@
 					
 				 $index = 0;
 				 foreach ($category_list as $category): 
+          if ($category['parent_id'] != 0) {
+           
 				 $index++;
 				 ?>
 					<tr>
 					  <td><?php echo $index; ?></td>
-            <td><?php echo $category['name']; ?></td>           
-					  <td><?php echo ucwords($category->parent['name']); ?></td>					  
+            <td><?php echo $category['name']; ?></td>       <!--     
+					  <td><?php echo ucwords($category->parent['name']); ?></td>		 -->			  
 					  <td><?php echo ($category['status'] == 1) ? '<small class="label bg-green">Active</small>' : '<small class="label bg-red">Inactive</small>'; ?></td>
 					  <td><?php echo (date('d-m-Y',strtotime($category['created_at']))); ?></td>
 					  
@@ -58,7 +60,8 @@
 					  </td>
             
 					</tr>
-               <?php endforeach; }
+               <?php  
+          } endforeach; }
                ?> 
 
                  </tbody>

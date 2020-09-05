@@ -219,7 +219,7 @@
                                     <h5 class="text-center text-muted">Order details</h5>
                                     <div class="panel-details-container">
                                         <!-- Panel Details / Size -->
-                                        <div class="panel-details">
+                                        <!-- <div class="panel-details">
                                             <h5 class="panel-details-title">
                                                 <label class="custom-control custom-radio">
                                                     <input name="radio_title_size" type="radio" class="custom-control-input">
@@ -230,22 +230,10 @@
                                             <div id="panelDetailsSize" class="collapse">
                                                 <div class="panel-details-content">
                                                     
-                                            <?php if(!empty($productFeatureItems) && count($productFeatureItems) > 0){  
-                                            $i = 1;
-                                            foreach ($productFeatureItems as $productFeatureItem) {
-                                                                                               
-                                                  ?>                                                
-                                                    <div class="form-group">
-                                                        <label class="custom-control custom-radio">
-                                                            <input name="productFeatureItem[{{ $productFeatureItem['id']}}]" type="radio" class="custom-control-input " value="{{ $productFeatureItem['price'] }}">
-                                                            <span class="custom-control-indicator"></span>
-                                                            <span class="custom-control-description">{{ $productFeatureItem['product_feature']['value'] }} ({{ getSiteCurrencyType().$productFeatureItem['price'] }})</span>
-                                                        </label>
-                                                    </div>
-                                                    <?php } } ?>
+                                            
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <!-- Panel Details / Additions -->
                                         <div class="panel-details">
                                             <h5 class="panel-details-title">
@@ -258,10 +246,15 @@
                                             <div id="panelDetailsAdditions" class="collapse">
                                                 <div class="panel-details-content">
                                                     <div class="row">
-                                            <?php if(!empty($product_details->productItem) && count($product_details->productItem) > 0){  
+                                            
+
+                                            <?php if(!empty($product_details->productAttribute) && count($product_details->productAttribute) > 0){  
                                             $i = 1;
-                                            foreach ($product_details->productItem as $key => $productitem) {
-                                                                                               
+                                            foreach ($product_details->productAttribute as $key => $productitem) {
+
+                                                $attribute_name = getAttributeName($productitem->attribute);
+                                                       
+                                                if (!empty($attribute_name)) {                                       
                                                   ?>
                                                 
                                                                                                    
@@ -272,12 +265,11 @@
 
                                                                     
                                                                     <span class="custom-control-indicator"></span>
-                                                                    <span class="custom-control-description">{{ $productitem->title }} ({{ getSiteCurrencyType().$productitem->price }})</span>
+                                                                    <span class="custom-control-description">{{$attribute_name}} ({{ getSiteCurrencyType().$productitem->price }})</span>
                                                                 </label>
                                                             </div>
                                                         </div>
-                                            <?php } } ?> 
-
+                                            <?php } } } ?> 
                                                     </div>
                                                 </div>
                                             </div>
@@ -322,7 +314,7 @@
                                                   if (Session::has('postcode')) {
                                                     $code_status = Session::get('postcode.code_status');
                                                    }  ?>
-                                                <a href="javascript:void(0)" class="btn btn-outline-primary btn-lg btn-block addToCart">Add to cart</a>
+                                                <button class="btn btn-outline-primary btn-lg btn-block addToCart11">Add to cart</button>
 
 
                                                 <?php }else{ ?>

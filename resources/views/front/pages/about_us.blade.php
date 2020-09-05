@@ -27,21 +27,18 @@
                 <div class="col-lg-5 offset-lg-5 col-md-9 offset-md-3">
                     <div class="rate mb-5 rate-lg"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i></div>
                     <h2>The best food in London!</h2>
-                    <p class="lead">Donec a eros metus. Vivamus volutpat leo dictum risus ullamcorper condimentum. Cras sollicitudin varius condimentum. Praesent a dolor sem....</p>
-                    <p>Nam eleifend elementum sapien et bibendum. Nunc ac diam efficitur, ultrices lorem quis, consectetur odio. Nullam vulputate, eros quis accumsan cursus, elit lectus bibendum nulla, sed dapibus ligula tellus at purus. Fusce id eros id mi cursus semper. Quisque efficitur bibendum nunc a consectetur. Maecenas vitae quam iaculis, scelerisque purus nec, varius purus. Nullam eget varius elit. Donec eget facilisis nunc, non rutrum lorem.</p>
-                    <h6>Mark Johnson, Chef</h6>
-                    <img src="assets/img/svg/sign.svg" alt="" class="mb-5">
-                    <h4>What people say about Us?</h4>
-                    <a href="page-reviews.html" class="btn btn-outline-primary"><span>Check our reviews</span></a>
+                    
+                        <?php echo $pageabout_us->description; ?>
+                    
                 </div>
             </div>
 
         </section>
 
         <!-- Section -->
-        <section class="section section-lg dark bg-dark">
+        <!-- <section class="section section-lg dark bg-dark">
 
-            <!-- BG Image -->
+            
             <div class="bg-image bg-parallax"><img src="http://assets.suelo.pl/soup/img/photos/bg-croissant.jpg" alt=""></div>
 
             <div class="container text-center">
@@ -53,5 +50,5 @@
                 </div>
             </div>
 
-        </section>
+        </section> -->
 @endsection

@@ -93,7 +93,7 @@
                                                     <select name="reservation_time" class="form-control" required>
                                                         <?php foreach ($timearray as $value) {
                                                              ?>
-                                                        <option value="{{$value}}">{{$value}} people</option>
+                                                        <option value="{{$value}}">{{$value}}</option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>

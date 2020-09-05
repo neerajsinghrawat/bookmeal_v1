@@ -15,6 +15,21 @@ if (! function_exists('get_data')) {
 
         return $cart_count;
     }
+
+    function getAttributeName($attribute)
+    {
+    	$attributeArr = explode(',', $attribute);
+    	$attribute_name = '';
+    	foreach ($attributeArr as $key => $value) {
+    		$product_feature_attributes = DB::table('product_feature_attributes')->where('id', $value)->first();
+    		if (!empty($product_feature_attributes)) {
+    			$attribute_name .= $product_feature_attributes->name.' ';
+    		}  		
+    	    		
+    	}
+    	//print_r($attribute_name);die;
+        return $attribute_name;
+    }
     
     
     

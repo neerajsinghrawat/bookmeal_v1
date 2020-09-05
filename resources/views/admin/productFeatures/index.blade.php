@@ -6,11 +6,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Product Features Manager
+        Product Attributes Manager
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Product Features Manager</a></li>
+        <li><a href="#">Product Attributes Manager</a></li>
       </ol>
     </section>
     <!-- Main content -->
@@ -56,7 +56,7 @@
 					  
 					 <td><a href="{{ URL::to('admin/productFeatures/edit/'.$testimonial['id']) }}"><i class="fa fa-edit"></i></a>
             <a  onclick="return confirm('Are you sure?');" href="{{ URL::to('admin/productFeatures/delete/'.$testimonial['id']) }}" ><i class="fa fa-trash" ></i></a>
-  					
+  					<a href="{{ URL::to('admin/productFeatures/features_attribute/'.$testimonial['id']) }}"><i class="fa fa-eye"></i></a>
   					    
 					  </td>
             

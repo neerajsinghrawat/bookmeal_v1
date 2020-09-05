@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\NewsLetter;
 use App\Models\Contact;
+use App\Models\TableReservation;
 use Session;
 
 class PagesController extends Controller
@@ -210,6 +211,38 @@ class PagesController extends Controller
          //die(Helper::$common->getproductsFeaturevalue());
         $contacts = Contact::OrderBy('created_at','DESC')->paginate(10);
         return view('admin.pages.contact_us',["contacts" => $contacts]);
+    }
+
+/**
+ * Show all TableReservation recoreds in table a new resource.
+ *
+ * @return \Illuminate\Http\Response
+ */ 
+    public function book_table()
+    {
+        $conditions = array();
+        if (isset($_GET['data'])) {
+            //echo '<pre>';print_r($_GET['data']);die;
+
+            if (isset($_GET['data']['name']) && !empty($_GET['data']['name'])) {
+            $conditions[] = array('name','LIKE', '%'.$_GET['data']['name'].'%');
+            }
+
+            if (isset($_GET['data']['phone']) && !empty($_GET['data']['phone'])) {
+            $conditions[] = array('phone','=', $_GET['data']['phone']);
+            }
+            if (isset($_GET['data']['email']) && !empty($_GET['data']['email'])) {
+            $conditions[] = array('email','=', $_GET['data']['email']);
+            }
+            if (isset($_GET['data']['reservation_date']) && !empty($_GET['data']['reservation_date'])) {
+            $conditions[] = array('reservation_date','=', date('Y-m-d',strtotime($_GET['data']['reservation_date'])));
+            }
+            if (isset($_GET['data']['reservation_time']) && !empty($_GET['data']['reservation_time'])) {
+            $conditions[] = array('reservation_time','=', date('H:i:s',strtotime($_GET['data']['reservation_time'])));
+            }
+        }
+        $tableReservations = TableReservation::where($conditions)->OrderBy('created_at','DESC')->paginate(20);
+        return view('admin.pages.book_table',["tableReservations" => $tableReservations]);
     }
 
 

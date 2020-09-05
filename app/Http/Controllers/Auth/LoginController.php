@@ -54,7 +54,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:web')->except('logout');
     }
 
 
@@ -326,4 +326,12 @@ public function facebookRedirect()
         }
       }
 
+ /*public function logout(Request $request)
+    {
+      //echo 'Hello';die;
+       Auth::guard('web')->logout();
+        $request->session()->flush();
+        $request->session()->regenerate();
+        return redirect()->guest(route( 'login' ));
+    }*/
 }
