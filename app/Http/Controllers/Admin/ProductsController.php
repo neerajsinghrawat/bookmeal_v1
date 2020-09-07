@@ -151,24 +151,21 @@ class ProductsController extends Controller
                 if (!empty($request->Productattribute)) {
 
                     foreach ($request->Productattribute as $key => $productFeature_add) {
-                        if (isset($productFeature_add['attribute'])) {
+                        foreach ($productFeature_add as $value) {
+
                             $ProductAttribute = new ProductAttribute;
 
                             $ProductAttribute->product_id = $product->id;
-                            $ProductAttribute->is_same_price = (isset($productFeature_add['is_same_price']) && $productFeature_add['is_same_price'] == 1)?1:0;
-                            
-                            $ProductAttribute->attribute = implode($productFeature_add['attribute'], ',');
-
-                            //$ProductAttribute->attribute = $productFeature_add['attribute'];                            
-                            if (isset($productFeature_add['price_type'])) {
-                                $ProductAttribute->price_type = $productFeature_add['price_type'];
-                                $ProductAttribute->price = $productFeature_add['price'];
+                            $ProductAttribute->is_same_price = (isset($value['is_same_price']) && $value['is_same_price'] == 1)?1:0;
+                            $ProductAttribute->attribute = $value['attribute'];                            
+                            $ProductAttribute->feature_id = $key;                            
+                            if (isset($value['price_type'])) {
+                                $ProductAttribute->price_type = $value['price_type'];
+                                $ProductAttribute->price = $value['price'];
                             }
                             $ProductAttribute->save(); 
-
-                        }                               
-                           
-
+                        }
+                        
                     }
 
                 }
@@ -199,7 +196,9 @@ class ProductsController extends Controller
         $product_featureAttributes = ProductFeatureAttribute::with('productFeature')->where('status','=', 1)->get()->toArray();
         foreach ($product_featureAttributes as $key => $value) {
            $productFeatureAttributes[$value['product_feature_id']][] = $value;
-        }/*
+        }
+
+        /*
         foreach ($productFeatureItems as $key => $value) {
             $productFeatureItemsarr[$value['product_feature_id']] = $value;
         }*/
@@ -298,22 +297,21 @@ class ProductsController extends Controller
                 if (!empty($request->Productattribute)) {
                     $this->productFeature_delete($id);
                     foreach ($request->Productattribute as $key => $productFeature_add) {
-                        if (isset($productFeature_add['attribute'])) {
-                           $ProductAttribute = new ProductAttribute;
+                        foreach ($productFeature_add as $value) {
+
+                            $ProductAttribute = new ProductAttribute;
 
                             $ProductAttribute->product_id = $product->id;
-                            $ProductAttribute->is_same_price = (isset($productFeature_add['is_same_price']) && $productFeature_add['is_same_price'] == 1)?1:0;
-                            
-                            $ProductAttribute->attribute = implode($productFeature_add['attribute'], ',');
-
-                            //$ProductAttribute->attribute = $productFeature_add['attribute'];
-                            if (isset($productFeature_add['price_type'])) {
-                                $ProductAttribute->price_type = $productFeature_add['price_type'];
-                                $ProductAttribute->price = $productFeature_add['price'];
+                            $ProductAttribute->is_same_price = (isset($value['is_same_price']) && $value['is_same_price'] == 1)?1:0;
+                            $ProductAttribute->attribute = $value['attribute'];                            
+                            $ProductAttribute->feature_id = $key;                            
+                            if (isset($value['price_type'])) {
+                                $ProductAttribute->price_type = $value['price_type'];
+                                $ProductAttribute->price = $value['price'];
                             }
-
-                            $ProductAttribute->save();                        
+                            $ProductAttribute->save(); 
                         }
+                        
                     }
 
                 }

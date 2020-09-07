@@ -113,6 +113,8 @@
                                               if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
                                                 $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
                                               }
+                                $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
+                               echo '<pre>';print_r($attributes);die;            
                                 $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
                          ?>
                         <tr class="cart_{{ $cartlistdetail->id }}">

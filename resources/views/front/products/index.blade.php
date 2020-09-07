@@ -90,7 +90,8 @@
                                         <div class="col-sm-6 text-sm-right">
                                             <span class="text-md mr-4"><span class="text-muted">from</span> <?php echo getSiteCurrencyType(); ?><span data-product-base-price>{{ $food['price'] }}</span></span>
                                             
-                                            <button class="btn btn-outline-secondary btn-sm addToCart" product_id="{{ $food['id'] }}"><span>Add to cart</span></button>
+                                            <!-- <button class="btn btn-outline-secondary btn-sm addToCart" product_id="{{ $food['id'] }}"><span>Add to cart</span></button> -->
+                                            <a href="#productModal" data-toggle="modal" class="btn btn-outline-secondary productDetail" product_id="{{$food['id']}}"><span>Add to cart</span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -104,6 +105,17 @@
                 </div>
             </div>
         </div>
+
+
+<div class="modal fade" id="productModal" role="dialog">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content" id="product_detail">
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 <script src="{{ asset('js/admin/jquery.min2.1.3.js') }}"></script>
@@ -156,6 +168,110 @@ $(document).ready(function() {
                 
               });
           
+  });
+
+
+  $('.productDetail').click(function(){
+        
+        var productid = $(this).attr('product_id');     
+        //alert(productid);
+        
+            $.ajax({
+      
+                url: baseUrl+'/products/product_detail',
+                
+                type: 'post',
+                
+                data: {productid: productid,_token: CSRF_TOKEN},
+                
+                dataType: 'html',
+                
+                success: function(result) {
+
+                //console.log(result);
+                  
+                  $('#product_detail').html(result);
+                  
+                  
+                  
+                  
+                
+                }
+                
+              });
+          
   });  
+
+  $(document).on('click','.attributes',function(){
+    var totalAmount = $('.totalAmount').val();
+    var totalPrice = parseFloat(0);
+    if($('.attributes:checked').length){
+        
+        $(".attributes:checked").each(function() {
+          var pricetype = $(this).attr('pricetype');
+          var amount = $(this).attr('amount');
+          var productAmount = $(this).attr('productAmount');
+          
+          
+          if (pricetype == 'Increment') {
+              totalPrice = parseFloat(productAmount)+parseFloat(amount);
+          } else if (pricetype == 'Decrement'){
+              totalPrice = parseFloat(productAmount)-parseFloat(amount);
+          }else{
+              totalPrice = parseFloat(productAmount);
+          }
+         $(".totalPrice").html(totalPrice);
+         $('.totalAmount').val(totalPrice);
+        });      
+    }else{
+        $(".totalPrice").html(parseFloat(productAmount));
+        //$('.totalAmount').val(totalPrice);
+    }
+    /*if($(this).prop('checked')){
+        var totalPrice = parseFloat(0);
+        if (pricetype == 'Increment') {
+            totalPrice = parseFloat(productAmount)+parseFloat(amount);
+        } else if (pricetype == 'Decrement'){
+            totalPrice = parseFloat(productAmount)-parseFloat(amount);
+        }else{
+            totalPrice = parseFloat(productAmount);
+        }
+       $(".totalPrice").html(totalPrice);
+       $('.totalAmount').val(totalPrice);
+    }else{
+        $(".totalPrice").html(parseFloat(productAmount));
+        $('.totalAmount').val(totalPrice);
+    }*/
+
+  });  
+    $(document).on('click','.submitCart',function(){
+   
+        var baseUrl = '{{ URL::to('/') }}';
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+            url : baseUrl+'/products/add_to_cart_new',
+            type : 'POST',
+            data : $('#AddToCART').serialize(),
+            dataType : 'json',
+            success : function(result){
+              
+            }
+          }).done(function(result){
+            
+                  if (result.response == 1) {
+                   $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
+                  
+                    $('.notificationaa').html(result.cart_count);
+                  }else {
+
+                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');
+                  }    
+                  setTimeout(function(){
+                    $("#successFlashMsg").fadeOut('slow');
+                  },2000);
+
+          });    
+  
+  });
 });
 </script>

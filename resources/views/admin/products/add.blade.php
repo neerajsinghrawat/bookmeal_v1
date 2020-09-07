@@ -145,34 +145,31 @@
                    <input type="checkbox" class="is_varaible_product" name="is_varaible_product">
                 </div>
                 <div class="attachment_fields" style="display: none;">
-                  <div class="form-group box-footer box-comments">
+                  <div class="form-group box-footer">
                     <label for="exampleInputEmail1">Product Feature</label><br>
-
-                    <div class="row"> 
-                        <?php foreach ($productFeatures as $key => $productFeature) {
+                    <?php foreach ($productFeatures as $key => $productFeature) {
                          ?> 
+                    <div class="row"> 
+                        
                          <div class="col-md-3" style="margin-bottom: 15px;">                     
                          <div class="col-md-4">                     
                            <input type="checkbox" name="ProductFeature[{{ $key }}]" class="attachmentinput_fields" value="{{$productFeature->id}}">
                          <b> {{$productFeature->value}}</b></div>
                          </div>
 
-                        <?php } ?>
+                        
                     </div>
-                    <div class="form-group box-footer box-comments child_feature" style="display: none;">
+                    <div class="form-group box-footer box-comments child_feature_{{$productFeature->id}}" style="display: none;">
                       <div class="form-group">
-                        <a href="javascript:void(0)" class="add_more btn btn-info"><i class="fa fa-plus"> Add More</i></a>
+                        <a href="javascript:void(0)" class="add_more btn btn-info" id_main="{{ $productFeature['id'] }}"><i class="fa fa-plus"> Add More</i></a>
                       </div>
                         <div class="row">
-                            <div class="col-md-1">  
+                            <div class="col-md-2">  
                               <label>Is Same price ?</label>
                             </div>
-                            <div class="col-md-6 row form-group"> 
-                              <?php foreach ($productFeatures as $key => $productFeature) { ?> 
-                                <div class="col-md-6 feature_label_{{ $productFeature['id'] }}" style="display: none"> 
-                                  <label for="exampleInputEmail1">{{ $productFeature['value'] }}</label>
-                                </div>
-                              <?php } ?>
+                            <div class="col-md-4 row form-group"> 
+                               
+                                  <label for="exampleInputEmail1">Attribute</label>
                             </div>
                             <div class="col-md-2"> 
                               <label for="exampleInputEmail1">Increment/Decrement</label>
@@ -180,40 +177,38 @@
                             <div class="col-md-2"> 
                               <label for="exampleInputEmail1">price</label>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                               <label for="exampleInputEmail1">Action</label>
                             </div>  
                         </div>
-                        <div id="clone">                      
+                        <div id="clone_{{$productFeature->id}}">                      
                           <div class="row" > 
-                            <div class="col-md-1">                 
-                               <input type="checkbox" name="Productattribute[1][is_same_price]" value="1" class="is_same_price" count="1">
+                            <div class="col-md-2">                 
+                               <input type="checkbox" name="Productattribute[{{$productFeature->id}}][1][is_same_price]" value="1" class="is_same_price" count="1" id_main="{{$productFeature->id}}">
                             
                             </div>
                                                   
-                            <div class="col-md-6 row form-group"> 
-                                <?php foreach ($productFeatures as $key => $productFeature) { ?> 
-                                <div class="col-md-6 feature_{{ $productFeature['id'] }}" style="display: none"> 
-                                <select class="form-control feature_value_{{ $productFeature['id'] }}" name="Productattribute[1][attribute][]" id="main_category" required="required" disabled="disabled">
+                            <div class="col-md-4 row form-group"> 
+                                
+                                <select class="form-control feature_value_{{ $productFeature['id'] }}" name="Productattribute[{{$productFeature->id}}][1][attribute]" id="main_category" required="required" disabled="disabled">
                                   
                                     @foreach($productFeatureAttributes[$productFeature['id']] as $category)
                                         <option class="selectcategory" value="{{ $category['id'] }}">{{ ucwords($category['name']) }}</option>
                                     @endforeach
                                 </select>
-                              </div>
-                              <?php } ?>
-                            </div>  
+                            </div>
+                             
 
                             <div class="col-md-2"> 
-                              <select class="form-control remove_1" name="Productattribute[1][price_type]">
+                              <select class="form-control remove_1_{{$productFeature->id}}" name="Productattribute[{{$productFeature->id}}][1][price_type]">
                                 <option value="Increment">Increment</option>
                                 <option value="Decrement">Decrement</option>
                               </select>
                             </div> 
                             <div class="col-md-2" > 
-                              <input type="text" class="form-control remove_1" name="Productattribute[1][price]" placeholder="Enter Price" >
+                              <input type="text" class="form-control remove_1_{{$productFeature->id}}" name="Productattribute[{{$productFeature->id}}][1][price]" placeholder="Enter Price" >
                             </div> 
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                               
                               <!-- <i class="fa fa-users"></i> -->
                             </div>
@@ -221,7 +216,8 @@
                           </div>
                         </div>
                       
-                      </div>                  
+                    </div>     
+                    <?php } ?>             
                   </div> 
                 </div>
                 <div class="form-group">
@@ -295,9 +291,7 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function() {
-  var productFeatureAttributes = <?php echo json_encode($productFeatureAttributes) ?>;
-
-  console.log(productFeatureAttributes);
+  
   
   $(document).on('click','.add_tag',function(){
     //alert('baseUrl');
@@ -323,22 +317,13 @@ $(document).ready(function() {
 
   $(document).on('click','.attachmentinput_fields',function(){
     var valNew =$(this).val();
-    if($('.attachmentinput_fields:checked').length){
-         $(".child_feature").show();
-
-    }else{
-      
-         $(".child_feature").hide();
-      
-    }
+    
       if($(this).prop('checked')){
         //alert(valNew);
-         $(".feature_"+valNew).show();
-         $(".feature_label_"+valNew).show();
+         $(".child_feature_"+valNew).show();         
          $(".feature_value_"+valNew).prop('disabled', false);
       }else{
-         $(".feature_"+valNew).hide();
-         $(".feature_label_"+valNew).hide();
+         $(".child_feature_"+valNew).hide(); 
          $(".feature_value_"+valNew).prop('disabled', 'disabled');        
       }
   });
@@ -368,30 +353,29 @@ $(document).ready(function() {
 
   });  
 
+  var productFeatureAttributes = <?php echo json_encode($productFeatureAttributes) ?>;
+
+  //console.log(productFeatureAttributes);
   $(document).on('click','.add_more',function(){
     
 
       
      var baseUrl = '{{ URL::to('/') }}';
+     var id_main = $(this).attr('id_main');
      var totalitems = $("#totalitems").val();
      totalitems = parseInt(totalitems) + 1;
      $("#totalitems").val(totalitems);
-      var html = '<div class="row" ><div class="col-md-1"> <input type="checkbox" name="Productattribute['+totalitems+'][is_same_price]" class="is_same_price" count="'+totalitems+'"></div>';
-        html += '<div class="col-md-6 row form-group">';
-        <?php foreach ($productFeatures as $key => $productFeature) { ?> 
-          html += '<div class="col-md-6 feature_<?php echo $productFeature['id']; ?>" style="display: none">';
-          html += '<select class="form-control feature_value_<?php echo $productFeature['id']; ?>" name="Productattribute['+totalitems+'][attribute][]" id="main_category" required="required" disabled="disabled">';
-          <?php foreach($productFeatureAttributes[$productFeature['id']] as $category) { ?>
-            html += '<option class="selectcategory" value="<?php echo $category['id'] ?>"><?php echo $category['name'] ?></option>';  
+      var html = '<div class="row" ><div class="col-md-2"> <input type="checkbox" name="Productattribute['+id_main+']['+totalitems+'][is_same_price]" class="is_same_price" count="'+totalitems+'" id_main="'+id_main+'"></div>';
+        html += '<div class="col-md-4 row form-group">';
+          html += '<select class="form-control feature_value_'+id_main+'" name="Productattribute['+id_main+']['+totalitems+'][attribute]" id="main_category" required="required" disabled="disabled">';
+          $.each(productFeatureAttributes[id_main], function (i, elem) { 
+            html += '<option class="selectcategory" value="'+elem.id+'">'+elem.name+'</option>'; 
+          });
+          html += '</select>';
+        html += '</div><div class="col-md-2"><select class="form-control remove_'+totalitems+'_'+id_main+'" name="Productattribute['+id_main+']['+totalitems+'][price_type]"><option value="Increment">Increment</option><option value="Decrement">Decrement</option></select></div> <div class="col-md-2"><input type="text" class="form-control remove_'+totalitems+'_'+id_main+'" name="Productattribute['+id_main+']['+totalitems+'][price]" placeholder="Enter Price" ></div>';
 
-
-          <?php } ?> 
-          html += '</select></div>';
-        <?php } ?> 
-        html += '</div><div class="col-md-2"><select class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price_type]"><option value="Increment">Increment</option><option value="Decrement">Decrement</option></select></div> <div class="col-md-2"><input type="text" class="form-control remove_'+totalitems+'" name="Productattribute['+totalitems+'][price]" placeholder="Enter Price" ></div>';
-
-        html += '<div class="col-md-1"><i class="fa fa-trash deleteitem_1"></i></div></div>';
-        $('#clone').append(html);
+        html += '<div class="col-md-2"><i class="fa fa-trash deleteitem_1"></i></div></div>';
+        $('#clone_'+id_main).append(html);
         $(".attachmentinput_fields:checked").each(function() {
           
           var valNew = $(this).val();
@@ -419,14 +403,16 @@ $(document).ready(function(){
     if($(this).prop('checked')){
 
       var count = $(this).attr('count');
-      $('.remove_'+count).css('display','none');
-      $('.remove_'+count).prop('disabled', 'disabled');
+      var id_main = $(this).attr('id_main');
+      $('.remove_'+count+'_'+id_main).css('display','none');
+      $('.remove_'+count+'_'+id_main).prop('disabled', 'disabled');
     
     }else{
 
       var count = $(this).attr('count');
-      $('.remove_'+count).css('display','block');
-      $('.remove_'+count).prop('disabled', false);
+      var id_main = $(this).attr('id_main');
+      $('.remove_'+count+'_'+id_main).css('display','block');
+      $('.remove_'+count+'_'+id_main).prop('disabled', false);
 
     }
 

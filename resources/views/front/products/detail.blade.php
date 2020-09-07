@@ -204,7 +204,7 @@
                         <!-- Product Single -->
                         <div class="shopdetail product-single">
                             
-                            <form action="" id="booking-form" class="booking-form">
+                            <form id="booking-form" class="booking-form">
                                         {{ csrf_field() }}
                                 <div class="product-content">
                                     <div class="product-header text-center">
@@ -215,8 +215,8 @@
                                         
                                     </div>
                                     <p class="lead"><?php echo $product_details->description ?></p>
-                                    <hr class="hr-primary">
-                                    <h5 class="text-center text-muted">Order details</h5>
+                                    <hr class="hr-primary"><!-- 
+                                    <h5 class="text-center text-muted">Order details</h5> -->
                                     <div class="panel-details-container">
                                         <!-- Panel Details / Size -->
                                         <!-- <div class="panel-details">
@@ -235,10 +235,11 @@
                                             </div>
                                         </div> -->
                                         <!-- Panel Details / Additions -->
+                                        <?php if(!empty($product_details->productAttribute) && count($product_details->productAttribute) > 0){  ?>
                                         <div class="panel-details">
                                             <h5 class="panel-details-title">
                                                 <label class="custom-control custom-radio">
-                                                    <input name="radio_title_additions" type="radio" class="custom-control-input">
+                                                    
                                                     <span class="custom-control-indicator"></span>
                                                 </label>
                                                 <a href="#panelDetailsAdditions" data-toggle="collapse">Additions</a>
@@ -248,7 +249,7 @@
                                                     <div class="row">
                                             
 
-                                            <?php if(!empty($product_details->productAttribute) && count($product_details->productAttribute) > 0){  
+                                            <?php
                                             $i = 1;
                                             foreach ($product_details->productAttribute as $key => $productitem) {
 
@@ -261,7 +262,7 @@
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
                                                                 <label class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" class="custom-control-input" name="productItem[{{ $productitem->id }}]" value="{{$productitem->price}}">
+                                                                    <input type="checkbox" class="custom-control-input attributes" name="productAttribute[{{ $productitem->id }}]" value="{{$productitem->price}}" pricetype="{{$productitem->price_type}}" productAmount="{{$product_details->price}}">
 
                                                                     
                                                                     <span class="custom-control-indicator"></span>
@@ -269,11 +270,12 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                            <?php } } } ?> 
+                                            <?php } } ?> 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                         <!-- Panel Details / Other -->
                                         <!-- <div class="panel-details">
                                             <h5 class="panel-details-title">
@@ -294,7 +296,7 @@
                                         </div>
                                     </div>
                                     <h5 class="text-center text-muted">Order now!</h5>
-                                   <!--  <div class="product-price text-center">{{ getSiteCurrencyType().$product_details->price }}</div> -->
+                                    <div class="product-price text-center">{{ getSiteCurrencyType()}}<span class="totalPrice">{{$product_details->price }}</span></div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                              <div class="form-group text-center">
@@ -314,7 +316,7 @@
                                                   if (Session::has('postcode')) {
                                                     $code_status = Session::get('postcode.code_status');
                                                    }  ?>
-                                                <button class="btn btn-outline-primary btn-lg btn-block addToCart11">Add to cart</button>
+                                                <button class="btn btn-outline-primary btn-lg btn-block addToCart">Add to cart</button>
 
 
                                                 <?php }else{ ?>
@@ -449,9 +451,9 @@
 
     <script src="{{ asset('js/fornt/product_slider/jssor.slider-28.0.0.min.js') }}" type="text/javascript"></script>
 <script>
-  $(function() {
+  /*$(function() {
     $(".rslides").responsiveSlides();
-  });
+  });*/
 </script>
 <script type="text/javascript">
 
@@ -556,7 +558,7 @@ $(document).ready(function() {
                   if (result.response == 1) {
                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
                   
-                    $('.display-cart').html(result.cart_count);
+                    $('.notificationaa').html(result.cart_count);
                   }else {
 
                     $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');
@@ -581,26 +583,52 @@ $(document).ready(function() {
 <script>
 	$(document).ready(function(){
 		
-		$('.starRating').click(function(){
+        $('.starRating').click(function(){
+            
+            var star = $(this).attr('number');
+            
+            $('.rating_value').val(star);
+            
+             $( ".starRating" ).each(function() {
+                        
+                        var star_number = $(this).attr('number');
+                        
+                        if(star_number <= star){
+                            $(this).children().addClass('active');
+                        }else{
+                            $(this).children().removeClass('active');
+                        }
+                  });
+            
+        });
+		/*$('.attributes').click(function(){
+			parseFloat();
+            var pricetype = $(this).attr('pricetype');
+            var amount = $(this).val();
+			var productAmount = $(this).attr('productAmount');
 			
-			var star = $(this).attr('number');
-			
-			$('.rating_value').val(star);
-			
-			 $( ".starRating" ).each(function() {
-						
-						var star_number = $(this).attr('number');
-						
-						if(star_number <= star){
-							$(this).children().addClass('active');
-						}else{
-							$(this).children().removeClass('active');
-						}
-				  });
-			
-		});
+		});*/
 
+          /*$(document).on('click','.attributes',function(){
+            var pricetype = $(this).attr('pricetype');
+            var amount = $(this).val();
+            var productAmount = $(this).attr('productAmount');
 
+            if($(this).prop('checked')){
+                var totalPrice = parseFloat(0);
+                if (pricetype == 'Increment') {
+                    totalPrice = parseFloat(productAmount)+parseFloat(amount);
+                } else if (pricetype == 'Decrement'){
+                    totalPrice = parseFloat(productAmount)-parseFloat(amount);
+                }else{
+                    totalPrice = parseFloat(productAmount);
+                }
+               $(".totalPrice").html(totalPrice);
+            }else{
+                $(".totalPrice").html(parseFloat(productAmount));
+            }
+
+          });*/
 
 		
 	});

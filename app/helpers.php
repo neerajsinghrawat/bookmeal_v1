@@ -18,15 +18,62 @@ if (! function_exists('get_data')) {
 
     function getAttributeName($attribute)
     {
-    	$attributeArr = explode(',', $attribute);
+    	
     	$attribute_name = '';
+    	
+		$product_feature_attributes = DB::table('product_feature_attributes')->where('id', $attribute)->first();
+		if (!empty($product_feature_attributes)) {
+			$attribute_name = $product_feature_attributes->name;
+		}  		
+    	    		
+    	
+    	//print_r($attribute_name);die;
+        return $attribute_name;
+    }
+
+    function getAttributeDetail($attribute)
+    {
+    	
+    	$attributeArr = unserialize($attribute);
+    	$attribute_detail = array();
+    	$attribute_detail['amount'] = 0;
+    	$attribute_detail['name'] = '';
+    	$attribute_detailname = '';
     	foreach ($attributeArr as $key => $value) {
-    		$product_feature_attributes = DB::table('product_feature_attributes')->where('id', $value)->first();
+    		$product_feature_attributes = DB::table('product_attributes')->where('id', $value)->first();
     		if (!empty($product_feature_attributes)) {
-    			$attribute_name .= $product_feature_attributes->name.' ';
+    			
+    			$name = getAttributeName($product_feature_attributes->attribute);
+    			if ($product_feature_attributes->price_type == 'Increment') {
+    				$attribute_detail['amount'] +=$product_feature_attributes->price;
+    			}elseif ($product_feature_attributes->price_type == 'Decrement') {
+    				$attribute_detail['amount'] -=$product_feature_attributes->price;
+    				
+    			}
+
+	    			//echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+	    			$attribute_detail['name'] .= $name.' ';
+
+    			
     		}  		
     	    		
     	}
+
+    	//echo "<pre>";print_r($attribute_detail);die;
+        return $attribute_detail;
+    
+    }
+
+    function getFeatureName($attribute)
+    {
+    
+    	$attribute_name = '';
+		$product_feature_attributes = DB::table('product_features')->where('id', $attribute)->first();
+		if (!empty($product_feature_attributes)){
+			$attribute_name = $product_feature_attributes->value;
+		}  		
+    	    		
+    	
     	//print_r($attribute_name);die;
         return $attribute_name;
     }

@@ -32,6 +32,7 @@ use App\Models\OrderDeliveryStatus;
 use App\Models\EmailTemplate;
 use App\Models\Product;
 use App\Models\ShippingTax;
+use App\Models\Postcode;
 
 class PaymentsController extends Controller
 {
@@ -62,8 +63,87 @@ class PaymentsController extends Controller
  * @return \Illuminate\Http\Response
  */
     public function paypal(Request $request)
-    {
-       //echo '<prE>item_1'; print_r(Session::get('shoppingstep.total')); die; 
+    {	
+ 				//echo '<pre>';print_r($_POST);die;
+    $steps = array();
+    $product_detail = array();
+
+    $cart_itemslist = Cart::with('product')->where('user_id','=', Auth::user()->id)->get();
+    $shipping_taxes = ShippingTax::first();
+    $total = 0;
+
+    if (!empty($cart_itemslist[0])) {
+      foreach ($cart_itemslist as $key => $cartlistdetail) {                 
+          $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+      }
+
+      if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid') {
+
+      $shippingamount = $shipping_taxes->shipping_amount;
+
+      }else {
+
+      $shippingamount = 0;
+      }
+
+      if (!empty($shipping_taxes->tax_percent) && $shipping_taxes->tax_percent > 0) {              
+        $tax_amount =  ($total * $shipping_taxes->tax_percent) / 100;
+      } else {
+        $tax_amount = 0 ;
+      }
+
+      $submaintotal = $total + $shippingamount + $tax_amount;
+
+      //echo '<pre>';print_r(Session::get('apply_coupon'));die;
+      if (Session::has('apply_coupon')) {
+        if (Session::get('apply_coupon.status') == 'percentage') {
+          $coupon_discount = $total * Session::get('apply_coupon.percentage') / 100 ;
+          if ($submaintotal > $coupon_discount) {
+              $maintotal = $submaintotal - $coupon_discount;
+          }else {
+              $maintotal = 0;
+          }
+        }else{
+          $coupon_discount = Session::get('apply_coupon.amount');
+          if ($submaintotal > Session::get('apply_coupon.amount')) {
+              $maintotal = $submaintotal - Session::get('apply_coupon.amount');
+          }else {
+              $maintotal = 0;
+          }
+        }        
+      }else{
+        $coupon_discount = 0;
+        $maintotal = $submaintotal;
+      }
+    }
+
+    if (!empty($cart_itemslist[0])) {           
+              
+          $steps['deliveryAddress'] = isset($request->deliveryAddress) ? $request->deliveryAddress : '';
+          $postcode_list = Postcode::where('post_code','=',$steps['deliveryAddress']['postcode'])->first();
+
+          if (!empty($postcode_list)) {
+            $steps['step'] = 'step_2';
+            $steps['total'] = $total;
+            $steps['user'] = $request->user;
+            $steps['tax_amount'] = $tax_amount; 
+            $steps['maintotal'] = $maintotal; 
+            $steps['coupon_discount'] = $coupon_discount; 
+            $steps['shippingamount'] = $shippingamount; 
+            $steps['shipping_type'] = $shipping_taxes->shipping_type; 
+            $steps['tax_percentage'] = $shipping_taxes->tax_percent; 
+            if (Session::has('shoppingstep')) {
+                Session::forget('shoppingstep.step');
+            }
+            Session::put('shoppingstep', $steps);
+          }else{
+            Session::flash('error_h1','Postcode');
+            Session::flash('error','Food delivery not able to your Postcode, Change Postcode');
+            return redirect('/shopping-cart');
+          }              
+        
+      
+    }
        $total = (Session::has('shoppingstep.maintotal'))?Session::get('shoppingstep.maintotal'):0; 
        if($total == 0){
         return redirect('/shopping-cart');
