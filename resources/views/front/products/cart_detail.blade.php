@@ -14,6 +14,17 @@
         width: 1000px;
         left: -93px;
     }
+
+    .table-cart {
+        line-height: 1.25;
+        width: 100% ;
+    }    
+
+    .table-cart th, .table-cart td {
+        vertical-align: middle;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}" />   
 
@@ -44,7 +55,7 @@
                             <div class="bg-dark dark p-4"><h5 class="mb-0">You order</h5> </div>
                              <form action="{{ route('payments.paypal.post') }}" class="form-horizontal" method="post" id="paypalForm" enctype="multipart/form-data">
                             {{ csrf_field() }}   
-                            <table class="cart-tables" style="display: block;">
+                            <table class="table-cart" style="display: block;">
                                 <?php $total = 0;
                                 if (!empty($cart_list[0])) {
                                         foreach ($cart_list as $key => $cartlistdetail) {  
@@ -52,17 +63,19 @@
                                                       if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
                                                         $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
                                                       }
-                                        $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+                                        $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;              
+                                        $total += (($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail->qty);
                                  ?>
                                 <tr class="cart_{{ $cartlistdetail->id }}">
                                     <td class="title">
-                                        <span class="name"><a href="#product-modal" data-toggle="modal">{{ ucwords($cartlistdetail->product->name) }}</a></span>
-                                        <!-- <span class="caption text-muted">26”, deep-pan, thin-crust</span> -->
+                                        <span class="name"><a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="{{$cartlistdetail->product->id}}" 
+        cart_id="{{$cartlistdetail->id }}">{{ ucwords($cartlistdetail->product->name) }}</a></span><br>
+                                        <span class="caption text-muted">{{$attributes['name']}}</span>
                                     </td>
-                                    <td class="price">{{ getSiteCurrencyType().($cartlistdetail->product->price * $cartlistdetail->qty)  }}</td>
+                                    <td class="price">{{ getSiteCurrencyType().(($cartlistdetail->product->price+$attributes['amount'])  * $cartlistdetail->qty)  }}</td>
                                     <td class="actions">
                                         <!-- <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a> -->
-                                        <a href="#" class="action-icon"><i class="ti ti-close"></i></a>
+                                       <span class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-trash"></i></span>
                                     </td>
                                 </tr>
 
@@ -116,7 +129,7 @@
                                 </div>
                                 <hr class="hr-sm">
                                 <div class="row text-lg">
-                                    <div class="col-7 text-right text-muted"><button class="btn btn-theme btn-md btn-wide"  data-toggle="modal" data-target="#apply_coupon_popup" href="">Apply Coupon</button>Total:</div>
+                                    <div class="col-7 text-right text-muted"><button class="btn btn-theme btn-md btn-wide" type="type"  data-toggle="modal" data-target="#apply_coupon_popup">Apply Coupon</button>Total:</div>
                                     <div class="col-5"><strong><span class="main_total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
                                 </div>
                             </div>
@@ -239,80 +252,7 @@
     </div>
     <!-- Content / End -->
 
-    <!-- Panel Cart -->
-    <div id="panel-cart">
-        <div class="panel-cart-container">
-            <div class="panel-cart-title">
-                <h5 class="title">Your Cart</h5>
-                <button class="close" data-toggle="panel-cart"><i class="ti ti-close"></i></button>
-            </div>
-            <div class="panel-cart-content cart-details">
-                <table class="cart-table">
-                    <tr>
-                        <td class="title">
-                            <span class="name"><a href="#product-modal" data-toggle="modal">Beef Burger</a></span>
-                            <span class="caption text-muted">Large (500g)</span>
-                        </td>
-                        <td class="price">$9.00</td>
-                        <td class="actions">
-                            <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
-                            <a href="#" class="action-icon"><i class="ti ti-close"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">
-                            <span class="name"><a href="#product-modal" data-toggle="modal">Extra Burger</a></span>
-                            <span class="caption text-muted">Small (200g)</span>
-                        </td>
-                        <td class="price text-success">$9.00</td>
-                        <td class="actions">
-                            <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
-                            <a href="#" class="action-icon"><i class="ti ti-close"></i></a>
-                        </td>
-                    </tr>
-                </table>
-                <div class="cart-summary">
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Order total:</div>
-                        <div class="col-5"><strong>$<span class="cart-products-total">0.00</span></strong></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Devliery:</div>
-                        <div class="col-5"><strong>$<span class="cart-delivery">0.00</span></strong></div>
-                    </div>
-                    <hr class="hr-sm">
-                    <div class="row text-lg">
-                        <div class="col-7 text-right text-muted">Total:</div>
-                        <div class="col-5"><strong>$<span class="cart-total">0.00</span></strong></div>
-                    </div>
-                </div>
-                <div class="cart-empty">
-                    <i class="ti ti-shopping-cart"></i>
-                    <p>Your cart is empty...</p>
-                </div>
-            </div>
-        </div>
-        <a href="checkout.html" class="panel-cart-action btn btn-secondary btn-block btn-lg"><span>Go to checkout</span></a>
-    </div>
-
-    <!-- Panel Mobile -->
-    <nav id="panel-mobile">
-        <div class="module module-logo bg-dark dark">
-            <a href="#">
-                <img src="assets/img/logo-light.svg" alt="" width="88">
-            </a>
-            <button class="close" data-toggle="panel-mobile"><i class="ti ti-close"></i></button>
-        </div>
-        <nav class="module module-navigation"></nav>
-        <div class="module module-social">
-            <h6 class="text-sm mb-3">Follow Us!</h6>
-            <a href="#" class="icon icon-social icon-circle icon-sm icon-facebook"><i class="fa fa-facebook"></i></a>
-            <a href="#" class="icon icon-social icon-circle icon-sm icon-google"><i class="fa fa-google"></i></a>
-            <a href="#" class="icon icon-social icon-circle icon-sm icon-twitter"><i class="fa fa-twitter"></i></a>
-            <a href="#" class="icon icon-social icon-circle icon-sm icon-youtube"><i class="fa fa-youtube"></i></a>
-            <a href="#" class="icon icon-social icon-circle icon-sm icon-instagram"><i class="fa fa-instagram"></i></a>
-        </div>
-    </nav>
+    
 
 <!-- apply_coupon_popup popup -->
 <div id="apply_coupon_popup" class="modal fade " role="dialog">

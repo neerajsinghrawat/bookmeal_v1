@@ -33,6 +33,7 @@ use App\Models\EmailTemplate;
 use App\Models\Product;
 use App\Models\ShippingTax;
 use App\Models\Postcode;
+use App\Models\ProductAttribute;
 
 class PaymentsController extends Controller
 {
@@ -73,8 +74,9 @@ class PaymentsController extends Controller
     $total = 0;
 
     if (!empty($cart_itemslist[0])) {
-      foreach ($cart_itemslist as $key => $cartlistdetail) {                 
-          $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+      foreach ($cart_itemslist as $key => $cartlistdetail) {     
+          $attributes = $this->getAttributeDetail($cartlistdetail->productItem_ids);            
+          $total += (($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail->qty);
       }
 
       if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid') {
@@ -376,7 +378,39 @@ class PaymentsController extends Controller
         return Redirect::to('/');
     }
 	
-	
+  public function getAttributeDetail($attribute='')
+  {
+          
+      $attributeArr = unserialize($attribute);
+      $attribute_detail = array();
+      $attribute_detail['amount'] = 0;
+      $attribute_detail['name'] = '';
+      $attribute_detailname = '';
+
+      //echo '<pre>';print_r($attributeArr);die;
+      foreach ($attributeArr as $key => $value) {
+        $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+        if (!empty($product_feature_attributes)) {
+          
+          $name = getAttributeName($product_feature_attributes->attribute);
+          if ($product_feature_attributes->price_type == 'Increment') {
+            $attribute_detail['amount'] +=$product_feature_attributes->price;
+          }elseif ($product_feature_attributes->price_type == 'Decrement') {
+            $attribute_detail['amount'] -=$product_feature_attributes->price;
+            
+          }
+
+            //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+            $attribute_detail['name'] .= $name.' ';
+
+          
+        }     
+              
+      }
+
+      //echo "<pre>";print_r($attribute_detail);die;
+        return $attribute_detail;
+  }	
 /**
  * delete user cart by cart ids
  *

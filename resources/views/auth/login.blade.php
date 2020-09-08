@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                            
-                            <form method="post" enctype="multipart/form-data" action="{{ route('login') }}">
+                            <form method="post" enctype="multipart/form-data" autocomplete="off" action="{{ route('login') }}">
                             {{ csrf_field() }}
                                 <div class="utility-box-content">
                                             <div class="form-group">

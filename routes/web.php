@@ -53,7 +53,9 @@ Route::group(['middleware' => ['web']], function() {
 //Cart routes
     Route::post('/products/add_to_cart', 'Front\ProductsController@add_to_cart')->middleware('auth');
     Route::post('/products/product_detail', 'Front\ProductsController@product_detail')->middleware('auth');
+    Route::post('/products/product_cart_detail', 'Front\ProductsController@product_cart_detail')->middleware('auth');
     Route::post('/products/add_to_cart_new', 'Front\ProductsController@add_to_cart_new')->middleware('auth');
+    Route::post('/products/update_to_cart_new', 'Front\ProductsController@update_to_cart_new')->middleware('auth');
     Route::post('/products/update-cart', 'Front\ProductsController@update_cart')->middleware('auth');
 
     Route::post('/products/cart-step',  ['as' => 'products.cart-step.post',   'uses' => 'Front\ProductsController@shopping_cart_step'])->middleware('auth');

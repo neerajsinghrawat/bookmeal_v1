@@ -216,6 +216,8 @@
                           <div class="row" > 
                             <div class="col-md-2">                 
                                <input type="checkbox" name="Productattribute[{{$productFeature->id}}][{{ $key }}][is_same_price]" value="1" {{ ($product_items['is_same_price'] == 1)?'checked':'unchecked' }}  class="is_same_price"  count="{{ $key }}" id_main="{{ $productFeature['id'] }}">
+
+                               <input type="hidden" name="Productattribute[{{$productFeature->id}}][{{ $key }}][id]" value="{{$product_items['id']}}">
                             
                             </div>
                                                   
@@ -425,30 +427,26 @@ $(document).ready(function() {
       $(this).parent().parent().remove();
     }
   }); 
-
-  $('.delete_item').click(function(){
+  $(document).on('click','.delete_item',function(){
+  /*$('.delete_item').click(function(){*/
     if (confirm('Are You Sure?')){
     var baseUrl = '{{ URL::to('/admin') }}';
     var item_id = $(this).attr('item_id');
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-     //alert(tag_id);
+     //alert(item_id);
       $.ajax({
         url : baseUrl+'/products/delete_ajax_item',
         type : 'POST',
         data : {item_id : item_id,_token: CSRF_TOKEN},
         dataType : 'json',
         success : function(result){
-          
-        }
-      }).done(function(result){
-        
-        if(result['success'] == 1){
+          if(result.success == 1){
+           // alert(result.success);
+            $(this).parent().parent().remove();
 
-          $(this).parent().parent().remove();
-
+          }
         }
-      });
-    }
+      })    }
   });
 
 

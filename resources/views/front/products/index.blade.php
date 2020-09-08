@@ -244,7 +244,8 @@ $(document).ready(function() {
     }*/
 
   });  
-    $(document).on('click','.submitCart',function(){
+  
+  $(document).on('click','.submitCart',function(){
    
         var baseUrl = '{{ URL::to('/') }}';
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

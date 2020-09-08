@@ -220,7 +220,7 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
 
-       // echo '<pre>';print_r($_POST);die;
+        //echo '<pre>';print_r($_POST);die;
 
         $product = Product::find($id);
 
@@ -295,11 +295,16 @@ class ProductsController extends Controller
 
                
                 if (!empty($request->Productattribute)) {
-                    $this->productFeature_delete($id);
+                    //$this->productFeature_delete($id);
                     foreach ($request->Productattribute as $key => $productFeature_add) {
                         foreach ($productFeature_add as $value) {
-
-                            $ProductAttribute = new ProductAttribute;
+                            if (isset($value['id']) && !empty($value['id'])) {
+                                $ProductAttribute = ProductAttribute::find($value['id']);
+                            }else{
+                                $ProductAttribute = new ProductAttribute;
+                            }
+                            
+                            
 
                             $ProductAttribute->product_id = $product->id;
                             $ProductAttribute->is_same_price = (isset($value['is_same_price']) && $value['is_same_price'] == 1)?1:0;
@@ -412,9 +417,9 @@ public function productFeature_delete($id)
         //die($request);
        //echo '<pre>';print_r($_POST);die();
         $result = 0;
-        $productItem = ProductAttribute::where('id','=', $request->item_id)->first();  
-         
-        $product_item = ProductAttribute::find($productItem->id);  
+        /*$productItem = ProductAttribute::where('id','=', $request['item_id'])->first();  
+          echo '<pre>';print_r($productItem);die();*/
+        $product_item = ProductAttribute::find($request['item_id']);  
        // echo '<pre>';print_r($product_item);die();
         if($product_item->delete()){
             $result = 1;

@@ -29,6 +29,18 @@
 <link id="theme" rel="stylesheet" href="{{ asset('css/front/css/theme-beige.css') }}" />
 
 </head>
+<style type="text/css">
+.table-cart {
+    line-height: 1.25;
+    width: 100% ;
+}    
+
+.table-cart th, .table-cart td {
+    vertical-align: middle;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+</style>
     <body>
         <meta name="csrf-token" content="{{ csrf_token() }}" />  
         @include('partials._front_messages')
@@ -114,17 +126,19 @@
                                                 $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
                                               }
                                 $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
-                               echo '<pre>';print_r($attributes);die;            
-                                $total += ($cartlistdetail->product->price * $cartlistdetail->qty);
+                              //echo '<pre>';print_r($cartlistdetail);die;            
+                                $total += ($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail['qty'];
                          ?>
                         <tr class="cart_{{ $cartlistdetail->id }}">
                             <td class="title">
-                                <span class="name"><a href="#product-modal" data-toggle="modal">{{ ucwords($cartlistdetail->product->name) }}</a></span>
-                                <span class="caption text-muted">Large (500g)</span>
+                                <span class="name"><a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="{{$cartlistdetail->product->id}}" 
+cart_id="{{$cartlistdetail->id }}">{{ ucwords($cartlistdetail->product->name) }}</a></span><br>
+                                <span class="caption text-muted">{{$attributes['name']}}</span>
                             </td>
-                            <td class="price">{{ getSiteCurrencyType().$cartlistdetail->product->price }}</td>
+                            <td class="price">{{ getSiteCurrencyType().($cartlistdetail->product->price+$attributes['amount'])  }}</td>
                             <td class="actions">
-                                <a href="#product-modal" data-toggle="modal" class="action-icon"><i class="ti ti-pencil"></i></a>
+                                <a href="#productcartDetail" data-toggle="modal" class="action-icon productcartDetail" product_id="{{$cartlistdetail->product->id}}" 
+cart_id="{{$cartlistdetail->id }}"><i class="ti ti-pencil"></i></a>
                                 
                                 <span class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-trash"></i></span>
                             </td>
@@ -137,14 +151,14 @@
                     <?php } ?>
                     </tbody>
                 </table>
-                <div class="cart-summary">
+                <div class="cart-summarys">
                     <div class="row">
                         <div class="col-7 text-right text-muted">Order total:</div>
-                        <div class="col-5"><strong><span class="cart-products-total">{{ getSiteCurrencyType().$total}}</span></strong></div>
+                        <div class="col-5"><strong><span class="cart-products-totals">{{ getSiteCurrencyType().$total}}</span></strong></div>
                     </div>
                     <div class="row">
                         <div class="col-7 text-right text-muted">Devliery:</div>
-                        <div class="col-5"><strong><span class="cart-delivery"><?php $total_amount = $total; 
+                        <div class="col-5"><strong><span class="cart-deliverys"><?php $total_amount = $total; 
                                 if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
                                      $total_amount = $shipping_taxes->shipping_amount + $total_amount;       
 
@@ -166,7 +180,7 @@
                     <hr class="hr-sm">
                     <div class="row text-lg">
                         <div class="col-7 text-right text-muted">Total:</div>
-                        <div class="col-5"><strong><span class="cart-total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
+                        <div class="col-5"><strong><span class="cart-totals"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
                     </div>
                 </div>
                 <!-- <div class="cart-empty">
@@ -175,7 +189,7 @@
                 </div> -->
             </div>
         </div>
-        <a href="checkout.html" class="panel-cart-action btn btn-secondary btn-block btn-lg"><span>Go to checkout</span></a>
+        <a href="{{ URL::to('shopping-cart') }}" class="panel-cart-action btn btn-secondary btn-block btn-lg"><span>Go to checkout</span></a>
     </div>
 
     <!-- Panel Mobile -->
@@ -201,135 +215,9 @@
     <div id="body-overlay"></div>
 </div>
 <!-- Modal / Product -->
-<div class="modal fade product-modal" id="product-modal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header modal-header-lg dark bg-dark">
-                <div class="bg-image"><img src="http://assets.suelo.pl/soup/img/photos/modal-add.jpg" alt=""></div>
-                <h4 class="modal-title">Specify your dish</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button>
-            </div>
-            <div class="modal-product-details">
-                <div class="row align-items-center">
-                    <div class="col-9">
-                        <h6 class="mb-1 product-modal-name">Boscaiola Pasta</h6>
-                        <span class="text-muted product-modal-ingredients">Pasta, Cheese, Tomatoes, Olives</span>
-                    </div>
-                    <div class="col-3 text-lg text-right">$<span class="product-modal-price">9.00</span></div>
-                </div>
-            </div>
-            <div class="modal-body panel-details-container">
-                <!-- Panel Details / Size -->
-                <div class="panel-details panel-details-size">
-                    <h5 class="panel-details-title">
-                        <label class="custom-control custom-radio">
-                            <input name="radio_title_size" type="radio" class="custom-control-input">
-                            <span class="custom-control-indicator"></span>
-                        </label>
-                        <a href="#panel-details-sizes-list" data-toggle="collapse">Size</a>
-                    </h5>
-                    <div id="panel-details-sizes-list" class="collapse show">
-                        <div class="panel-details-content">
-                            <div class="product-modal-sizes">
-                                <div class="form-group">
-                                    <label class="custom-control custom-radio">
-                                        <input name="radio_size" type="radio" class="custom-control-input" checked>
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Small - 100g ($9.99)</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="custom-control custom-radio">
-                                        <input name="radio_size" type="radio" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Medium - 200g ($14.99)</span>
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="custom-control custom-radio">
-                                        <input name="radio_size" type="radio" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Large - 350g ($21.99)</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Panel Details / Additions -->
-                <div class="panel-details panel-details-additions">
-                    <h5 class="panel-details-title">
-                        <label class="custom-control custom-radio">
-                            <input name="radio_title_additions" type="radio" class="custom-control-input">
-                            <span class="custom-control-indicator"></span>
-                        </label>
-                        <a href="#panel-details-additions-content" data-toggle="collapse">Additions</a>
-                    </h5>
-                    <div id="panel-details-additions-content" class="collapse">
-                        <div class="panel-details-content">
-                            <!-- Additions List -->
-                            <div class="row product-modal-additions">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">Tomato ($1.29)</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">Ham ($1.29)</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">Chicken ($1.29)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">Cheese($1.29)</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input">
-                                            <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">Bacon ($1.29)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Panel Details / Other -->
-                <div class="panel-details panel-details-form">
-                    <h5 class="panel-details-title">
-                        <label class="custom-control custom-radio">
-                            <input name="radio_title_other" type="radio" class="custom-control-input">
-                            <span class="custom-control-indicator"></span>
-                        </label>
-                        <a href="#panel-details-other" data-toggle="collapse">Other</a>
-                    </h5>
-                    <div id="panel-details-other" class="collapse">
-                        <form action="#">
-                            <textarea cols="30" rows="4" class="form-control" placeholder="Put this any other informations..."></textarea>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="modal-btn btn btn-secondary btn-block btn-lg" data-action="add-to-cart"><span>Add to Cart</span></button>
-            <button type="button" class="modal-btn btn btn-secondary btn-block btn-lg" data-action="update-cart"><span>Update</span></button>
+<div class="modal fade product-modal" id="productcartDetail" role="dialog">
+    <div class="modal-dialog" role="document" >
+       <div class="modal-content" id="product_cartdetail">
         </div>
     </div>
 </div>
@@ -605,8 +493,74 @@ $(document).ready(function(){
               });
           
   });
+
+
+
+  $('.productcartDetail').click(function(){
+        
+        var productid = $(this).attr('product_id');     
+        var cartid = $(this).attr('cart_id');     
+        //alert(productid);
+        
+            $.ajax({
+      
+                url: baseUrl+'/products/product_cart_detail',
+                
+                type: 'post',
+                
+                data: {productid: productid,cartid: cartid,_token: CSRF_TOKEN},
+                
+                dataType: 'html',
+                
+                success: function(result) {
+                    //alert('jhghj');
+
+                //console.log(result);
+                  
+                  $('#product_cartdetail').html(result);
+                  
+                  
+                  
+                  
+                
+                }
+                
+              });
+          
+  });  
+  
+  $(document).on('click','.submitupdateCart',function(){
+   
+        var baseUrl = '{{ URL::to('/') }}';
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+            url : baseUrl+'/products/update_to_cart_new',
+            type : 'POST',
+            data : $('#updateToCART').serialize(),
+            dataType : 'json',
+            success : function(result){
+              
+            }
+          }).done(function(result){
+            
+                  if (result.response == 1) {
+                   $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
+                  
+                    $('.notificationaa').html(result.cart_count);
+                  }else {
+
+                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');
+                  }    
+                  setTimeout(function(){
+                    $("#successFlashMsg").fadeOut('slow');
+                  },2000);
+
+          });    
+  
+  });
 });
 </script>
+
     </body>
 
 </html>

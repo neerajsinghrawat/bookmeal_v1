@@ -18,6 +18,7 @@ use App\Models\Couponcode;
 use App\Models\Order;
 use App\Models\ProductFeature;
 use App\Models\ProductFeatureAttribute;
+use App\Models\ProductAttribute;
 
 use Session;
 use Auth;
@@ -430,6 +431,126 @@ class ProductsController extends Controller
     }
     return $html;
   }
+
+  /**
+ * product_detail
+ *
+ * ajax
+ * @param \Illuminate\Http\Request  $request
+ *
+ * @return \Illuminate\Http\Response
+ */
+  public function product_cart_detail(Request $request)
+  {         
+    $html ='';
+    //echo '<pre>';print_r($_POST);die;
+    if(Auth::check()){
+      if ($request->isMethod('post')) {
+
+        $product_details = Product::with('productAttribute')->where('status','=', 1)->where('id','=', $request->productid)->first();
+        $product_cartdetails = Cart::where('id','=', $request->cartid)->first();
+        //echo "<pre>";print_r($product_cartdetails);die;
+        $attributes = $this->getAttributeDetail($product_cartdetails['productItem_ids']);
+        //echo "<pre>";print_r($attributes);die;
+        if(!empty($product_details)){
+          $iImgPath = asset('image/no_product_image.jpg');
+          if(isset($product_details->image) && !empty($product_details->image)){
+            $iImgPath = asset('image/product/400x330/'.$product_details->image);
+          }
+            $html .='<form action="" id="updateToCART" class="booking-formss">'.csrf_field().'<div class="modal-header modal-header-sm dark bg-dark"><div class="bg-image" ><img src="'.$iImgPath.'" alt=""></div><h4 class="modal-title">Specify your dish</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button></div>';
+
+            $html .='<div class="modal-product-details"><div class="row align-items-center"><div class="col-md-9"><h6 class="mb-0">'. ucwords($product_details->name) .'</h6><span class="text-muted">'. $product_details->description .'</span></div><div class="col-md-3 text-lg text-right">'. getSiteCurrencyType().'<span class="totalPrice">'.($product_details->price + $attributes['amount']) .'</span></div></div></div>
+            <div class="modal-body panel-details-container">';
+                
+            $feature =array();
+            $feature = explode(',', $product_details->product_feature);  
+            if (!empty($feature)) {
+            foreach ($feature as $key => $value) {                      
+                
+
+            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_size" type="radio" class="custom-control-input"><span class="custom-control-indicator"><svg class="icon" x="0px" y="0px" viewBox="0 0 32 32"><path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path></svg></span></label>';
+            $feature_name = getFeatureName($value); 
+            $html .='<a href="#panelDetails'.$value.'" data-toggle="collapse">'.$feature_name.'</a></h5><div id="panelDetails'.$value.'" class="collapse show"><div class="panel-details-content row">';
+            $attributeArr = unserialize($product_cartdetails->productItem_ids);
+            foreach ($product_details->productAttribute as $key => $productitem){ 
+              if ($productitem['feature_id'] == $value) { 
+                $checked= '';
+                if ($attributeArr['radio_'.$value] == $productitem->id) {
+                  $checked='checked=checked';
+                }
+                
+
+              if ($productitem->is_same_price == 1) {
+                  $productitem->price = 0;
+              }
+              $attribute_name = getAttributeName($productitem->attribute);
+              $html .='<div class="col-md-6 form-group"><label class="custom-control custom-radio">
+              
+               <input name="productAttribute[radio_'.$value.']" type="radio" class="custom-control-input attributes" value="'.$productitem->id.'" pricetype="'.$productitem->price_type.'" productAmount="'.$product_details->price.'" amount="'.$productitem->price.'" '.$checked.'><span class="custom-control-indicator"><svg class="icon" x="0px" y="0px" viewBox="0 0 32 32"><path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path></svg></span> <span class="custom-control-description">'.$attribute_name.'('. getSiteCurrencyType().$productitem->price.')</span> </label></div>';
+              } 
+            } 
+
+            $html .='</div></div></div>';
+            } }
+               
+               
+            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_other" type="radio" class="custom-control-input"></label><a href="#panelDetailsOther" data-toggle="collapse">Other</a>
+                </h5><div id="panelDetailsOther" class="collapse"><textarea cols="30" rows="4" class="form-control" readonly>'.$product_details->allergen_key.'</textarea></div>
+                </div>
+            </div>
+            <input type="hidden" class="totalAmount" value="'.$product_details->price.'">
+            <input type="hidden" name="product_id" value="'.$product_details->id.'">
+            <input type="hidden" name="cart_id" value="'.$product_cartdetails['id'].'">
+            <button type="button" class="modal-btn btn btn-secondary btn-block btn-lg submitupdateCart" data-dismiss="modal"><span>Add to Cart</span></button></form>';
+
+
+
+        }
+
+
+        
+
+               
+      }
+    }else{
+
+    }
+    return $html;
+  }
+
+  public function getAttributeDetail($attribute='')
+  {
+          
+      $attributeArr = unserialize($attribute);
+      $attribute_detail = array();
+      $attribute_detail['amount'] = 0;
+      $attribute_detail['name'] = '';
+      $attribute_detailname = '';
+
+      //echo '<pre>';print_r($attributeArr);die;
+      foreach ($attributeArr as $key => $value) {
+        $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+        if (!empty($product_feature_attributes)) {
+          
+          $name = getAttributeName($product_feature_attributes->attribute);
+          if ($product_feature_attributes->price_type == 'Increment') {
+            $attribute_detail['amount'] +=$product_feature_attributes->price;
+          }elseif ($product_feature_attributes->price_type == 'Decrement') {
+            $attribute_detail['amount'] -=$product_feature_attributes->price;
+            
+          }
+
+            //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+            $attribute_detail['name'] .= $name.' ';
+
+          
+        }     
+              
+      }
+
+      //echo "<pre>";print_r($attribute_detail);die;
+        return $attribute_detail;
+  }
 /**
  * add_to_cart
  *
@@ -466,6 +587,69 @@ class ProductsController extends Controller
         if(!empty($products)){
          //echo '<pre>';print_r($_POST);die;
             $cart = $set_id;
+            $cart->user_id = Auth::user()->id;
+            $cart->product_id = $request->product_id;
+            $cart->qty = $qty+$oldqty; 
+
+            if (isset($request->productAttribute) && !empty($request->productAttribute)) {
+               $cart->productItem_ids = serialize($request->productAttribute);
+               
+            }            
+            
+            $cart->save();
+
+            $cart_count = Cart::where('user_id','=', Auth::user()->id)->count();
+            $result['cart_count'] = $cart_count;
+            $result['response'] = 1;
+
+            if (Session::has('cart_count')) {
+                Session::forget('cart_count');
+            }
+            Session::put('cart_count', $cart_count);
+        }        
+      }
+    }else{
+
+    }
+    return response()->json($result);
+  }
+
+/**
+ * update_to_cart_new
+ *
+ * ajax
+ * @param \Illuminate\Http\Request  $request
+ *
+ * @return \Illuminate\Http\Response
+ */
+  public function update_to_cart_new(Request $request)
+  {         
+    $result['cart_count'] = 0;
+    $result['response'] = 0;
+    $oldqty = 0;
+    //echo '<pre>';print_r($_POST);die;
+    if(Auth::check()){
+      if ($request->isMethod('post')) {
+
+        
+        $qty = isset($request->quantity)?$request->quantity:1;
+        $products = Product::where('status','=', 1)->where('id','=', $request->product_id)->first();
+       //echo '<pre>';print_r($products);die;
+        //$cart_list = Cart::where('product_id','=',$request->productid)->first();
+        $cart_list = array();
+
+        /*if (!empty($cart_list)) {
+          $set_id = Cart::find($cart_list->id);
+          $oldqty = $cart_list->qty;
+        }*/
+
+        if (Session::has('shoppingstep')) {
+          Session::forget('shoppingstep');
+        }
+
+        if(!empty($products)){
+         //echo '<pre>';print_r($_POST);die;
+            $cart = Cart::find($request->cart_id);
             $cart->user_id = Auth::user()->id;
             $cart->product_id = $request->product_id;
             $cart->qty = $qty+$oldqty; 
