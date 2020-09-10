@@ -21,6 +21,7 @@ use App\Models\ProductTag;
 use App\Models\UserAddress;
 use App\Models\ShippingTax;
 use App\Models\Couponcode;
+use App\Models\ProductAttribute;
 
 use View;
 use Auth;
@@ -57,6 +58,47 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('cart_count', $cart_count);
             });
 
+        View::composer('partials.header', function($view)
+            {
+              $total = 0;
+                $cart_list = Cart::with('product')->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
+                
+                $couponn = array();
+                foreach ($cart_list as $key1 => $cart_value) {
+                  
+                    $attributeArr = unserialize($cart_value['productItem_ids']);
+                    $attribute_detail = array();
+                    $attribute_detail['amount'] = 0;
+                    if (!empty($cart_value['productItem_ids'])) {
+                      foreach ($attributeArr as $key => $value) {
+                        
+                        $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+                        if (!empty($product_feature_attributes)) {
+                          
+                          $name = getAttributeName($product_feature_attributes->attribute);
+                          if ($product_feature_attributes->price_type == 'Increment') {
+                            $attribute_detail['amount'] +=$product_feature_attributes->price;
+                          }elseif ($product_feature_attributes->price_type == 'Decrement') {
+                            $attribute_detail['amount'] -=$product_feature_attributes->price;
+                            
+                          }
+
+                          
+                        }     
+                              
+                      }
+                    }
+                  
+
+                  $total += ($cart_value->product->price+$attribute_detail['amount']) * $cart_value['qty'];
+                        
+                }                
+         
+                $cart_amount = $total;
+
+                $view->with('cart_amount', $cart_amount);
+            });
+
         View::composer('partials.footer', function($view)
             {
                 
@@ -78,69 +120,11 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('pages_detail', $pages_detail);
             });
 
-        View::composer('*', function($view)
+        /*View::composer('*', function($view)
             {
 
 
-          $current_date = date('Y-m-d');
-          $conditions = array(1 => 1,0 => 0);
 
-          $cart_list = Cart::with('product')->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
-             //echo '<pre>couponn'; print_r($cart_list); die;
-          
-          $couponcode_lists = Couponcode::with('couponItem')->where('status','=', 1)->where('start_date','<=', $current_date)->where('expire_date','>=', $current_date)->whereIn('group_id',$conditions)->get();
-          //echo '<pre>couponcode_lists'; print_r($couponcode_lists); die;
-          
-          $couponn = array();
-          foreach ($cart_list as $key1 => $cart_value) {
-              foreach ($couponcode_lists as $key3 => $couponcodeList) {
-                //echo '<pre>couponcodeList'; print_r($couponcodeList); die;
-
-                $appliedCoupon = order::where('coupon_code','=', $couponcodeList->code)->count();
-
-                $appliedUserCoupon = order::where('coupon_code','=', $couponcodeList->code)->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->count();
-
-                if (($couponcodeList->coupon_count > $appliedCoupon) && ($couponcodeList->use_code_times > $appliedUserCoupon)) {
-                  if($couponcodeList->apply_for == "cart"){
-                     $couponn[$couponcodeList->id] = $couponcodeList->id; 
-
-                  }else{
-                    foreach ($couponcodeList->couponItem as $key4 => $value) {
-                     if ($value->apply_for == 'product' && $value->product_id == $cart_value->product_id) {
-                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
-                     }elseif ($value->apply_for == 'category' && $value->category_id == $cart_value['product']['sub_category_id']){
-                      //
-                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
-
-                     }
-                    }
-                  }
-
-                }else{
-
-                }
-                
-              }      
-          }
-   
-          $couponcode_list = Couponcode::whereIn('id',$couponn)->get();
-
-      //die('asfsdfd');
-          $shipping_taxes = ShippingTax::first();
-
-          $addressesArr = array();
-          $addresses = UserAddress::where('user_id','=',((Auth::check())?Auth::user()->id:'1'))->get();
-          if(!empty($addresses)){
-            $i = 0;
-            foreach ($addresses as $key => $address) {
-              if($address->type == "other"){
-                $addressesArr[$address->type][$i] = $address;
-                $i++;
-              }else{
-                $addressesArr[$address->type] = $address;
-              }          
-            }   
-          }
 
           
                 $view->with('cart_list', $cart_list);
@@ -148,7 +132,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('shipping_taxes', $shipping_taxes);
                 $view->with('couponcode_list', $couponcode_list);
 
-            });
+            });*/
             
             
         

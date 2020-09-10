@@ -16,6 +16,13 @@ if (! function_exists('get_data')) {
         return $cart_count;
     }
 
+    function get_cart_amount()
+    {
+    	$cart_count = DB::table('carts')->where('user_id', $user_id)->count();
+
+        return $cart_count;
+    }
+
     function getAttributeName($attribute)
     {
     	
@@ -39,25 +46,28 @@ if (! function_exists('get_data')) {
     	$attribute_detail['amount'] = 0;
     	$attribute_detail['name'] = '';
     	$attribute_detailname = '';
-    	foreach ($attributeArr as $key => $value) {
-    		$product_feature_attributes = DB::table('product_attributes')->where('id', $value)->first();
-    		if (!empty($product_feature_attributes)) {
-    			
-    			$name = getAttributeName($product_feature_attributes->attribute);
-    			if ($product_feature_attributes->price_type == 'Increment') {
-    				$attribute_detail['amount'] +=$product_feature_attributes->price;
-    			}elseif ($product_feature_attributes->price_type == 'Decrement') {
-    				$attribute_detail['amount'] -=$product_feature_attributes->price;
-    				
-    			}
+    	if (!empty($attribute)) {
+	    	foreach ($attributeArr as $key => $value) {
+	    		$product_feature_attributes = DB::table('product_attributes')->where('id', $value)->first();
+	    		if (!empty($product_feature_attributes)) {
+	    			
+	    			$name = getAttributeName($product_feature_attributes->attribute);
+	    			if ($product_feature_attributes->price_type == 'Increment') {
+	    				$attribute_detail['amount'] +=$product_feature_attributes->price;
+	    			}elseif ($product_feature_attributes->price_type == 'Decrement') {
+	    				$attribute_detail['amount'] -=$product_feature_attributes->price;
+	    				
+	    			}
 
-	    			//echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
-	    			$attribute_detail['name'] .= $name.' ';
+		    			//echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+		    			$attribute_detail['name'] .= $name.' ';
 
-    			
-    		}  		
-    	    		
+	    			
+	    		}  		
+	    	    		
+	    	}
     	}
+
 
     	//echo "<pre>";print_r($attribute_detail);die;
         return $attribute_detail;

@@ -263,6 +263,7 @@ $(document).ready(function() {
                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
                   
                     $('.notificationaa').html(result.cart_count);
+                    $('.notification_amount').html(result.cart_amount);
                   }else {
 
                     $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');

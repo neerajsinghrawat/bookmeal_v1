@@ -40,6 +40,35 @@
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #e0e0e0;
 }
+.bg-image > img {
+    display: block;
+}
+.booking-formss{
+    margin-bottom: 0px; 
+}
+.modal-product-details {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 25px;
+    padding-left: 25px;
+}
+p {
+    margin-bottom: 0px;
+}
+.modal-header{
+    width: 500px;
+    height: 140px;
+}
+.bbg-image {
+    width: 500px;
+    height: 140px;
+}
+.modal-body{
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
 </style>
     <body>
         <meta name="csrf-token" content="{{ csrf_token() }}" />  
@@ -115,74 +144,8 @@
                 <h5 class="title">Your Cart</h5>
                 <button class="close" data-toggle="panel-cart"><i class="ti ti-close"></i></button>
             </div>
-            <div class="panel-cart-content cart-details">
-                <table class="table-cart">
-                   <tbody>
-                        <?php $total = 0;
-                        if (!empty($cart_list[0])) {
-                                foreach ($cart_list as $key => $cartlistdetail) {  
-                                               $iImgPath = asset('image/no_product_image.jpg');
-                                              if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
-                                                $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
-                                              }
-                                $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
-                              //echo '<pre>';print_r($cartlistdetail);die;            
-                                $total += ($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail['qty'];
-                         ?>
-                        <tr class="cart_{{ $cartlistdetail->id }}">
-                            <td class="title">
-                                <span class="name"><a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="{{$cartlistdetail->product->id}}" 
-cart_id="{{$cartlistdetail->id }}">{{ ucwords($cartlistdetail->product->name) }}</a></span><br>
-                                <span class="caption text-muted">{{$attributes['name']}}</span>
-                            </td>
-                            <td class="price">{{ getSiteCurrencyType().($cartlistdetail->product->price+$attributes['amount'])  }}</td>
-                            <td class="actions">
-                                <a href="#productcartDetail" data-toggle="modal" class="action-icon productcartDetail" product_id="{{$cartlistdetail->product->id}}" 
-cart_id="{{$cartlistdetail->id }}"><i class="ti ti-pencil"></i></a>
-                                
-                                <span class="action-icon delete_cart delete_{{ $cartlistdetail->id }}" cart_id="{{ $cartlistdetail->id }}"><i class="ti ti-trash"></i></span>
-                            </td>
-                        </tr>
-                       
-                        <?php } }else { ?>
-                        <tr>
-                            <td>No items found</td>
-                        </tr>
-                    <?php } ?>
-                    </tbody>
-                </table>
-                <div class="cart-summarys">
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Order total:</div>
-                        <div class="col-5"><strong><span class="cart-products-totals">{{ getSiteCurrencyType().$total}}</span></strong></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7 text-right text-muted">Devliery:</div>
-                        <div class="col-5"><strong><span class="cart-deliverys"><?php $total_amount = $total; 
-                                if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
-                                     $total_amount = $shipping_taxes->shipping_amount + $total_amount;       
-
-                                     echo getSiteCurrencyType().$shipping_taxes->shipping_amount;
-                                 }else{
-                                    echo 'Free';
-                                 } 
-
-
-                                if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
-                                    if ($total_amount > Session::get('apply_coupon.amount')) {
-                                        $total_amount = $total_amount - Session::get('apply_coupon.amount');
-                                    }else{
-                                        $total_amount = 0;
-                                    }
-                                    
-                                } ?></span></strong></div>
-                    </div>
-                    <hr class="hr-sm">
-                    <div class="row text-lg">
-                        <div class="col-7 text-right text-muted">Total:</div>
-                        <div class="col-5"><strong><span class="cart-totals"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
-                    </div>
-                </div>
+            <div class="panel-cart-content cart-details product_front_cartdetail">
+                
                 <!-- <div class="cart-empty">
                     <i class="ti ti-shopping-cart"></i>
                     <p>Your cart is empty...</p>
@@ -215,7 +178,7 @@ cart_id="{{$cartlistdetail->id }}"><i class="ti ti-pencil"></i></a>
     <div id="body-overlay"></div>
 </div>
 <!-- Modal / Product -->
-<div class="modal fade product-modal" id="productcartDetail" role="dialog">
+<div class="modal fade" id="productcartDetail" role="dialog">
     <div class="modal-dialog" role="document" >
        <div class="modal-content" id="product_cartdetail">
         </div>
@@ -449,8 +412,8 @@ $(document).ready(function(){
   var baseUrl = '{{ URL::to('/') }}';
       
   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-  $('.delete_cart').click(function(){
-    alert('jjh');
+  $(document).on('click','.delete_cart',function(){
+    //$('.delete_cart').click(function(){
         
         var cartid = $(this).attr('cart_id'); 
         
@@ -496,7 +459,8 @@ $(document).ready(function(){
 
 
 
-  $('.productcartDetail').click(function(){
+  $(document).on('click','.productcartDetail',function(){
+  
         
         var productid = $(this).attr('product_id');     
         var cartid = $(this).attr('cart_id');     
@@ -527,6 +491,31 @@ $(document).ready(function(){
                 
               });
           
+  });
+
+  $('.productfrontcartdetail').click(function(){
+        
+        var productid = 0; 
+        
+            $.ajax({
+      
+                url: baseUrl+'/products/product_front_cartdetail',
+                
+                type: 'post',
+                
+                data: {productid: productid,_token: CSRF_TOKEN},
+                
+                dataType: 'html',
+                
+                success: function(result) {                   
+                  
+                  $('.product_front_cartdetail').html(result);                 
+                  
+                
+                }
+                
+              });
+          
   });  
   
   $(document).on('click','.submitupdateCart',function(){
@@ -543,17 +532,18 @@ $(document).ready(function(){
             }
           }).done(function(result){
             
-                  if (result.response == 1) {
-                   $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
-                  
-                    $('.notificationaa').html(result.cart_count);
-                  }else {
+              if (result.response == 1) {
+               $('<div id="successFlashMsg" class="msg msg-ok alert alert-success"><p>Item is successfully added into cart !</p></div>').prependTo('.msgcart');
+              
+                $('.notificationaa').html(result.cart_count);
+              }else {
 
-                    $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');
-                  }    
-                  setTimeout(function(){
-                    $("#successFlashMsg").fadeOut('slow');
-                  },2000);
+                $('<div id="successFlashMsg" class="msg msg-ok alert alert-danger"><p>Item is not added into cart!</p></div>').prependTo('.msgcart');
+              }    
+              setTimeout(function(){
+                $("#successFlashMsg").fadeOut('slow');
+              },2000);
+              location.reload();
 
           });    
   

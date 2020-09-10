@@ -25,6 +25,7 @@
         padding: 1rem 1.5rem;
         border-bottom: 1px solid #e0e0e0;
     }
+    .apply_coupon{cursor:pointer;font-size: 13px;color: #ddae71; margin-right: 15px;}
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}" />   
 
@@ -51,11 +52,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xl-4 col-lg-5">
-                        <div class="cart-details shadow bg-white stick-to-content mb-4">
+                        <div class="panel-cart-content cart-details shadow bg-white stick-to-content mb-4">
                             <div class="bg-dark dark p-4"><h5 class="mb-0">You order</h5> </div>
                              <form action="{{ route('payments.paypal.post') }}" class="form-horizontal" method="post" id="paypalForm" enctype="multipart/form-data">
                             {{ csrf_field() }}   
-                            <table class="table-cart" style="display: block;">
+                            <table class="table-cart">
                                 <?php $total = 0;
                                 if (!empty($cart_list[0])) {
                                         foreach ($cart_list as $key => $cartlistdetail) {  
@@ -101,9 +102,9 @@
                                                     $total_amount = $total;
                                                                 if (!empty($shipping_taxes->tax_percent) && $shipping_taxes->tax_percent > 0) {   
                                                                     $total_amount = ($total * $shipping_taxes->tax_percent) / 100 + $total;       
-                                                                    echo  '- '.getSiteCurrencyType().($total * $shipping_taxes->tax_percent) / 100;
+                                                                    echo  ''.getSiteCurrencyType().($total * $shipping_taxes->tax_percent) / 100;
                                                                 } else{
-                                                                  echo '- '.getSiteCurrencyType().'0';
+                                                                  echo ''.getSiteCurrencyType().'0';
                                                                 }?></span></strong></div>
                                 </div>
                                 <div class="row">
@@ -128,8 +129,8 @@
                                                     } ?></span></strong></div>
                                 </div>
                                 <hr class="hr-sm">
-                                <div class="row text-lg">
-                                    <div class="col-7 text-right text-muted"><button class="btn btn-theme btn-md btn-wide" type="type"  data-toggle="modal" data-target="#apply_coupon_popup">Apply Coupon</button>Total:</div>
+                                <div class="row">
+                                    <div class="col-7 text-right text-muted"><i class="ti ti-ticket apply_coupon" data-toggle="modal" data-target="#apply_coupon_popup"><b>Apply Coupon</b></i>Total:</div>
                                     <div class="col-5"><strong><span class="main_total"><?php echo getSiteCurrencyType().$total_amount; ?></span></strong></div>
                                 </div>
                             </div>

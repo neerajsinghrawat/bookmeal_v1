@@ -62,12 +62,13 @@
                 <div class="col-md-2">
                     @if (Auth::guest())
                     @else
-                    <a href="#" class="module module-cart right" data-toggle="panel-cart">
+                    <a href="#" class="module module-cart right productfrontcartdetail" data-toggle="panel-cart">
                         <span class="cart-icon">
                             <i class="ti ti-shopping-cart"></i>
                             <span class="notificationaa"><?php echo (Session::has('cart_count'))?Session::get('cart_count'):$cart_count;?></span>
                         </span>
-                        <span class="cart-value"></span>
+                        <span class="cart-value">{{getSiteCurrencyType()}}<span class="notification_amount">
+                        {{$cart_amount}}</span></span>
                     </a>
                     @endif
                 </div>

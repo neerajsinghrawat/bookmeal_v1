@@ -379,7 +379,7 @@ class ProductsController extends Controller
           if(isset($product_details->image) && !empty($product_details->image)){
             $iImgPath = asset('image/product/400x330/'.$product_details->image);
           }
-            $html .='<form action="" id="AddToCART" class="booking-formss">'.csrf_field().'<div class="modal-header modal-header-sm dark bg-dark"><div class="bg-image" ><img src="'.$iImgPath.'" alt=""></div><h4 class="modal-title">Specify your dish</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button></div>';
+            $html .='<form action="" id="AddToCART" class="booking-formss">'.csrf_field().'<div class="modal-header modal-header-lg dark bg-dark"><div class="bg-image" ><img src="http://assets.suelo.pl/soup/img/photos/modal-add.jpg" alt="" class="bbg-image"></div><h4 class="modal-title">Specify your dish</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button></div>';
 
             $html .='<div class="modal-product-details"><div class="row align-items-center"><div class="col-md-9"><h6 class="mb-0">'. ucwords($product_details->name) .'</h6><span class="text-muted">'. $product_details->description .'</span></div><div class="col-md-3 text-lg text-right">'. getSiteCurrencyType().'<span class="totalPrice">'.$product_details->price .'</span></div></div></div>
             <div class="modal-body panel-details-container">';
@@ -409,7 +409,7 @@ class ProductsController extends Controller
             } }
                
                
-            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_other" type="radio" class="custom-control-input"></label><a href="#panelDetailsOther" data-toggle="collapse">Other</a>
+            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_size" type="radio" class="custom-control-input"><span class="custom-control-indicator"><svg class="icon" x="0px" y="0px" viewBox="0 0 32 32"><path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path></svg></span></label><a href="#panelDetailsOther" data-toggle="collapse">Other</a>
                 </h5><div id="panelDetailsOther" class="collapse"><textarea cols="30" rows="4" class="form-control" readonly>'.$product_details->allergen_key.'</textarea></div>
                 </div>
             </div>
@@ -457,7 +457,7 @@ class ProductsController extends Controller
           if(isset($product_details->image) && !empty($product_details->image)){
             $iImgPath = asset('image/product/400x330/'.$product_details->image);
           }
-            $html .='<form action="" id="updateToCART" class="booking-formss">'.csrf_field().'<div class="modal-header modal-header-sm dark bg-dark"><div class="bg-image" ><img src="'.$iImgPath.'" alt=""></div><h4 class="modal-title">Specify your dish</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button></div>';
+            $html .='<form action="" id="updateToCART" class="booking-formss">'.csrf_field().'<div class="modal-header modal-header-lg dark bg-dark"><div class="bg-image" ><img src="http://assets.suelo.pl/soup/img/photos/modal-add.jpg" alt="" class="bbg-image"></div><h4 class="modal-title">Specify your dish</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti ti-close"></i></button></div>';
 
             $html .='<div class="modal-product-details"><div class="row align-items-center"><div class="col-md-9"><h6 class="mb-0">'. ucwords($product_details->name) .'</h6><span class="text-muted">'. $product_details->description .'</span></div><div class="col-md-3 text-lg text-right">'. getSiteCurrencyType().'<span class="totalPrice">'.($product_details->price + $attributes['amount']) .'</span></div></div></div>
             <div class="modal-body panel-details-container">';
@@ -475,7 +475,7 @@ class ProductsController extends Controller
             foreach ($product_details->productAttribute as $key => $productitem){ 
               if ($productitem['feature_id'] == $value) { 
                 $checked= '';
-                if ($attributeArr['radio_'.$value] == $productitem->id) {
+                if (isset($attributeArr['radio_'.$value]) && $attributeArr['radio_'.$value]== $productitem->id) {
                   $checked='checked=checked';
                 }
                 
@@ -484,8 +484,7 @@ class ProductsController extends Controller
                   $productitem->price = 0;
               }
               $attribute_name = getAttributeName($productitem->attribute);
-              $html .='<div class="col-md-6 form-group"><label class="custom-control custom-radio">
-              
+              $html .='<div class="col-md-6 form-group"><label class="custom-control custom-radio">              
                <input name="productAttribute[radio_'.$value.']" type="radio" class="custom-control-input attributes" value="'.$productitem->id.'" pricetype="'.$productitem->price_type.'" productAmount="'.$product_details->price.'" amount="'.$productitem->price.'" '.$checked.'><span class="custom-control-indicator"><svg class="icon" x="0px" y="0px" viewBox="0 0 32 32"><path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path></svg></span> <span class="custom-control-description">'.$attribute_name.'('. getSiteCurrencyType().$productitem->price.')</span> </label></div>';
               } 
             } 
@@ -494,7 +493,7 @@ class ProductsController extends Controller
             } }
                
                
-            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_other" type="radio" class="custom-control-input"></label><a href="#panelDetailsOther" data-toggle="collapse">Other</a>
+            $html .='<div class="panel-details"><h5 class="panel-details-title"><label class="custom-control custom-radio"><input name="radio_title_size" type="radio" class="custom-control-input"><span class="custom-control-indicator"><svg class="icon" x="0px" y="0px" viewBox="0 0 32 32"><path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"></path></svg></span></label><a href="#panelDetailsOther" data-toggle="collapse">Other</a>
                 </h5><div id="panelDetailsOther" class="collapse"><textarea cols="30" rows="4" class="form-control" readonly>'.$product_details->allergen_key.'</textarea></div>
                 </div>
             </div>
@@ -518,6 +517,152 @@ class ProductsController extends Controller
     return $html;
   }
 
+
+
+/**
+ * product_front_cartdetail
+ *
+ * ajax
+ * @param \Illuminate\Http\Request  $request
+ *
+ * @return \Illuminate\Http\Response
+ */
+  public function product_front_cartdetail(Request $request)
+  {         
+    $html ='';
+
+    if(Auth::check()){
+      if ($request->isMethod('post')) {
+
+          $current_date = date('Y-m-d');
+          $conditions = array(Auth::user()->group_id => Auth::user()->group_id,0 => 0);
+          
+
+          $cart_list = Cart::with('product')->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
+          
+          $couponcode_lists = Couponcode::with('couponItem')->where('status','=', 1)->where('start_date','<=', $current_date)->where('expire_date','>=', $current_date)->whereIn('group_id',$conditions)->get();
+          
+          $couponn = array();
+          foreach ($cart_list as $key1 => $cart_value) {
+              foreach ($couponcode_lists as $key3 => $couponcodeList) {
+
+                $appliedCoupon = order::where('coupon_code','=', $couponcodeList->code)->count();
+
+                $appliedUserCoupon = order::where('coupon_code','=', $couponcodeList->code)->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->count();
+
+                if (($couponcodeList->coupon_count > $appliedCoupon) && ($couponcodeList->use_code_times > $appliedUserCoupon)) {
+                  if($couponcodeList->apply_for == "cart"){
+                     $couponn[$couponcodeList->id] = $couponcodeList->id; 
+
+                  }else{
+                    foreach ($couponcodeList->couponItem as $key4 => $value) {
+                     if ($value->apply_for == 'product' && $value->product_id == $cart_value->product_id) {
+                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
+                     }elseif ($value->apply_for == 'category' && $value->category_id == $cart_value['product']['sub_category_id']){
+                      //
+                      $couponn[$value->couponcode_id] = $value->couponcode_id; 
+
+                     }
+                    }
+                  }
+
+                }else{
+
+                }
+                
+              }      
+          }
+   
+          $shipping_taxes = ShippingTax::first();
+
+          $html .='<table class="table-cart">
+             <tbody>';
+                  $total = 0;
+                  if (!empty($cart_list[0])) {
+                          foreach ($cart_list as $key => $cartlistdetail) {  
+                                         $iImgPath = asset('image/no_product_image.jpg');
+                                        if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
+                                          $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
+                                        }
+                          $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
+                        //echo '<pre>';print_r($cartlistdetail);die;            
+                          $total += ($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail['qty'];
+                   
+          $html .='<tr class="cart_'.$cartlistdetail->id.'">
+                      <td class="title">
+                          <span class="name">
+                              <a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'">'. ucwords($cartlistdetail->product->name).'</a></span><br>
+                          <span class="caption text-muted">'.$attributes['name'].'</span>
+                      </td>
+                      <td class="price">'. getSiteCurrencyType().($cartlistdetail->product->price+$attributes['amount']).'</td>
+                      <td class="actions">
+                          <a href="#productcartDetail" data-toggle="modal" class="action-icon productcartDetail" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'"><i class="ti ti-pencil"></i></a>
+                          
+                          <span class="action-icon delete_cart delete_'.$cartlistdetail->id.'" cart_id="'. $cartlistdetail->id.'"><i class="ti ti-trash"></i></span>
+                      </td>
+                  </tr>';
+                 
+                   } }else { 
+
+
+          $html .='<tr>
+                      <td>No items found</td>
+                  </tr>';
+              } 
+          $html .='</tbody>
+          </table>
+          <div class="cart-summarys">
+              <div class="row">
+                  <div class="col-7 text-right text-muted">Order total:</div>
+                  <div class="col-5"><strong><span class="cart-products-totals">'. getSiteCurrencyType().$total.'</span></strong></div>
+              </div>
+              <div class="row">
+                  <div class="col-7 text-right text-muted">Tax:</div>
+                  <div class="col-5"><strong><span class="tax_total">';
+                  
+
+                  $total_amount = $total;
+                  if (!empty($shipping_taxes->tax_percent) && $shipping_taxes->tax_percent > 0) {   
+                      $total_amount = ($total * $shipping_taxes->tax_percent) / 100 + $total;       
+                    $html .=  getSiteCurrencyType().($total * $shipping_taxes->tax_percent) / 100;
+                  } else{
+                   $html .= getSiteCurrencyType().'0';
+                  }
+          $html .='</span></strong></div>
+              </div>
+              <div class="row">
+                  <div class="col-7 text-right text-muted">Devliery:</div>
+                  <div class="col-5"><strong><span class="cart-deliverys">';
+
+                  if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
+                       $total_amount = $shipping_taxes->shipping_amount + $total_amount;
+               $html .= getSiteCurrencyType().$shipping_taxes->shipping_amount;
+                   }else{
+               $html .= 'Free';
+                   } 
+
+                  if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
+                      if ($total_amount > Session::get('apply_coupon.amount')) {
+                          $total_amount = $total_amount - Session::get('apply_coupon.amount');
+                      }else{
+                          $total_amount = 0;
+                      }
+                      
+                  } 
+          $html .='</span></strong></div>
+              </div>
+              <hr class="hr-sm">
+              <div class="row text-lg">
+                  <div class="col-7 text-right text-muted">Total:</div>
+                  <div class="col-5"><strong><span class="cart-totals">'.getSiteCurrencyType().$total_amount.'</span></strong></div>
+              </div>
+          </div>';
+      }
+    }
+
+        
+    return $html;
+  }
   public function getAttributeDetail($attribute='')
   {
           
@@ -528,24 +673,28 @@ class ProductsController extends Controller
       $attribute_detailname = '';
 
       //echo '<pre>';print_r($attributeArr);die;
-      foreach ($attributeArr as $key => $value) {
-        $product_feature_attributes = ProductAttribute::where('id', $value)->first();
-        if (!empty($product_feature_attributes)) {
-          
-          $name = getAttributeName($product_feature_attributes->attribute);
-          if ($product_feature_attributes->price_type == 'Increment') {
-            $attribute_detail['amount'] +=$product_feature_attributes->price;
-          }elseif ($product_feature_attributes->price_type == 'Decrement') {
-            $attribute_detail['amount'] -=$product_feature_attributes->price;
+      if (!empty($attribute)) {
+        
+      
+        foreach ($attributeArr as $key => $value) {
+          $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+          if (!empty($product_feature_attributes)) {
             
-          }
-
-            //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
-            $attribute_detail['name'] .= $name.' ';
-
-          
-        }     
+            $name = getAttributeName($product_feature_attributes->attribute);
+            if ($product_feature_attributes->price_type == 'Increment') {
+              $attribute_detail['amount'] +=$product_feature_attributes->price;
+            }elseif ($product_feature_attributes->price_type == 'Decrement') {
+              $attribute_detail['amount'] -=$product_feature_attributes->price;
               
+            }
+
+              //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+              $attribute_detail['name'] .= $name.' ';
+
+            
+          }     
+                
+        }
       }
 
       //echo "<pre>";print_r($attribute_detail);die;
@@ -600,8 +749,43 @@ class ProductsController extends Controller
 
             $cart_count = Cart::where('user_id','=', Auth::user()->id)->count();
             $result['cart_count'] = $cart_count;
+            $result['cart_amount'] = 0;
             $result['response'] = 1;
 
+              $total = 0;
+              $cart_list = Cart::with('product')->where('user_id','=', ((Auth::check())?Auth::user()->id:'1'))->get();
+              
+              $couponn = array();
+              foreach ($cart_list as $key1 => $cart_value) {
+                
+                  $attributeArr = unserialize($cart_value['productItem_ids']);
+                  $attribute_detail = array();
+                  $attribute_detail['amount'] = 0;
+                  if (!empty($cart_value['productItem_ids'])) {
+                    foreach ($attributeArr as $key => $value) {
+                      
+                      $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+                      if (!empty($product_feature_attributes)) {
+                        
+                        $name = getAttributeName($product_feature_attributes->attribute);
+                        if ($product_feature_attributes->price_type == 'Increment') {
+                          $attribute_detail['amount'] +=$product_feature_attributes->price;
+                        }elseif ($product_feature_attributes->price_type == 'Decrement') {
+                          $attribute_detail['amount'] -=$product_feature_attributes->price;
+                          
+                        }
+
+                        
+                      }     
+                            
+                    }
+                  }
+                
+
+                $total += ($cart_value->product->price+$attribute_detail['amount']) * $cart_value['qty'];
+                      
+              }     
+              $result['cart_amount'] = $total;
             if (Session::has('cart_count')) {
                 Session::forget('cart_count');
             }
