@@ -603,7 +603,7 @@ input:checked + .slider:before {
                             foreach($orders as $order){ ?>
                     <div class="menu-category-content new-padding">
                         <span class="btn btn-primary order-id">Order ID: <?php echo $order->order_number; ?></span>
-                        <a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>"><span class="btn btn-primary order-id view_order_button right" > View Order</span></a>
+                        <a href="<?php echo URL::to('/'); ?>/order/<?php echo $order->order_number; ?>" target="_blank"><span class="btn btn-primary order-id view_order_button right" > View Order</span></a>
                         
                         <div class="item-content">
                             <div class="item-body">

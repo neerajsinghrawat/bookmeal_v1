@@ -575,88 +575,91 @@ class ProductsController extends Controller
    
           $shipping_taxes = ShippingTax::first();
 
-          $html .='<table class="table-cart">
-             <tbody>';
-                  $total = 0;
-                  if (!empty($cart_list[0])) {
-                          foreach ($cart_list as $key => $cartlistdetail) {  
-                                         $iImgPath = asset('image/no_product_image.jpg');
-                                        if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
-                                          $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
-                                        }
-                          $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
-                        //echo '<pre>';print_r($cartlistdetail);die;            
-                          $total += ($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail['qty'];
+          if (!empty($cart_list[0])) {
+            $html .='<table class="table-cart">
+               <tbody>';
+                    $total = 0;
+                            foreach ($cart_list as $key => $cartlistdetail) {  
+                                           $iImgPath = asset('image/no_product_image.jpg');
+                                          if(isset($cartlistdetail->product->image) && !empty($cartlistdetail->product->image)){
+                                            $iImgPath = asset('image/product/200x200/'.$cartlistdetail->product->image);
+                                          }
+                            $attributes = getAttributeDetail($cartlistdetail->productItem_ids) ;
+                          //echo '<pre>';print_r($cartlistdetail);die;            
+                            $total += ($cartlistdetail->product->price+$attributes['amount']) * $cartlistdetail['qty'];
+                     
+            $html .='<tr class="cart_'.$cartlistdetail->id.'">
+                        <td class="title">
+                            <span class="name">
+                                <a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'">'. ucwords($cartlistdetail->product->name).'</a></span><br>
+                            <span class="caption text-muted">'.$attributes['name'].'</span>
+                        </td>
+                        <td class="price">'. getSiteCurrencyType().($cartlistdetail->product->price+$attributes['amount']).'</td>
+                        <td class="actions">
+                            <a href="#productcartDetail" data-toggle="modal" class="action-icon productcartDetail" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'"><i class="ti ti-pencil"></i></a>
+                            
+                            <span class="action-icon delete_cart delete_'.$cartlistdetail->id.'" cart_id="'. $cartlistdetail->id.'"><i class="ti ti-trash"></i></span>
+                        </td>
+                    </tr>';
                    
-          $html .='<tr class="cart_'.$cartlistdetail->id.'">
-                      <td class="title">
-                          <span class="name">
-                              <a href="#productcartDetail" class="productcartDetail" data-toggle="modal" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'">'. ucwords($cartlistdetail->product->name).'</a></span><br>
-                          <span class="caption text-muted">'.$attributes['name'].'</span>
-                      </td>
-                      <td class="price">'. getSiteCurrencyType().($cartlistdetail->product->price+$attributes['amount']).'</td>
-                      <td class="actions">
-                          <a href="#productcartDetail" data-toggle="modal" class="action-icon productcartDetail" product_id="'.$cartlistdetail->product->id.'" cart_id="'.$cartlistdetail->id.'"><i class="ti ti-pencil"></i></a>
-                          
-                          <span class="action-icon delete_cart delete_'.$cartlistdetail->id.'" cart_id="'. $cartlistdetail->id.'"><i class="ti ti-trash"></i></span>
-                      </td>
-                  </tr>';
-                 
-                   } }else { 
+                     }  
+            $html .='</tbody>
+            </table>
+            <div class="cart-summarys">
+                <div class="row">
+                    <div class="col-7 text-right text-muted">Order total:</div>
+                    <div class="col-5"><strong><span class="cart-products-totals">'. getSiteCurrencyType().$total.'</span></strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-7 text-right text-muted">Tax:</div>
+                    <div class="col-5"><strong><span class="tax_total">';
+                    
+
+                    $total_amount = $total;
+                    if (!empty($shipping_taxes->tax_percent) && $shipping_taxes->tax_percent > 0) {   
+                        $total_amount = ($total * $shipping_taxes->tax_percent) / 100 + $total;       
+                      $html .=  getSiteCurrencyType().($total * $shipping_taxes->tax_percent) / 100;
+                    } else{
+                     $html .= getSiteCurrencyType().'0';
+                    }
+            $html .='</span></strong></div>
+                </div>
+                <div class="row">
+                    <div class="col-7 text-right text-muted">Devliery:</div>
+                    <div class="col-5"><strong><span class="cart-deliverys">';
+
+                    if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
+                         $total_amount = $shipping_taxes->shipping_amount + $total_amount;
+                 $html .= getSiteCurrencyType().$shipping_taxes->shipping_amount;
+                     }else{
+                 $html .= 'Free';
+                     } 
+
+                    if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
+                        if ($total_amount > Session::get('apply_coupon.amount')) {
+                            $total_amount = $total_amount - Session::get('apply_coupon.amount');
+                        }else{
+                            $total_amount = 0;
+                        }
+                        
+                    } 
+            $html .='</span></strong></div>
+                </div>
+                <hr class="hr-sm">
+                <div class="row text-lg">
+                    <div class="col-7 text-right text-muted">Total:</div>
+                    <div class="col-5"><strong><span class="cart-totals">'.getSiteCurrencyType().$total_amount.'</span></strong></div>
+                </div>
+            </div>';
+          }else{
 
 
-          $html .='<tr>
-                      <td>No items found</td>
-                  </tr>';
-              } 
-          $html .='</tbody>
-          </table>
-          <div class="cart-summarys">
-              <div class="row">
-                  <div class="col-7 text-right text-muted">Order total:</div>
-                  <div class="col-5"><strong><span class="cart-products-totals">'. getSiteCurrencyType().$total.'</span></strong></div>
-              </div>
-              <div class="row">
-                  <div class="col-7 text-right text-muted">Tax:</div>
-                  <div class="col-5"><strong><span class="tax_total">';
-                  
+            $html .='<table class="table-cart">
+                      <i class="ti ti-shopping-cart"></i>
+                      <p>Your cart is empty...</p>
+                    </table>';
 
-                  $total_amount = $total;
-                  if (!empty($shipping_taxes->tax_percent) && $shipping_taxes->tax_percent > 0) {   
-                      $total_amount = ($total * $shipping_taxes->tax_percent) / 100 + $total;       
-                    $html .=  getSiteCurrencyType().($total * $shipping_taxes->tax_percent) / 100;
-                  } else{
-                   $html .= getSiteCurrencyType().'0';
-                  }
-          $html .='</span></strong></div>
-              </div>
-              <div class="row">
-                  <div class="col-7 text-right text-muted">Devliery:</div>
-                  <div class="col-5"><strong><span class="cart-deliverys">';
-
-                  if (!empty($shipping_taxes->shipping_amount) && $shipping_taxes->shipping_type == 'Paid' ) {
-                       $total_amount = $shipping_taxes->shipping_amount + $total_amount;
-               $html .= getSiteCurrencyType().$shipping_taxes->shipping_amount;
-                   }else{
-               $html .= 'Free';
-                   } 
-
-                  if ((Session::has('apply_coupon.amount')) && !empty(Session::get('apply_coupon.amount'))) {
-                      if ($total_amount > Session::get('apply_coupon.amount')) {
-                          $total_amount = $total_amount - Session::get('apply_coupon.amount');
-                      }else{
-                          $total_amount = 0;
-                      }
-                      
-                  } 
-          $html .='</span></strong></div>
-              </div>
-              <hr class="hr-sm">
-              <div class="row text-lg">
-                  <div class="col-7 text-right text-muted">Total:</div>
-                  <div class="col-5"><strong><span class="cart-totals">'.getSiteCurrencyType().$total_amount.'</span></strong></div>
-              </div>
-          </div>';
+          }
       }
     }
 

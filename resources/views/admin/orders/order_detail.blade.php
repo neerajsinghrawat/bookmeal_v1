@@ -80,8 +80,7 @@
 			  
               <th>Serial #</th>
               <th>Product</th>
-              <th>Category</th>
-              <th>Pre Order</th>
+              <th>Product Attribute</th>
               <th>Amount</th>
               <th>Qty</th>
               <th>Total</th>
@@ -93,7 +92,7 @@
 				if(!empty($orderDetail->order_items)){
 					$i = 1;
 					foreach($orderDetail->order_items as $order_item){ 
-					
+					$attributes = getAttributeDetail($order_item->productFeatureItem_id) ; 
 					$iImgPath = asset('image/no_product_image.jpg');
 					  if(isset($order_item->image) && !empty($order_item->image)){
 						$iImgPath = asset('image/product/200x200/'.$order_item->image);
@@ -104,8 +103,8 @@
             <tr class="<?php echo (($order_item->is_pre_order == 1) && ($orderDetail->order_status == 'Order Confirmed')) ? 'background_color' : ''; ?>">
               <td><?php echo $i; ?></td>
               <td><?php echo $order_item->product_name ?></td>
-              <td>{{ $categoryname }}</td>
-              <td><?php echo ($order_item->is_pre_order == 1) ? '<small class="label bg-green">Yes</small>' : '<small class="label bg-red">No</small>'; ?></td>
+              <td>{{$attributes['name']}}</td>
+              
               <td><?php echo getSiteCurrencyType(); ?><?php echo $order_item->amount ?></td>
               <td> <?php echo $order_item->qty ?></td>
               <td><?php echo getSiteCurrencyType(); ?><?php echo $order_item->total_amount ?></td>

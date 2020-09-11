@@ -328,11 +328,14 @@ class PaymentsController extends Controller
 			$cart_itemslist = Cart::with('product')->where('user_id','=', Auth::user()->id)->get();
 			 if(!empty($cart_itemslist)){
 				 foreach($cart_itemslist as $cart){
-					
+					$attributes = $this->getAttributeDetail($cart->productItem_ids);            
+          $subtotal = ($cart->product->price+$attributes['amount']);
+          $total = (($cart->product->price+$attributes['amount']) * $cart->qty);
 					 // save data in cart item table
 					$orderItem = new OrderItem();
 					$orderItem->order_id = $order->id;
-					$orderItem->product_id = $cart->product_id;
+          $orderItem->product_id = $cart->product_id;
+					$orderItem->productFeatureItem_id = $cart->productItem_ids;
 
 					$product_detail = $this->getproduct_detail($cart->product_id);
 					//echo '<pre>';print_r($product_detail);die;
@@ -342,8 +345,8 @@ class PaymentsController extends Controller
 					$orderItem->product_name = $cart->product->name;
 					$orderItem->product_image = $cart->product->image;
 					$orderItem->qty =  $cart->qty;
-					$orderItem->amount = $cart->product->price;
-					$orderItem->total_amount = $cart->qty * $cart->product->price;
+					$orderItem->amount = $subtotal;
+					$orderItem->total_amount = $total;
 					
 					$orderItem->save();
 				 }
@@ -387,27 +390,28 @@ class PaymentsController extends Controller
       $attribute_detail['name'] = '';
       $attribute_detailname = '';
 
-      //echo '<pre>';print_r($attributeArr);die;
-      foreach ($attributeArr as $key => $value) {
-        $product_feature_attributes = ProductAttribute::where('id', $value)->first();
-        if (!empty($product_feature_attributes)) {
-          
-          $name = getAttributeName($product_feature_attributes->attribute);
-          if ($product_feature_attributes->price_type == 'Increment') {
-            $attribute_detail['amount'] +=$product_feature_attributes->price;
-          }elseif ($product_feature_attributes->price_type == 'Decrement') {
-            $attribute_detail['amount'] -=$product_feature_attributes->price;
+      if (!empty($attributeArr)) {
+        //echo '<pre>';print_r($attributeArr);die;
+        foreach ($attributeArr as $key => $value) {
+          $product_feature_attributes = ProductAttribute::where('id', $value)->first();
+          if (!empty($product_feature_attributes)) {
             
-          }
-
-            //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
-            $attribute_detail['name'] .= $name.' ';
-
-          
-        }     
+            $name = getAttributeName($product_feature_attributes->attribute);
+            if ($product_feature_attributes->price_type == 'Increment') {
+              $attribute_detail['amount'] +=$product_feature_attributes->price;
+            }elseif ($product_feature_attributes->price_type == 'Decrement') {
+              $attribute_detail['amount'] -=$product_feature_attributes->price;
               
-      }
+            }
 
+              //echo "<pre>";print_r(getAttributeName($product_feature_attributes->attribute));die;
+              $attribute_detail['name'] .= $name.' ';
+
+            
+          }     
+                
+        }
+      }
       //echo "<pre>";print_r($attribute_detail);die;
         return $attribute_detail;
   }	

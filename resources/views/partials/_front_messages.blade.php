@@ -5,7 +5,8 @@
   <div class="modal-dialog" style="max-width:350px">
 	
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="width: 346px;
+    height: 60px;">
         <h5 class="modal-title" id="exampleModalLabel">{{ Session::get('success_h1') }}</h5>
         <button type="button" class="close close_popup_msg" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -27,7 +28,8 @@
   <div class="modal-dialog" style="max-width:350px">
 	
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="width: 346px;
+    height: 60px;">
         <h5 class="modal-title" id="exampleModalLabel">{{ Session::get('success_h1') }}</h5>
         <button type="button" class="close close_popup_msg" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -50,7 +52,8 @@
   <div class="modal-dialog" style="max-width:350px">
 	
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="width: 346px;
+    height: 60px;">
         <h5 class="modal-title" id="exampleModalLabel">{{ Session::get('error_h1') }}</h5>
         <button type="button" class="close close_popup_msg" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
